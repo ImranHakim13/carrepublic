@@ -194,6 +194,8 @@ ol.tl li.ext::before{background:#aab5b3}
 .flow li{display:flex;gap:12px;align-items:center;justify-content:space-between;border:1px solid var(--line);border-radius:14px;padding:10px 12px;background:#fff}
 .flow li div{flex:1}.flow li b{display:block}
 .todo{display:grid;gap:8px}.todo button{display:flex;justify-content:space-between;gap:10px;align-items:center;text-align:left;border:1px solid var(--line);background:#fff;border-radius:14px;padding:11px 13px;font:600 14px var(--bd);cursor:pointer;color:var(--ink)}
+.scopebar{margin:0 0 14px}.scopebar label{margin:0;font-weight:700;color:var(--ink);max-width:460px}.scopebar select{font-weight:700;border:2px solid var(--ink)}
+.net td,.net th{padding:9px 6px}.net tr[data-act]{cursor:pointer}
 .cm{border-bottom:1px solid var(--line);padding:8px 0}
 </style>
 </head>
@@ -295,8 +297,10 @@ function seed(){
     {id:'a2',jid:'j1',name:'Calon contoh B',phone:'(contoh)',email:'',exp:0,lic:false,must:[true,false,false,true],ans:['','',''],st:'baharu',ts:Date.now()-2*3600e3}];
   return {v:5,seq:300,skip:0,
     branches:[
-      {id:'KMN',name:'CARREPUBLIC Kemaman',city:'Kemaman',state:'Terengganu',postcode:'24000',bays:2,open:'09:00',close:'18:00',closed:[0],note:'Cawangan perintis. Alamat, waktu dan harga sebenar belum diisi; nilai di sini ialah contoh.'},
-      {id:'SHA',name:'[Contoh] Cawangan Shah Alam',city:'Shah Alam',state:'Selangor',postcode:'40000',bays:1,open:'09:00',close:'18:00',closed:[0],note:'Cawangan contoh untuk menunjukkan perjalanan merentas negeri.'}],
+      {id:'KMN',st:'aktif',name:'CARREPUBLIC Kemaman',city:'Kemaman',state:'Terengganu',postcode:'24000',bays:2,open:'09:00',close:'18:00',closed:[0],note:'Cawangan perintis. Alamat, waktu dan harga sebenar belum diisi; nilai di sini ialah contoh.'},
+      {id:'SHA',st:'aktif',name:'[Contoh] Cawangan Shah Alam',city:'Shah Alam',state:'Selangor',postcode:'40000',bays:1,open:'09:00',close:'18:00',closed:[0],note:'Cawangan contoh untuk menunjukkan perjalanan merentas negeri.'},
+      {id:'KTE',st:'onboarding',name:'[Contoh] Cawangan Kuala Terengganu',city:'Kuala Terengganu',state:'Terengganu',postcode:'20000',bays:2,open:'09:00',close:'18:00',closed:[0],note:'Cawangan contoh dalam proses onboarding. Belum aktif dan belum boleh ditempah.'},
+      {id:'JBU',st:'onboarding',name:'[Contoh] Cawangan Johor Bahru',city:'Johor Bahru',state:'Johor',postcode:'80000',bays:2,open:'09:00',close:'18:00',closed:[0],note:'Cawangan contoh dalam proses onboarding. Belum aktif dan belum boleh ditempah.'}],
     prices:{KMN:{oil:120,ac:180,brake:45,tyre:60},SHA:{oil:130,ac:190,brake:50,tyre:65}},
     vehicles,bookings,records,reminders,quotes,
     leads:[{id:'l1',type:'insurance',vid:'v2',plate:'DEMO 5678',phone:'(contoh)',exp:D(-5),ts:Date.now()-3*3600e3,st:'baharu',partner:'(slot belum diisi)'},{id:'l2',type:'roadtax',vid:'v6',plate:'DEMO 7788',phone:'(contoh)',exp:D(70),ts:Date.now()-26*3600e3,st:'dihubungi',partner:'(slot belum diisi)'}],
@@ -315,7 +319,7 @@ const now=()=>new Date(Date.now()+S.skip*DAY);
 const by=(a,id)=>S[a].find(x=>x.id===id);
 const authGet=()=>{try{return sessionStorage.getItem('careos-auth')==='1'}catch(e){return false}};
 const authSet=v=>{try{v?sessionStorage.setItem('careos-auth','1'):sessionStorage.removeItem('careos-auth')}catch(e){}};
-const ui={logged:authGet(),role:'master',ct:'utama',bt:'papan',ht:'ringkas',branch:'KMN',f:{le:'master@carrepublic.demo',lp:'Demo#2026'},msg:null,slot:null,done:null,sel:null,fb:false,menu:false};
+const ui={logged:authGet(),role:'master',ct:'utama',bt:'papan',ht:'ringkas',branch:'ALL',f:{le:'master@carrepublic.demo',lp:'Demo#2026'},msg:null,slot:null,done:null,sel:null,fb:false,menu:false};
 
 /* ---------- domain ---------- */
 function slotsFor(bid,svc,date){
@@ -454,17 +458,26 @@ ${input('fb:n','Nama anda (pilihan)')}<label>Komen<textarea id="fb:t" data-ui="f
 <div class="row"><button class="btn alt" data-act="fbSend">Hantar komen</button><button class="btn ghost" data-act="fbClose">Batal</button></div></div></div>`}
 
 /* ---------- master ---------- */
-function stats(){const rs=S.records.filter(r=>r.src==='verified'),rev=rs.reduce((a,r)=>a+r.total,0);
-  const act=S.bookings.filter(activeB);return {rs,rev,act,wait:act.filter(b=>b.st==='awaiting').length,over:S.reminders.filter(r=>remStatus(r)==='overdue').length,leads:S.leads.filter(l=>l.st==='baharu').length,apps:S.apps.filter(a=>a.st==='baharu').length}}
+const inS=b=>ui.branch==='ALL'||b===ui.branch;
+function scopeBar(all){const g={};S.branches.forEach(b=>{(g[b.state]=g[b.state]||[]).push(b)});
+  return `<div class="scopebar"><label>Cawangan dipantau<select id="bsel" data-act="bsel">${all?`<option value="ALL" ${ui.branch==='ALL'?'selected':''}>Semua cawangan (${S.branches.length})</option>`:''}${Object.entries(g).map(([st,l])=>`<optgroup label="${esc(st)}">${l.map(b=>`<option value="${b.id}" ${b.id===ui.branch?'selected':''}>${esc(b.name)}${b.st==='aktif'?'':' (onboarding)'}</option>`).join('')}</optgroup>`).join('')}</select></label></div>`}
+const scopeName=()=>ui.branch==='ALL'?'seluruh rangkaian':by('branches',ui.branch).name;
+function stats(){const rs=S.records.filter(r=>r.src==='verified'&&inS(r.bid)),rev=rs.reduce((a,r)=>a+r.total,0);
+  const act=S.bookings.filter(b=>activeB(b)&&inS(b.bid));
+  return {rs,rev,act,wait:act.filter(b=>b.st==='awaiting').length,over:S.reminders.filter(r=>remStatus(r)==='overdue'&&inS((S.records.find(x=>x.id===r.rec)||{}).bid)).length,leads:ui.branch==='ALL'?S.leads.filter(l=>l.st==='baharu').length:null,apps:S.apps.filter(a=>a.st==='baharu'&&inS((by('jobs',a.jid)||{}).bid)).length}}
 const PIPE=[['confirmed','Akan tiba'],['arrived','Tiba'],['inspection','Pemeriksaan'],['awaiting','Tunggu kelulusan'],['service','Diservis'],['quality','Semakan kualiti'],['ready','Sedia diambil']];
+function netTable(){const today=ymd(now());
+  return `<h2 class="sec">Rangkaian cawangan</h2><div class="card scroll net"><table><thead><tr><th>Cawangan</th><th>Negeri</th><th>Status</th><th class="num">Bay</th><th class="num">Kerja aktif</th><th class="num">Servis</th><th class="num">Hasil</th><th></th></tr></thead><tbody>${S.branches.map(b=>{const rs=S.records.filter(r=>r.src==='verified'&&r.bid===b.id),act=S.bookings.filter(k=>k.bid===b.id&&activeB(k)).length;
+   return `<tr><td><b>${esc(b.name)}</b><div class="muted">${esc(b.city)}</div></td><td>${esc(b.state)}</td><td><span class="pill ${b.st==='aktif'?'ok':'warn'}">${b.st==='aktif'?'Aktif':'Onboarding'}</span></td><td class="num">${b.bays}</td><td class="num">${act}</td><td class="num">${rs.length}</td><td class="num">${rm(rs.reduce((a,r)=>a+r.total,0))}</td><td><button class="btn sm ghost" data-act="goBranch" data-id="${b.id}">Buka</button></td></tr>`}).join('')}</tbody></table></div>`}
 function viewMaster(){const x=stats();
   const stp=(n,role,sub,t,d)=>`<li><div><b>${t}</b><span class="muted">${d}</span></div><button class="btn sm ghost" data-act="go" data-id="${role}:${sub}">Buka</button></li>`;
-  return `<div class="hero-m"><h1>Gambaran Master</h1><p>Anda melihat seluruh CareOS sekaligus: apa yang pelanggan nampak di telefon, apa yang cawangan buat di bengkel, dan apa yang HQ pantau. Cawangan perintis ialah Kemaman.</p><div class="strip" style="margin:12px 0 0"><span class="pill warn">Data contoh</span><span class="pill info">Cawangan perintis: Kemaman</span></div></div>
-  <div class="kpis"><div class="kpi"><small>Kereta dalam bengkel</small><b>${x.act.length}</b></div><div class="kpi ${x.wait?'hot':''}"><small>Menunggu kelulusan pelanggan</small><b>${x.wait}</b></div><div class="kpi"><small>Hasil direkod (contoh)</small><b>${rm(x.rev)}</b></div><div class="kpi"><small>Peringatan tertunggak</small><b>${x.over}</b></div><div class="kpi"><small>Permohonan rakan baharu</small><b>${x.leads}</b></div><div class="kpi"><small>Calon baharu</small><b>${x.apps}</b></div></div>
-  <h2 class="sec">Bengkel Kemaman sekarang</h2><div class="pipe">${PIPE.map(([k,n])=>{const l=S.bookings.filter(b=>b.bid==='KMN'&&b.st===k);return `<div><b>${l.length}</b><small>${n}</small></div>`}).join('')}</div>
+  return `<div class="hero-m"><h1>Gambaran Master</h1><p>Anda melihat seluruh CareOS sekaligus: apa yang pelanggan nampak di telefon, apa yang cawangan buat di bengkel, dan apa yang HQ pantau. Cawangan perintis ialah Kemaman.</p><div class="strip" style="margin:12px 0 0"><span class="pill warn">Data contoh</span><span class="pill info">${S.branches.filter(b=>b.st==='aktif').length} cawangan aktif · ${S.branches.length} dalam rangkaian</span></div></div>
+  ${scopeBar(true)}<div class="kpis"><div class="kpi"><small>Kereta dalam bengkel</small><b>${x.act.length}</b></div><div class="kpi ${x.wait?'hot':''}"><small>Menunggu kelulusan pelanggan</small><b>${x.wait}</b></div><div class="kpi"><small>Hasil direkod (contoh)</small><b>${rm(x.rev)}</b></div><div class="kpi"><small>Peringatan tertunggak</small><b>${x.over}</b></div><div class="kpi"><small>Permohonan rakan baharu</small><b>${x.leads==null?'-':x.leads}</b></div><div class="kpi"><small>Calon baharu</small><b>${x.apps}</b></div></div>
+  <h2 class="sec">Bengkel sekarang: ${esc(scopeName())}</h2><div class="pipe">${PIPE.map(([k,n])=>{const l=S.bookings.filter(b=>inS(b.bid)&&b.st===k);return `<div><b>${l.length}</b><small>${n}</small></div>`}).join('')}</div>
+  ${ui.branch==='ALL'?netTable():''}
   <h2 class="sec">Lihat sebagai</h2><div class="roles">
   <div class="card"><h3>Pelanggan</h3><p class="muted">Garaj, status servis, sebut harga untuk diluluskan, tempahan, pasport servis, ruangan insurans dan roadtax.</p><button class="btn" data-act="go" data-id="cust:utama">Buka app pelanggan</button></div>
-  <div class="card"><h3>Cawangan Kemaman</h3><p class="muted">Papan kerja bengkel, jadual bay, senarai pelanggan akan due, jualan dan staf.</p><button class="btn" data-act="go" data-id="branch:papan">Buka papan kerja</button></div>
+  <div class="card"><h3>Cawangan (BranchOS)</h3><p class="muted">Papan kerja bengkel, jadual bay, senarai pelanggan akan due, jualan dan staf bagi cawangan yang dipilih.</p><button class="btn" data-act="go" data-id="branch:papan">Buka papan kerja</button></div>
   <div class="card"><h3>HQ</h3><p class="muted">Prestasi rangkaian, rakan insurans dan roadtax, WhatsApp peringatan, rekrutmen staf.</p><button class="btn" data-act="go" data-id="hq:ringkas">Buka HQ</button></div></div>
   <h2 class="sec">Cuba aliran penuh (lebih kurang 5 minit)</h2><ol class="flow">
   ${stp(1,'cust','utama','Pelanggan: luluskan sebut harga','Aisyah ada sebut harga servis Myvi menunggu kelulusan.')}
@@ -519,7 +532,7 @@ function cTempah(){const f=ui.f,mv=mine();if(!f.vid||!mv.find(v=>v.id===f.vid))f
   <div class="step"><span>1</span>Kenderaan</div>${sel('vid','',mv.map(v=>[v.id,v.plate+' · '+v.make+' '+v.model]))}
   <div class="step"><span>2</span>Servis</div><div class="svcs">${Object.entries(SV).map(([k,s])=>{const p=(S.prices[f.bid]||{})[k];return `<button class="svc" aria-pressed="${f.svc===k}" data-act="svc" data-v="${k}"><span><b>${s.n}</b><small>${s.d} minit</small></span><b>${p==null?'Hubungi':rm(p)}</b></button>`}).join('')}</div>
   ${pr!=null?'<p class="muted" style="margin-top:6px"><span class="pill warn">Harga contoh demo</span></p>':''}
-  <div class="step"><span>3</span>Cawangan</div>${sel('bid','',S.branches.map(b=>[b.id,b.name+' ('+b.city+')']))}<p class="muted">${esc(by('branches',f.bid).note)}</p>
+  <div class="step"><span>3</span>Cawangan</div>${sel('bid','',S.branches.filter(b=>b.st==='aktif').map(b=>[b.id,b.name+' ('+b.city+')']))}<p class="muted">${esc(by('branches',f.bid).note)}</p>
   <div class="step"><span>4</span>Hari dan masa</div><div class="days">${days.map((d,i)=>`<button class="day" aria-pressed="${f.date===d}" data-act="day" data-v="${d}">${dn(d,i)}<small>${new Date(d+'T00:00:00').toLocaleDateString('ms-MY',{day:'numeric',month:'short'})}</small></button>`).join('')}</div>
   <div class="slots" style="margin-top:10px">${sl.length?sl.map(x=>`<button class="slot" aria-pressed="${ui.slot===x.s}" data-act="slot" data-v="${x.s}">${hm(x.s)}</button>`).join(''):'<span class="muted">Tiada slot (cawangan tutup, penuh atau masa telah lalu). Pilih hari lain.</span>'}</div>
   <label style="margin:14px 0 10px;color:var(--ink)"><input type="checkbox" id="share" data-ui="share" data-cb="1" ${f.share?'checked':''}>Kongsi sejarah servis kenderaan ini dengan cawangan ini sepanjang tempahan aktif (boleh ditarik balik).</label>
@@ -550,9 +563,9 @@ function cSaya(){const c=S.consent;const row=(k,t)=>`<label style="color:var(--i
 
 /* ---------- cawangan ---------- */
 const COLS=[['confirmed','Akan tiba'],['arrived','Tiba'],['inspection','Pemeriksaan'],['awaiting','Tunggu kelulusan'],['service','Diservis'],['quality,ready','Semakan dan sedia']];
-function viewBranch(){const bid=ui.branch,br=by('branches',bid),t=ui.bt;
+function viewBranch(){if(ui.branch==='ALL')ui.branch='KMN';const bid=ui.branch,br=by('branches',bid),t=ui.bt;
   const act=S.bookings.filter(b=>b.bid===bid&&activeB(b)),done=S.records.filter(r=>r.bid===bid&&r.src==='verified'),today=ymd(now());
-  let h=`<div class="row sp" style="margin-bottom:8px"><div><h1 style="margin:0">${esc(br.name)}</h1><p class="muted">${esc(br.note)} Waktu ${br.open} hingga ${br.close} · ${br.bays} bay.</p></div><label style="margin:0;min-width:210px">Cawangan<select id="bsel" data-act="bsel">${S.branches.map(b=>`<option value="${b.id}" ${b.id===bid?'selected':''}>${esc(b.name)}</option>`).join('')}</select></label></div>
+  let h=`${scopeBar(false)}<div style="margin-bottom:8px"><h1 style="margin:0">${esc(br.name)}</h1><p class="muted">${esc(br.city)}, ${esc(br.state)} · ${br.st==='aktif'?'Aktif':'Onboarding'} · ${esc(br.note)} Waktu ${br.open} hingga ${br.close} · ${br.bays} bay.</p></div>
   <div class="kpis"><div class="kpi"><small>Kerja aktif</small><b>${act.length}</b></div><div class="kpi ${act.some(b=>b.st==='awaiting')?'hot':''}"><small>Tunggu kelulusan</small><b>${act.filter(b=>b.st==='awaiting').length}</b></div><div class="kpi"><small>Jualan hari ini</small><b>${rm(done.filter(r=>r.date===today).reduce((a,r)=>a+r.total,0))}</b></div><div class="kpi"><small>Bay</small><b>${br.bays}</b></div></div>`;
   h+=t==='papan'?bBoard(bid,act):t==='jadual'?bJadual(bid):t==='due'?bDue(bid):t==='jualan'?bJualan(bid,done):branchJobs(bid);
   return h+`<div class="hint" style="margin-top:12px">Cawangan tidak nampak tempahan cawangan lain, maklumat insurans atau roadtax pelanggan, atau kos cawangan lain. Sejarah cawangan lain hanya kelihatan semasa tempahan aktif dan dengan persetujuan pelanggan.</div>`}
@@ -593,10 +606,10 @@ function hqRingkas(){const x=stats(),rs=x.rs,withCost=rs.filter(r=>r.cost!=null)
   const flows={},byV={};rs.slice().sort((a,b)=>a.ts-b.ts).forEach(r=>{const p=byV[r.vid];if(p&&p!==r.bid){const k=p+'→'+r.bid;flows[k]=(flows[k]||0)+1}byV[r.vid]=r.bid});
   const days=[];for(let i=13;i>=0;i--)days.push(ymd(addDays(now(),-i)));const dv=days.map(d=>rs.filter(r=>r.date===d).reduce((a,r)=>a+r.total,0)),mx=Math.max(1,...dv);
   const rst={};S.reminders.forEach(r=>{const s=remStatus(r);rst[s]=(rst[s]||0)+1});const bk=S.bookings,rb=bk.filter(b=>b.src==='reminder');
-  return `<h1>Pusat Kawalan HQ</h1><p class="muted">Sumber: <span class="pill warn">demo, ${rs.length} rekod</span> Angka dikira daripada rekod operasi. Peringatan ialah anggaran jadual, bukan diagnosis.</p>
+  return `${scopeBar(true)}<h1>Pusat Kawalan HQ</h1><p class="muted">Paparan: <b>${esc(scopeName())}</b> · Sumber: <span class="pill warn">demo, ${rs.length} rekod</span> Angka dikira daripada rekod operasi. Peringatan ialah anggaran jadual, bukan diagnosis.</p>
   <div class="kpis"><div class="kpi"><small>Servis selesai</small><b>${rs.length}</b></div><div class="kpi"><small>Hasil</small><b>${rm(x.rev)}</b></div><div class="kpi"><small>Purata invois</small><b>${rs.length?rm(x.rev/rs.length):'-'}</b></div><div class="kpi"><small>Kenderaan aktif</small><b>${new Set(rs.map(r=>r.vid)).size}</b></div><div class="kpi"><small>Margin kasar</small><b>${withCost.length?rm(withCost.reduce((a,r)=>a+r.total-r.cost,0)):'-'}</b></div><div class="kpi"><small>Merentas cawangan</small><b>${Object.values(flows).reduce((a,b)=>a+b,0)}</b></div></div>
   <div class="card"><h2>Hasil 14 hari terakhir</h2><div class="bars" role="img" aria-label="Carta hasil harian 14 hari">${dv.map((v,i)=>`<div class="b ${i===13?'t':''}" title="${dfmt(days[i])}: ${rm(v)}"><em>${v?Math.round(v):''}</em><i style="height:${Math.max(2,v/mx*92)}%"></i><span>${days[i].slice(8)}</span></div>`).join('')}</div></div>
-  <div class="grid"><div class="card"><h2>Mengikut cawangan</h2>${S.branches.map(b=>{const l=rs.filter(r=>r.bid===b.id);return `<div class="row sp sm" style="padding:7px 0;border-bottom:1px solid var(--line)"><span><b>${esc(b.name)}</b><div class="muted">${esc(b.city)}, ${esc(b.state)}</div></span><span>${l.length} servis · ${rm(l.reduce((a,r)=>a+r.total,0))}</span></div>`}).join('')}</div>
+  <div class="grid"><div class="card"><h2>Mengikut cawangan</h2>${S.branches.map(b=>{const l=S.records.filter(r=>r.src==='verified'&&r.bid===b.id);return `<div class="row sp sm" style="padding:7px 0;border-bottom:1px solid var(--line)"><span><b>${esc(b.name)}</b><div class="muted">${esc(b.city)}, ${esc(b.state)}${b.st==='aktif'?'':' · onboarding'}</div></span><span>${l.length} servis · ${rm(l.reduce((a,r)=>a+r.total,0))}</span></div>`}).join('')}</div>
   <div class="card"><h2>Aliran merentas cawangan</h2>${Object.keys(flows).length?Object.entries(flows).map(([k,n])=>{const [a,c]=k.split('→');return `<div class="sm">${esc(by('branches',a).name)} (${by('branches',a).state}) kepada ${esc(by('branches',c).name)} (${by('branches',c).state}): <b>${n}</b> kenderaan</div>`}).join(''):'<span class="muted">Belum ada.</span>'}</div>
   <div class="card"><h2>Peringatan dan tempahan</h2><div class="sm">${Object.keys(rst).length?Object.entries(rst).map(([k,n])=>`${REM[k]?REM[k][0]:k}: ${n}`).join('<br>'):'Tiada peringatan.'}<br>Tempahan: ${bk.length} · dari peringatan: ${rb.length} (selesai ${rb.filter(b=>b.st==='completed').length}) · tidak hadir: ${bk.filter(b=>b.st==='noshow').length}<br>Persetujuan peringatan (demo): ${S.consent.reminder?'Ya':'Tidak'} · pemasaran: ${S.consent.marketing?'Ya':'Tidak'}</div></div></div>`}
 function hqRakan(){const lead=t=>S.leads.filter(l=>l.type===t).length;
@@ -707,6 +720,7 @@ const A={
  ct:e=>{ui.ct=e.v;ui.role='cust';window.scrollTo(0,0)},bt:e=>{ui.bt=e.v;ui.role='branch';window.scrollTo(0,0)},ht:e=>{ui.ht=e.v;ui.role='hq';window.scrollTo(0,0)},
  go:e=>{const [r,s]=e.id.split(':');ui.role=r;if(SUBK[r])ui[SUBK[r]]=s;window.scrollTo(0,0)},
  menu:()=>{ui.menu=!ui.menu},
+ goBranch:e=>{ui.branch=e.id;ui.role='branch';ui.bt='papan';ui.sel=null;window.scrollTo(0,0)},
  skip:()=>{S.skip+=182;ui.menu=false;setMsg('ok','Masa disimulasi maju 6 bulan (demo). Peringatan dikira semula.');save()},
  reset:()=>{S=seed();ui.f={le:'master@carrepublic.demo',lp:''};ui.slot=null;ui.sel=null;ui.menu=false;store.set(JSON.stringify(S));setMsg('ok','Data demo disetkan semula.')},
  logout:()=>{ui.logged=false;authSet(false);ui.menu=false;ui.f.lp='Demo#2026'},
