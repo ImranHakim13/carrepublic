@@ -217,6 +217,24 @@ ol.tl li.ext::before{background:#aab5b3}
 .stg{display:flex;gap:4px;margin:12px 0 8px}.stg i{flex:1;height:8px;border-radius:99px;background:#d9e0de}.stg i.d{background:var(--teal)}.stg i.n{background:var(--lane);box-shadow:0 0 0 2px rgba(255,210,31,.35)}
 .job .alert{margin-top:8px;background:var(--amb-bg);color:var(--amb);border-radius:10px;padding:7px 10px;font-size:12.5px;font-weight:600}
 .cm{border-bottom:1px solid var(--line);padding:8px 0}
+
+.bdg{font-style:normal;background:#d6342c;color:#fff;border-radius:99px;font:800 11px var(--bd);padding:1px 6px;margin-left:6px;vertical-align:middle}
+.banner{display:flex;gap:12px;align-items:center;width:100%;text-align:left;background:var(--amb-bg);border:1.5px solid #f0c24a;border-radius:14px;padding:11px 13px;margin-bottom:12px;cursor:pointer;color:var(--ink);font:600 14px var(--bd)}
+.banner.late{background:var(--red-bg);border-color:#e8908a}.banner>span:nth-child(2){flex:1;display:grid;gap:2px}.banner .sm{font-weight:500;color:var(--mut)}
+.banner .bi{width:34px;height:34px;border-radius:10px;background:var(--ink);color:var(--lane);display:grid;place-items:center;flex:none}.banner .bi svg{width:20px;height:20px}
+.tks,.tkl{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr))}
+.tk{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px;display:grid;gap:6px;align-content:start}
+.tk.late{border-color:#e8908a;box-shadow:0 0 0 2px var(--red-bg)}.tk.done{opacity:.7}.tk h3{margin:4px 0 0;font-size:16px}.tk p{margin:0}
+.tkf{display:grid;gap:8px;margin-top:8px}.tkf input{width:100%}
+.tkc{display:inline-block;border-radius:99px;padding:3px 10px;font-size:12px;background:var(--chip)}.tkc.baru{background:var(--amb-bg);color:var(--amb)}.tkc.terima{background:var(--blue-bg);color:var(--blue)}.tkc.siap{background:var(--teal-bg);color:#0a6a58}.tkc.late{background:var(--red-bg);color:var(--red);font-weight:700}
+.tkcs{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}.tkw{display:inline-flex;align-items:center;gap:6px}
+.lnk{background:none;border:0;color:var(--blue);font:600 12.5px var(--bd);text-decoration:underline;cursor:pointer;padding:2px}
+.prog.sm2{height:8px}.fgrid{display:grid;gap:10px}.fgrid input,.fgrid select,.fgrid textarea{width:100%}
+.lg2{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--line)}.lg2:last-child{border:0}.lg2>span{min-width:92px}
+.hgrid{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));margin-bottom:6px}
+.hc{border-top:5px solid var(--line)}.hc.ok{border-top-color:#0d8a73}.hc.warn{border-top-color:#f0b400}.hc.bad{border-top-color:#d6342c}
+.hm{display:grid;gap:6px;margin-top:10px}.hm>div{display:flex;align-items:center;gap:8px;font-size:13.5px}.hm span{flex:1}.hm b{font-weight:700}
+.dot{width:10px;height:10px;border-radius:50%;background:#0d8a73;flex:none}.dot.warn{background:#f0b400}.dot.bad{background:#d6342c}
 </style>
 </head>
 <body>
@@ -269,6 +287,12 @@ function genHist(){const out=[],t=new Date(),dim=new Date(t.getFullYear(),t.getM
       const oil=Math.round(jobs*(.62+.02*Math.sin(j))),ac=Math.round(jobs*.14),br=Math.round(jobs*.12),ty=Math.max(0,jobs-oil-ac-br);
       out.push({m,bid,jobs,rev:Math.round(rev),cost:Math.round(cost),newc,rep:jobs-newc,bk,noshow:ns,tat,svc:{oil,ac,brake:br,tyre:ty}})}}
   return out}
+function seedTasks(){const D=n=>ymd(addDays(new Date(),n)),T=n=>Date.now()-n*3600000;
+  return [
+   {id:'t1',title:'Hubungi semua pelanggan yang tertunggak servis',body:'Guna senarai Akan due. Sasaran: setiap pelanggan tertunggak dihubungi atau ditempah semula minggu ini.',to:'ALL',pri:'segera',cat:'Pelanggan',due:D(2),ts:T(20),p:{KMN:{st:'terima',ts:T(18)}},log:[{ts:T(20),b:null,ev:'Arahan dihantar'},{ts:T(18),b:'KMN',ev:'Diterima oleh Hafiz (Demo)'}]},
+   {id:'t2',title:'Tutup jurang sasaran hasil bulan ini',body:'Fokus servis kedua pelanggan sedia ada dan tempahan walk-in petang.',to:'KMN',pri:'tinggi',cat:'Jualan',due:D(5),ts:T(5),p:{},log:[{ts:T(5),b:null,ev:'Arahan dihantar'}]},
+   {id:'t3',title:'Hantar gambar bay dan papan harga untuk direktori',body:'',to:'ALL',pri:'biasa',cat:'Operasi',due:D(-1),ts:T(80),p:{KMN:{st:'siap',ts:T(30),note:'Gambar dihantar melalui WhatsApp HQ.'}},log:[{ts:T(80),b:null,ev:'Arahan dihantar'},{ts:T(30),b:'KMN',ev:'Ditanda siap: Gambar dihantar melalui WhatsApp HQ.'}]},
+   {id:'t4',title:'Semak stok minyak enjin dan penapis',body:'',to:'ALL',pri:'biasa',cat:'Kewangan',due:D(1),ts:T(100),p:{KMN:{st:'siap',ts:T(60)},SHA:{st:'siap',ts:T(50)}},log:[{ts:T(100),b:null,ev:'Arahan dihantar'},{ts:T(60),b:'KMN',ev:'Ditanda siap'},{ts:T(50),b:'SHA',ev:'Ditanda siap'}]}];}
 function seed(){
   const t=new Date(),D=n=>ymd(addDays(t,n)),T=(h,m)=>{const d=new Date(t);d.setHours(h,m,0,0);return d.getTime()};
   const veh=(id,own,plate,make,model,year,km,col,rt,ins)=>({id,own,plate,make,model,year,km,ik:10000,im:6,rt:D(rt),ins:D(ins),col});
@@ -324,7 +348,7 @@ function seed(){
   const apps=[
     {id:'a1',jid:'j1',name:'Calon contoh A',phone:'(contoh)',email:'',exp:2,lic:true,must:[true,true,true,false],ans:['Saya dengar dahulu, minta maaf, kemudian terangkan langkah seterusnya.','Saya semak rekod pemeriksaan dan tunjuk bukti kepada pelanggan.','Boleh.'],st:'saringan',ts:Date.now()-5*3600e3},
     {id:'a2',jid:'j1',name:'Calon contoh B',phone:'(contoh)',email:'',exp:0,lic:false,must:[true,false,false,true],ans:['','',''],st:'baharu',ts:Date.now()-2*3600e3}];
-  return {v:6,seq:300,skip:0,hist:genHist(),targets:{KMN:36000,SHA:11500},
+  return {v:7,tasks:seedTasks(),seq:300,skip:0,hist:genHist(),targets:{KMN:36000,SHA:11500},
     branches:[
       {id:'KMN',st:'aktif',name:'CARREPUBLIC Kemaman',city:'Kemaman',state:'Terengganu',postcode:'24000',bays:2,open:'09:00',close:'18:00',closed:[0],note:'Cawangan perintis. Alamat, waktu dan harga sebenar belum diisi; nilai di sini ialah contoh.'},
       {id:'SHA',st:'aktif',name:'[Contoh] Cawangan Shah Alam',city:'Shah Alam',state:'Selangor',postcode:'40000',bays:1,open:'09:00',close:'18:00',closed:[0],note:'Cawangan contoh untuk menunjukkan perjalanan merentas negeri.'},
@@ -341,7 +365,7 @@ function seed(){
 }
 const KEY5='careos-demo-v5';
 let S;try{S=JSON.parse(store.get())}catch(e){}
-if(!S||S.v!==6)S=seed();
+if(!S||S.v!==7)S=seed();
 const save=()=>store.set(JSON.stringify(S));
 const nid=p=>p+(++S.seq);
 const now=()=>new Date(Date.now()+S.skip*DAY);
@@ -457,8 +481,9 @@ const hm=t=>new Date(t).toLocaleTimeString('ms-MY',{hour:'2-digit',minute:'2-dig
 
 const NAV=[
  {id:'master',t:'Gambaran Master',ic:'star',subs:[]},
+ {id:'arahan',t:'Arahan CEO',ic:'brief',subs:[]},
  {id:'cust',t:'Pelanggan (app)',ic:'user',k:'ct',subs:[['utama','Utama','home'],['tempah','Tempah','cal'],['pasport','Pasport','book'],['rakan','Rakan','shield'],['saya','Saya','user']]},
- {id:'branch',t:'Cawangan (BranchOS)',ic:'wrench',k:'bt',subs:[['papan','Papan kerja','board'],['jadual','Jadual','cal'],['due','Akan due','chat'],['jualan','Jualan','chart'],['staf','Staf','people']]},
+ {id:'branch',t:'Cawangan (BranchOS)',ic:'wrench',k:'bt',subs:[['papan','Papan kerja','board'],['jadual','Jadual','cal'],['due','Akan due','chat'],['jualan','Jualan','chart'],['arahan','Arahan','brief'],['staf','Staf','people']]},
  {id:'hq',t:'HQ',ic:'chart',k:'ht',subs:[['ringkas','Ringkasan','chart'],['rakan','Rakan','shield'],['wa','WhatsApp','chat'],['rekrut','Rekrutmen','people']]},
  {id:'kerja',t:'Kerjaya (calon)',ic:'brief',subs:[]}];
 
@@ -474,12 +499,13 @@ function viewLogin(){return `<div class="lg"><section class="lg-l"><div class="l
 
 function ctrls(){return `<button class="btn" data-act="fbOpen">${I('chat')}Beri komen</button><button class="btn" data-act="skip">${I('gear')}Simulasi +6 bulan${S.skip?' ('+Math.round(S.skip/30)+' bln)':''}</button><button class="btn" data-act="reset">${I('wrench')}Set semula data demo</button><button class="btn out" data-act="logout">Log keluar</button>`}
 
+const bdg=k=>{if(k!=='arahan')return '';const n=tkOpen(ui.branch==='ALL'?'KMN':ui.branch).length;return n?`<em class="bdg">${n}</em>`:''};
 function shell(){
   const n=NAV.find(x=>x.id===ui.role);
-  const side=`<aside class="side"><div class="logo"><i></i><b>CARREPUBLIC</b><small>CareOS</small></div><nav aria-label="Peranan">${NAV.map(x=>`<button class="nb" aria-current="${ui.role===x.id}" data-act="role" data-v="${x.id}">${I(x.ic)}${x.t}</button>${ui.role===x.id&&x.subs.length?`<div class="subs">${x.subs.map(([k,t])=>`<button class="sb" aria-current="${ui[x.k]===k}" data-act="${x.k}" data-v="${k}">${t}</button>`).join('')}</div>`:''}`).join('')}</nav><div class="sidef">${ctrls()}<div class="env">Persekitaran demo. Data contoh disimpan dalam pelayar ini.</div></div></aside>`;
+  const side=`<aside class="side"><div class="logo"><i></i><b>CARREPUBLIC</b><small>CareOS</small></div><nav aria-label="Peranan">${NAV.map(x=>`<button class="nb" aria-current="${ui.role===x.id}" data-act="role" data-v="${x.id}">${I(x.ic)}${x.t}</button>${ui.role===x.id&&x.subs.length?`<div class="subs">${x.subs.map(([k,t])=>`<button class="sb" aria-current="${ui[x.k]===k}" data-act="${x.k}" data-v="${k}">${t}${bdg(k)}</button>`).join('')}</div>`:''}`).join('')}</nav><div class="sidef">${ctrls()}<div class="env">Persekitaran demo. Data contoh disimpan dalam pelayar ini.</div></div></aside>`;
   const mtop=`<header class="mtop"><div class="row1"><span class="logo2">CARREPUBLIC<small>CareOS</small></span><button class="menub" data-act="menu" aria-label="Menu" aria-expanded="${!!ui.menu}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">${ui.menu?'<path d="M6 6l12 12M18 6L6 18"/>':'<path d="M4 7h16M4 12h16M4 17h16"/>'}</svg></button></div><div class="chips">${NAV.map(x=>`<button class="chip-r" aria-pressed="${ui.role===x.id}" data-act="role" data-v="${x.id}">${x.t.replace(/ \(.*\)/,'')}</button>`).join('')}</div>${ui.menu?`<div class="pop">${ctrls()}</div>`:''}</header>`;
-  const bnav=n.subs.length?`<nav class="bnav" aria-label="Menu">${n.subs.map(([k,t,ic])=>`<button aria-current="${ui[n.k]===k}" data-act="${n.k}" data-v="${k}">${I(ic)}${t}</button>`).join('')}</nav>`:'';
-  const body=ui.role==='master'?viewMaster():ui.role==='cust'?viewCust():ui.role==='branch'?viewBranch():ui.role==='kerja'?viewKerja():viewHQ();
+  const bnav=n.subs.length?`<nav class="bnav" aria-label="Menu">${n.subs.map(([k,t,ic])=>`<button aria-current="${ui[n.k]===k}" data-act="${n.k}" data-v="${k}">${I(ic)}${t}${bdg(k)}</button>`).join('')}</nav>`:'';
+  const body=ui.role==='master'?viewMaster():ui.role==='arahan'?viewArahan():ui.role==='cust'?viewCust():ui.role==='branch'?viewBranch():ui.role==='kerja'?viewKerja():viewHQ();
   return `<div class="shell">${side}${mtop}<main class="main" id="main">${body}</main>${bnav}</div><button class="fab" data-act="fbOpen">${I('chat')}<span>Komen</span></button>${ui.fb?fbModal():''}${msgBox()}`}
 
 function fbModal(){return `<div class="modal" data-act="fbClose"><div role="dialog" aria-label="Beri komen"><h2>Beri komen</h2><p class="muted">Tulis apa yang baik, mengelirukan atau kurang. Komen dihantar kepada pemilik demo bersama nama paparan yang anda sedang lihat.</p>
@@ -574,7 +600,7 @@ function viewBranch(){if(ui.branch==='ALL')ui.branch='KMN';const bid=ui.branch,b
   const act=S.bookings.filter(b=>b.bid===bid&&activeB(b)),done=S.records.filter(r=>r.bid===bid&&r.src==='verified'),today=ymd(now());
   let h=`${scopeBar(false)}<div style="margin-bottom:8px"><h1 style="margin:0">${esc(br.name)}</h1><p class="muted">${esc(br.city)}, ${esc(br.state)} · ${br.st==='aktif'?'Aktif':'Onboarding'} · ${esc(br.note)} Waktu ${br.open} hingga ${br.close} · ${br.bays} bay.</p></div>
   <div class="kpis"><div class="kpi"><small>Kerja aktif</small><b>${act.length}</b></div><div class="kpi ${act.some(b=>b.st==='awaiting')?'hot':''}"><small>Tunggu kelulusan</small><b>${act.filter(b=>b.st==='awaiting').length}</b></div><div class="kpi"><small>Jualan hari ini</small><b>${rm(done.filter(r=>r.date===today).reduce((a,r)=>a+r.total,0))}</b></div><div class="kpi"><small>Bay</small><b>${br.bays}</b></div></div>`;
-  h+=t==='papan'?bBoard(bid,act):t==='jadual'?bJadual(bid):t==='due'?bDue(bid):t==='jualan'?bJualan(bid,done):branchJobs(bid);
+  h=tkBanner(bid)+h;h+=t==='arahan'?tkBranchView(bid):t==='papan'?bBoard(bid,act):t==='jadual'?bJadual(bid):t==='due'?bDue(bid):t==='jualan'?bJualan(bid,done):branchJobs(bid);
   return h+`<div class="hint" style="margin-top:12px">Cawangan tidak nampak tempahan cawangan lain, maklumat insurans atau roadtax pelanggan, atau kos cawangan lain. Sejarah cawangan lain hanya kelihatan semasa tempahan aktif dan dengan persetujuan pelanggan.</div>`}
 function kcard(b){const v=by('vehicles',b.vid);return `<button class="kc ${b.st==='awaiting'?'wait':''}" aria-pressed="${ui.sel===b.id}" data-act="sel" data-id="${b.id}"><div class="row sp">${plate(v.plate,'sm')}<span class="sm" style="color:var(--mut)">${hm(b.s)}</span></div><div style="font-weight:700;margin-top:6px">${esc(v.make)} ${esc(v.model)}</div><div class="t">${SV[b.svc].n}<br>${esc(ownerName(v))}</div></button>`}
 function bBoard(bid,act){const list=act.slice().sort((a,b)=>a.s-b.s);
@@ -677,9 +703,13 @@ function viewMaster(){
   if(ui.branch==='ALL'&&x.leads)alerts.push([`${x.leads} permohonan rakan insurans atau roadtax baharu`,'hq:rakan','Buka rakan']);
   if(x.apps)alerts.push([`${x.apps} calon baharu menunggu saringan`,'hq:rekrut','Buka rekrutmen']);
   const ob=S.branches.filter(b=>b.st!=='aktif').length;if(ui.branch==='ALL'&&ob)alerts.push([`${ob} cawangan dalam onboarding`,'master:','Lihat rangkaian']);
+  const tl=S.tasks.reduce((a,t)=>a+tgtOf(t).filter(b=>inS(b)&&tkLate(t,b)).length,0),tu=S.tasks.reduce((a,t)=>a+tgtOf(t).filter(b=>inS(b)&&tkSt(t,b)==='baru').length,0);
+  if(tl)alerts.unshift([`${tl} tugasan cawangan lewat daripada arahan CEO`,'arahan:','Pantau arahan']);
+  if(tu)alerts.push([`${tu} arahan belum dibaca oleh ketua cawangan`,'arahan:','Pantau arahan']);
   const stp=(role,sub,t,d)=>`<li><div><b>${t}</b><span class="muted">${d}</span></div><button class="btn sm ghost" data-act="go" data-id="${role}:${sub}">Buka</button></li>`;
   return `<div class="hero-m"><h1>Pusat Kawalan CEO</h1><p>Operasi, kewangan dan jualan seluruh rangkaian di satu skrin. Pilih cawangan atau lihat semua, dan tukar tempoh untuk bandingkan dengan tempoh sebelumnya.</p><div class="strip" style="margin:12px 0 0"><span class="pill warn">Data demo</span><span class="pill info">${S.branches.filter(b=>b.st==='aktif').length} cawangan aktif · ${S.branches.length} dalam rangkaian</span></div></div>
   <div class="row sp" style="margin-bottom:6px">${scopeBar(true)}<div class="seg" role="group" aria-label="Tempoh">${per.map(([k,t])=>`<button aria-pressed="${String(n)===k}" data-act="per" data-v="${k}">${t}</button>`).join('')}</div></div>
+  ${healthPanel()}
   <div class="kpis ceo">
    ${ck('Hasil',rm0(cur.rev),n===1?'Bulan semasa (setakat hari ini)':ms.length+' bulan',prv&&delta(cur.rev,prv.rev))}
    ${ck('Margin kasar',rm0(cur.gm),pc(cur.gmp,1)+' daripada hasil',prv&&delta(cur.gm,prv.gm))}
@@ -739,6 +769,82 @@ function monthTable(A){const rows=A.slice().reverse();
 function csvMonths(){const A=aggM(monthsBack(12),inS);const L=[['Bulan','Hasil (RM)','Kos langsung (RM)','Margin kasar (RM)','Servis','Sumber']];
   A.forEach(a=>L.push([a.m,a.rev.toFixed(2),a.cost.toFixed(2),(a.rev-a.cost).toFixed(2),a.jobs,'DEMO']));
   const blob=new Blob([L.map(r=>r.join(',')).join('\n')],{type:'text/csv'}),u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download='carrepublic-bulanan-demo.csv';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),1000);setMsg('ok','CSV dimuat turun (data demo).')}
+
+/* ---------- arahan CEO & kesihatan cawangan ---------- */
+const HOD={KMN:'Hafiz (Demo)',SHA:'Nurul (Demo)',KTE:'Belum dilantik',JBU:'Belum dilantik'};
+const PRI={segera:['Segera','bad',0],tinggi:['Tinggi','warn',1],biasa:['Biasa','info',2]};
+const CATS=['Operasi','Jualan','Pelanggan','Kualiti','Staf','Kewangan'];
+const tgtOf=t=>t.to==='ALL'?S.branches.filter(b=>b.st==='aktif').map(b=>b.id):[t.to];
+const tkSt=(t,b)=>(t.p[b]||{st:'baru'}).st;
+const tkLate=(t,b)=>tkSt(t,b)!=='siap'&&t.due<ymd(now());
+const tkOpen=b=>S.tasks.filter(t=>tgtOf(t).includes(b)&&tkSt(t,b)!=='siap');
+const tkLateN=b=>S.tasks.filter(t=>tgtOf(t).includes(b)&&tkLate(t,b)).length;
+const dLeft=t=>Math.round((new Date(t.due+'T00:00:00')-new Date(ymd(now())+'T00:00:00'))/DAY);
+const dueTxt=t=>{const d=dLeft(t);return d<0?`Lewat ${-d} hari`:d===0?'Akhir hari ini':d===1?'Esok':`${d} hari lagi`};
+const TKS={baru:['Belum dibaca','bad'],terima:['Sedang dibuat','info'],siap:['Siap','ok']};
+function tkLog(t,b,ev){t.log.push({ts:Date.now(),b,ev})}
+function tkSend(){const f=ui.f,title=(f['tk:t']||'').trim();if(title.length<3)return setMsg('err','Tulis tajuk arahan (sekurang-kurangnya 3 aksara).');
+  const to=f['tk:to']||'ALL',due=f['tk:due']||ymd(addDays(now(),3));
+  const t={id:nid('t'),title:title.slice(0,120),body:(f['tk:b']||'').trim().slice(0,500),to,pri:f['tk:pri']||'tinggi',cat:f['tk:cat']||'Operasi',due,ts:Date.now(),p:{},log:[]};
+  tkLog(t,null,'Arahan dihantar');S.tasks.unshift(t);['tk:t','tk:b','tk:due'].forEach(k=>f[k]='');
+  setMsg('ok','Arahan dihantar kepada '+(to==='ALL'?'semua cawangan aktif':SHORT(to))+'. Ketua cawangan nampak amaran serta-merta.');save()}
+function tkAck(id){const t=by('tasks',id),b=ui.branch;t.p[b]=Object.assign(t.p[b]||{},{st:'terima',ts:Date.now()});tkLog(t,b,'Diterima oleh '+HOD[b]);setMsg('ok','Arahan diterima. CEO nampak status ini.');save()}
+function tkDone(id){const t=by('tasks',id),b=ui.branch,n=(ui.f['tn:'+id]||'').trim().slice(0,300);t.p[b]=Object.assign(t.p[b]||{},{st:'siap',ts:Date.now(),note:n});tkLog(t,b,'Ditanda siap'+(n?': '+n:''));ui.f['tn:'+id]='';setMsg('ok','Ditanda siap. Terima kasih.');save()}
+function tkNudge(id,b){const t=by('tasks',id);t.p[b]=Object.assign(t.p[b]||{st:'baru'},{nudge:((t.p[b]||{}).nudge||0)+1});tkLog(t,b,'CEO mengingatkan '+SHORT(b));setMsg('ok','Peringatan dihantar kepada '+HOD[b]+' ('+SHORT(b)+').');save()}
+function tkDel(id){S.tasks=S.tasks.filter(t=>t.id!==id);setMsg('ok','Arahan dipadam.');save()}
+const tkChip=(t,b)=>{const s=tkSt(t,b),late=tkLate(t,b);return `<span class="tkc ${late?'late':s}"><b>${esc(SHORT(b))}</b> ${late?'Lewat':TKS[s][0]}${(t.p[b]||{}).nudge?' · diingatkan '+t.p[b].nudge+'×':''}</span>`};
+
+/* kad arahan untuk cawangan */
+function tkBranchCard(t,b){const s=tkSt(t,b),late=tkLate(t,b),p=PRI[t.pri];
+  return `<div class="tk ${late?'late':''} ${s==='siap'?'done':''}"><div class="row sp"><span class="pill ${p[1]}">${p[0]}</span><span class="pill ${late?'bad':s==='siap'?'ok':'info'}">${late?'Lewat':s==='siap'?'Siap':dueTxt(t)}</span></div>
+  <h3>${esc(t.title)}</h3>${t.body?`<p>${esc(t.body)}</p>`:''}<div class="muted sm">Daripada CEO · ${esc(t.cat)} · akhir ${dfmt(t.due)}${t.to==='ALL'?' · untuk semua cawangan':''}</div>
+  ${s==='siap'?`<div class="sm" style="margin-top:6px">${(t.p[b]||{}).note?'Nota: '+esc(t.p[b].note):'Ditanda siap '+dtfmt(t.p[b].ts)}</div>`:`<div class="tkf">${s==='baru'?`<button class="btn alt" data-act="tkAck" data-id="${t.id}">Terima arahan</button>`:`<span class="pill info">Diterima ${dtfmt(t.p[b].ts)}</span>`}
+  <input id="tn:${t.id}" data-ui="tn:${t.id}" placeholder="Nota ringkas (pilihan)" value="${esc(ui.f['tn:'+t.id]||'')}"><button class="btn" data-act="tkDone" data-id="${t.id}">Tanda siap</button></div>`}</div>`}
+function tkBranchView(b){const l=S.tasks.filter(t=>tgtOf(t).includes(b)).sort((x,y)=>(tkSt(x,b)==='siap')-(tkSt(y,b)==='siap')||PRI[x.pri][2]-PRI[y.pri][2]||(x.due<y.due?-1:1));
+  const o=l.filter(t=>tkSt(t,b)!=='siap');
+  return `<h2>Arahan daripada CEO</h2><p class="muted">Ketua cawangan: <b>${esc(HOD[b])}</b>. Terima arahan supaya CEO tahu ia sudah dibaca, kemudian tanda siap bila selesai.</p>
+  <div class="tks">${l.map(t=>tkBranchCard(t,b)).join('')||'<div class="card"><p class="muted">Tiada arahan.</p></div>'}</div>${o.length?'':'<div class="hint">Semua arahan sudah siap. Bagus.</div>'}`}
+function tkBanner(b){const o=tkOpen(b),late=tkLateN(b),nw=o.filter(t=>tkSt(t,b)==='baru').length;if(!o.length)return '';
+  const top=o.slice().sort((x,y)=>PRI[x.pri][2]-PRI[y.pri][2]||(x.due<y.due?-1:1))[0];
+  return `<button class="banner ${late?'late':''}" data-act="bt" data-v="arahan"><span class="bi">${I('brief')}</span><span><b>${o.length} arahan CEO belum siap${late?` · ${late} lewat`:''}${nw?` · ${nw} belum dibaca`:''}</b><span class="sm">Terkini: ${esc(top.title)} (${dueTxt(top)})</span></span><span class="pill ${late?'bad':'warn'}">Buka</span></button>`}
+
+/* halaman CEO: hantar & pantau arahan */
+function viewArahan(){const f=ui.f,act=S.branches.filter(b=>b.st==='aktif');
+  const all=S.tasks,open=all.filter(t=>tgtOf(t).some(b=>tkSt(t,b)!=='siap')),lateN=all.reduce((a,t)=>a+tgtOf(t).filter(b=>tkLate(t,b)).length,0),unread=all.reduce((a,t)=>a+tgtOf(t).filter(b=>tkSt(t,b)==='baru').length,0);
+  const tot=all.reduce((a,t)=>a+tgtOf(t).length,0),dn=all.reduce((a,t)=>a+tgtOf(t).filter(b=>tkSt(t,b)==='siap').length,0);
+  const form=`<div class="card"><h2 style="margin-top:0">Hantar arahan baharu</h2><div class="fgrid">
+   ${input('tk:t','Tajuk arahan',{ph:'Contoh: Hubungi semua pelanggan tertunggak'})}
+   <label>Butiran (pilihan)<textarea id="tk:b" data-ui="tk:b" rows="3" maxlength="500" placeholder="Apa yang perlu dibuat dan bagaimana mengukur siap.">${esc(f['tk:b']||'')}</textarea></label>
+   ${sel('tk:to','Untuk',[['ALL','Semua cawangan aktif ('+act.length+')'],...act.map(b=>[b.id,b.name+' · '+HOD[b.id]])])}
+   ${sel('tk:pri','Keutamaan',[['tinggi','Tinggi'],['segera','Segera'],['biasa','Biasa']])}
+   ${sel('tk:cat','Kategori',CATS.map(c=>[c,c]))}
+   ${input('tk:due','Tarikh akhir (kosong = 3 hari)',{type:'date'})}</div>
+   <button class="btn alt" data-act="tkSend" style="margin-top:10px">Hantar arahan</button> <span class="muted sm">Ketua cawangan nampak sepanduk amaran dalam BranchOS.</span></div>`;
+  const row=t=>{const p=PRI[t.pri],ts=tgtOf(t),d=ts.filter(b=>tkSt(t,b)==='siap').length;
+   return `<div class="card tkm"><div class="row sp"><span><span class="pill ${p[1]}">${p[0]}</span> <span class="pill">${esc(t.cat)}</span></span><span class="muted sm">akhir ${dfmt(t.due)} · ${dLeft(t)<0&&d<ts.length?'<b style="color:var(--red)">'+dueTxt(t)+'</b>':dueTxt(t)}</span></div>
+   <h3 style="margin:8px 0 2px">${esc(t.title)}</h3>${t.body?`<p class="muted" style="margin:0 0 8px">${esc(t.body)}</p>`:''}
+   <div class="prog sm2" aria-label="Siap ${d} daripada ${ts.length}"><i style="width:${(d/ts.length*100).toFixed(0)}%"></i></div><div class="muted sm">${d} / ${ts.length} cawangan siap</div>
+   <div class="tkcs">${ts.map(b=>`<span class="tkw">${tkChip(t,b)}${tkSt(t,b)!=='siap'?`<button class="lnk" data-act="tkNudge" data-id="${t.id}" data-v="${b}">Ingatkan</button>`:''}</span>`).join('')}</div>
+   ${ts.map(b=>(t.p[b]||{}).note?`<div class="sm muted">Nota ${esc(SHORT(b))}: ${esc(t.p[b].note)}</div>`:'').join('')}
+   <div style="text-align:right"><button class="lnk" data-act="tkDel" data-id="${t.id}">Padam</button></div></div>`};
+  const sorted=all.slice().sort((x,y)=>{const ox=tgtOf(x).some(b=>tkSt(x,b)!=='siap'),oy=tgtOf(y).some(b=>tkSt(y,b)!=='siap');return (oy-ox)||PRI[x.pri][2]-PRI[y.pri][2]||(x.due<y.due?-1:1)});
+  const log=all.flatMap(t=>t.log.map(l=>Object.assign({t},l))).sort((a,b)=>b.ts-a.ts).slice(0,8);
+  return `<div class="hero-m"><h1>Arahan CEO</h1><p>Hantar tugasan kepada ketua cawangan, pantau siapa sudah baca, siapa sedang buat dan siapa lewat. Cawangan dapat amaran dalam sistem mereka.</p></div>
+  <div class="kpis ceo"><div class="kpi ceo ${lateN?'hot':''}"><small>Lewat</small><b>${lateN}</b><span class="sub">tugasan cawangan melepasi tarikh</span></div><div class="kpi ceo"><small>Belum dibaca</small><b>${unread}</b><span class="sub">cawangan belum terima</span></div><div class="kpi ceo"><small>Arahan aktif</small><b>${open.length}</b><span class="sub">daripada ${all.length} arahan</span></div><div class="kpi ceo"><small>Kadar siap</small><b>${tot?pc(dn/tot):'-'}</b><span class="sub">${dn} / ${tot} tugasan cawangan</span></div></div>
+  <div class="grid cg" style="align-items:start"><div>${form}</div><div><h2 class="sec" style="margin-top:0">Aktiviti terkini</h2><div class="card">${log.length?log.map(l=>`<div class="lg2"><span class="muted sm">${dtfmt(l.ts)}</span><div><b>${esc(l.t.title)}</b><div class="sm">${l.b?esc(SHORT(l.b))+' · ':''}${esc(l.ev)}</div></div></div>`).join(''):'<p class="muted">Belum ada aktiviti.</p>'}</div></div></div>
+  <h2 class="sec">Semua arahan</h2><div class="tkl">${sorted.map(row).join('')||'<div class="card"><p class="muted">Belum ada arahan.</p></div>'}</div>`}
+
+/* kesihatan cawangan (RAG) */
+function healthRows(){const pace=dayFrac(),ms=monthsBack(1);
+  return S.branches.filter(b=>b.st==='aktif'&&inS(b.id)).map(br=>{const a=kpi(aggM(ms,x=>x===br.id)),tg=S.targets[br.id]||0,att=tg?a.rev/tg:null,cap=br.bays*26*7*pace,ut=a.jobs/Math.max(1,cap),wait=S.bookings.filter(k=>k.bid===br.id&&k.st==='awaiting').length,late=tkLateN(br.id);
+   const rag=(v,g,y,rev)=>rev?(v<=g?0:v<=y?1:2):(v>=g?0:v>=y?1:2);
+   const m=[['Sasaran hasil',att==null?'-':pc(att),att==null?0:rag(att,pace,pace-.15)],['Utilisasi bay',pc(ut),rag(ut,.5,.35)],['Tidak hadir',pc(a.nsP,1),rag(a.nsP,.05,.08,1)],['Tunggu kelulusan',wait+' kerja',rag(wait,0,1,1)],['Arahan lewat',late+'',rag(late,0,1,1)]];
+   return {br,m,w:Math.max(...m.map(x=>x[2])),rev:a.rev}}).sort((x,y)=>y.w-x.w)}
+function healthPanel(){const rows=healthRows(),L=['Sihat','Perlu perhatian','Kritikal'],C=['ok','warn','bad'];
+  return `<h2 class="sec">Kesihatan cawangan</h2><p class="muted" style="margin:-6px 0 10px">Lampu isyarat setiap cawangan, yang paling bermasalah di atas. Merah atau kuning bermaksud CEO patut bertindak.</p>
+  <div class="hgrid">${rows.map(r=>`<div class="card hc ${C[r.w]}"><div class="row sp"><div><b style="font:800 17px var(--hd)">${esc(SHORT(r.br.id))}</b><div class="muted sm">Ketua: ${esc(HOD[r.br.id])}</div></div><span class="pill ${C[r.w]}">${L[r.w]}</span></div>
+   <div class="hm">${r.m.map(([n,v,g])=>`<div><i class="dot ${C[g]}"></i><span>${n}</span><b>${v}</b></div>`).join('')}</div>
+   <div class="row" style="gap:8px;margin-top:10px"><button class="btn sm ghost" data-act="goBranch" data-id="${r.br.id}">Buka cawangan</button><button class="btn sm alt" data-act="tkTo" data-id="${r.br.id}">Beri arahan</button></div></div>`).join('')||'<div class="card"><p class="muted">Tiada cawangan aktif dalam pilihan ini.</p></div>'}</div>`}
 
 /* ---------- WhatsApp & rekrutmen ---------- */
 const TAv=(k,label,val,rows)=>`<label>${label}<textarea id="${esc(k)}" data-ui="${esc(k)}" rows="${rows||3}">${esc(ui.f[k]!=null?ui.f[k]:val)}</textarea></label>`;
@@ -857,6 +963,7 @@ const A={
  jobSt:e=>{by('jobs',e.id).st=e.v;save()},jobDel:e=>{S.jobs=S.jobs.filter(j=>j.id!==e.id);S.apps=S.apps.filter(a=>a.jid!==e.id);save()},
  apply:e=>applyJob(e.id),applyOpen:e=>{ui.apply=e.id},applyClose:()=>{ui.apply=null},
  pname:e=>{S.partners[e.id].name=(ui.f['pn:'+e.id]||'').trim();setMsg('ok','Nama rakan disimpan.');save()},
+ tkSend,tkAck:e=>tkAck(e.id),tkDone:e=>tkDone(e.id),tkNudge:e=>tkNudge(e.id,e.v),tkDel:e=>tkDel(e.id),tkTo:e=>{ui.f['tk:to']=e.id;ui.role='arahan';window.scrollTo(0,0)},
  fbOpen:()=>{ui.fb=true;ui.menu=false},fbClose:()=>{ui.fb=false},fbSend
 };
 document.addEventListener('click',ev=>{if(ui.menu&&!ev.target.closest('.pop,.menub')){ui.menu=false;if(!ev.target.closest('[data-act]')){render();return}}
