@@ -269,37 +269,71 @@ ol.tl li.ext::before{background:#aab5b3}
 .spk{display:block}.pulse .kpis{grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}.rk{display:grid;grid-template-columns:14px 1fr auto;gap:10px;align-items:start;padding:9px 0;border-bottom:1px solid var(--line)}.rk:last-child{border:0}.rk .dot{margin-top:5px}.lgt td,.lgt th{white-space:nowrap}
 .capb{height:8px;border-radius:9px;background:var(--lane);overflow:hidden;min-width:90px;margin-bottom:3px}.capb i{display:block;height:100%}
 .gt{display:grid;grid-template-columns:22px 1fr auto;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);align-items:start}.gt:last-child{border:0}.gt .mk{width:20px;height:20px;border-radius:50%;display:grid;place-items:center;font:800 12px var(--bd);color:#fff;margin-top:2px}.gt .mk.ok{background:var(--teal)}.gt .mk.warn{background:#e0a800}.gt .mk.bad{background:var(--red)}.big{font:800 34px var(--hd);letter-spacing:-.02em}.asm input{max-width:170px}.gt>div:last-child{min-width:0;overflow-wrap:anywhere}@media(max-width:640px){.gt{grid-template-columns:22px 1fr}.gt>div:last-child{grid-column:2;text-align:left!important;max-width:none!important}}
-.cx{max-width:1100px}.cxhd{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:8px}.cxhd h1{font-size:26px;margin:0}.cxhd p{margin:2px 0 0}
-.cxwarn{background:var(--amb-bg);color:var(--amb);border-radius:12px;padding:10px 12px;font-size:13px;margin:8px 0 12px}
-.cxtabs{display:flex;gap:6px;overflow-x:auto;padding:4px 0 10px;scrollbar-width:none;position:sticky;top:0;z-index:5;background:var(--paper)}.cxtabs::-webkit-scrollbar{display:none}
-.cxtabs button,.cxsub button{flex:none;border:1px solid var(--line);background:#fff;border-radius:99px;padding:8px 14px;font:600 13px var(--bd);cursor:pointer;color:var(--ink);min-height:40px}
-.cxtabs button[aria-current=true],.cxsub button[aria-current=true]{background:var(--tar);color:#fff;border-color:var(--tar)}
-.cxsub{display:flex;gap:6px;overflow-x:auto;margin-bottom:10px;scrollbar-width:none}
-.cxf{padding:12px}.cxfg{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}@media(min-width:760px){.cxfg{grid-template-columns:repeat(4,minmax(0,1fr))}}
-.cxfl{display:flex;flex-direction:column;gap:3px;font-size:12px;color:var(--mut);min-width:0}.cxfl.grow{flex:1}.cxfl select,.cxfl input{font:500 14px var(--bd);padding:9px 8px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink);min-height:40px;width:100%;min-width:0}
-.cxfn{font-size:12px;margin:8px 0 0}.cxin{width:72px!important;display:inline-block;min-height:34px!important;padding:5px 6px!important}
-.cxgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px;margin-bottom:14px}
-.cxk{text-align:left;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px 14px;cursor:pointer;display:flex;flex-direction:column;gap:3px;font:inherit;color:inherit;min-width:0}
-.cxk:hover{border-color:var(--tar)}.cxk small{color:var(--mut);font-size:12.5px}.cxk b{font:800 24px/1.2 var(--hd);font-variant-numeric:tabular-nums}.cxk b.na{font-size:16px;color:var(--mut)}
-.cxk .sub{font-size:12px;color:var(--mut)}.cxk .cxn{font-size:11px;margin-top:2px}
+/* ===== CEO design system (8px grid) ===== */
+.cx{max-width:1200px;--cxr:16px;--cxb:#e3e8e7}
+.cx .card{border:1px solid var(--cxb);border-radius:var(--cxr);padding:24px;margin-bottom:16px;box-shadow:none}
+.cx h3{font-size:16px;font-weight:700;margin:0 0 16px}.cx h4{font-size:13px;font-weight:700;color:var(--mut);margin:16px 0 8px;text-transform:none}
+.cxhd{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin:0 0 16px}.cxhd h1{font-size:28px;line-height:1.2;margin:0}.cxhd p{margin:4px 0 0;color:var(--mut);font-size:14px}
+.cxst{display:flex;flex-direction:column;align-items:flex-end;gap:4px;font-size:12px;color:var(--mut);text-align:right}
+.cxsim{display:inline-block;border:1px solid #c9d6e8;background:var(--blue-bg);color:var(--blue);border-radius:99px;padding:2px 10px;font-weight:700;font-size:12px}
+/* toolbar */
+.cxbar{margin:0 0 16px}.cxfs{display:none;gap:8px;grid-template-columns:1fr 1fr}.cxfs.open{display:grid}
+.cxftog{display:flex;justify-content:space-between;align-items:center;gap:8px;width:100%;border:1px solid var(--cxb);background:#fff;border-radius:12px;padding:8px 16px;min-height:44px;font:600 13px var(--bd);color:var(--ink);cursor:pointer;margin-bottom:8px}.cxftog b{color:var(--blue)}
+.cxfl{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--mut);min-width:0}.cxfl select,.cxfl input{font:500 14px var(--bd);padding:8px 12px;border:1px solid var(--cxb);border-radius:12px;background:#fff;color:var(--ink);min-height:40px;width:100%;min-width:0}
+.cxcmp{font-size:12px;color:var(--mut);margin:8px 0 0}
+@media(min-width:760px){.cxftog{display:none}.cxbar .cxfs{display:flex;flex-wrap:wrap;align-items:flex-end}.cxbar .cxfl{flex:0 1 220px}.cxvf .cxfs{display:flex}}
+/* hero KPIs */
+.hkrow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-bottom:16px}
+.hk{display:flex;flex-direction:column;align-items:flex-start;gap:4px;text-align:left;background:#fff;border:1px solid var(--cxb);border-radius:var(--cxr);padding:24px;min-height:152px;font:inherit;color:inherit;cursor:pointer;min-width:0}
+.hk.static{cursor:default}.hk:not(.static):hover{border-color:var(--tar)}
+.hkl{font-size:13px;font-weight:600;color:var(--mut)}.hk b{font:800 32px/1.15 var(--hd);font-variant-numeric:tabular-nums;color:var(--ink);margin:4px 0}
+.hkd{font-size:13px;font-weight:700}.hkd.p{color:#0a6a58}.hkd.b{color:var(--red)}.hkd.n{color:var(--mut)}.hks{font-size:12px;color:var(--mut);margin-top:auto}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+@media(max-width:1100px){.hkrow{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){.hkrow{grid-template-columns:1fr;gap:8px}.hk{min-height:0;padding:16px}.hk b{font-size:28px}.cx .card{padding:16px}}
+/* chart card & segmented */
+.cxseg{display:inline-flex;border:1px solid var(--cxb);border-radius:99px;overflow:hidden}.cxseg button{border:0;background:#fff;padding:8px 16px;font:600 13px var(--bd);cursor:pointer;min-height:36px}.cxseg button[aria-pressed=true]{background:var(--tar);color:#fff}
+.cxfoot{font-size:12px;color:var(--mut);margin:16px 0 0}
+.cxtwo{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}.cxtwo .card{margin-bottom:0}@media(max-width:960px){.cxtwo{grid-template-columns:1fr}.cxtwo .card{margin-bottom:16px}}
+.cxp{margin-bottom:16px}
+.cxrk{display:grid}.cxrh,.cxrr{display:grid;grid-template-columns:minmax(0,1.5fr) .9fr .6fr .8fr 1.2fr;gap:8px;align-items:center;padding:8px 0;font-size:13px;text-align:left}
+.cxrh{color:var(--mut);font-size:12px;font-weight:700;border-bottom:1px solid var(--cxb)}.cxrr{border:0;border-bottom:1px solid #eef1f0;background:none;font-family:inherit;color:inherit;cursor:pointer;min-height:40px}.cxrr:hover{background:#f6f8f7}.cxrr .nm{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cxrk .num{text-align:right;font-variant-numeric:tabular-nums}
+.cxrr .st{font-size:12px;font-weight:700;display:inline-flex;align-items:center;gap:6px}.cxrr .st::before{content:'';width:8px;height:8px;border-radius:50%;background:#9aa5ad}.st.ok::before{background:var(--teal)}.st.bad::before{background:var(--red)}.st.warn::before{background:#d98a00}.st.info::before{background:var(--blue)}
+@media(max-width:560px){.cxrh,.cxrr{grid-template-columns:minmax(0,1.4fr) .9fr .6fr 1.1fr}.cxrh span:nth-child(4),.cxrr span:nth-child(4){display:none}}
+/* keputusan */
+.cxdc{border-top:1px solid var(--cxb);padding:16px 0}.cxdc:first-of-type{border-top:0;padding-top:0}.cxdh{display:flex;gap:8px;align-items:flex-start;margin-bottom:8px}.cxdh b{font-size:14px}
+.cxev1{font-size:13px;color:var(--mut);margin:0 0 8px}.cxdm{display:flex;flex-wrap:wrap;gap:8px 24px;margin:8px 0}.cxdm span{display:flex;flex-direction:column}.cxdm small{font-size:11px;color:var(--mut)}.cxdm b{font-size:13px}
+.cxdc details,.cxdemo summary{font-size:13px}.cxdc details{margin:0 0 8px}.cxdc summary{cursor:pointer;color:var(--blue);font-weight:600}
+.cxdemo{margin:24px 0}.cxdemo summary{cursor:pointer;color:var(--mut);font-weight:600;padding:8px 0}
+/* kad lama (modul lain) */
+.cxgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:16px}
+.cxk{text-align:left;background:var(--card);border:1px solid var(--cxb);border-radius:var(--cxr);padding:16px 24px;cursor:pointer;display:flex;flex-direction:column;gap:4px;font:inherit;color:inherit;min-width:0}.cxk:hover{border-color:var(--tar)}
+.cxk small{color:var(--mut);font-size:13px;font-weight:600}.cxk b{font:800 24px/1.2 var(--hd);font-variant-numeric:tabular-nums}.cxk b.na{font-size:16px;color:var(--mut)}.cxk .sub{font-size:12px;color:var(--mut)}.cxk .cxn{font-size:11px;margin-top:4px}
 .cxd{font-size:12px;font-weight:600}.cxd.cg{color:#0a6a58}.cxd.cb{color:var(--red)}.cxd.na{color:var(--mut);font-weight:500}
 .cxb{display:inline-block;border-radius:99px;font-size:11px;font-weight:700;padding:2px 8px;background:var(--chip);color:var(--mut);white-space:nowrap}.cxb.sim{background:var(--blue-bg);color:var(--blue)}.cxb.hi{background:var(--red-bg);color:var(--red)}.cxb.md{background:var(--amb-bg);color:var(--amb)}.cxb.lo,.cxb.ok{background:var(--teal-bg);color:#0a6a58}
 .cxu{color:var(--mut);font-style:italic;font-size:12.5px}.cxbad{color:var(--red);font-weight:800}
-.cxt{width:100%;border-collapse:collapse;font-size:13px}.cxt th{text-align:left;font-weight:700;color:var(--mut);padding:8px 8px;border-bottom:2px solid var(--line);white-space:nowrap;font-size:12px}.cxt td{padding:8px;border-bottom:1px solid var(--line);vertical-align:top}.cxt .num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}.cxt th.num{text-align:right}
-.cxt tr.cxtot td{font-weight:800;background:#f4f7f6}.cxt th.srt{cursor:pointer;text-decoration:underline dotted}.cxt tr.clk{cursor:pointer}
+.cxwarn{background:var(--amb-bg);color:var(--amb);border-radius:12px;padding:16px;font-size:13px;margin:16px 0}
+.cxt{width:100%;border-collapse:collapse;font-size:13px}.cxt th{text-align:left;font-weight:700;color:var(--mut);padding:8px;border-bottom:1px solid var(--cxb);white-space:nowrap;font-size:12px}.cxt td{padding:8px;border-bottom:1px solid #eef1f0;vertical-align:top}.cxt .num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}.cxt th.num{text-align:right}
+.cxt tr.cxtot td{font-weight:800;background:#f6f8f7}.cxt th.srt{cursor:pointer;text-decoration:underline dotted}.cxt tr.clk{cursor:pointer}
 .hm{display:inline-block;min-width:44px;text-align:center;border-radius:6px;padding:3px 6px;font-weight:700;font-size:12px}
-.cxdr{border:2px solid var(--tar)}.cxdr h4,.cxwrap h4,.cx h4{margin:12px 0 6px;font-size:14px}
-.cxf2{border:1px solid var(--line);border-left:5px solid var(--amb);border-radius:12px;padding:12px;margin:10px 0;background:#fff}.cxf2.tinggi{border-left-color:var(--red)}.cxf2.rendah{border-left-color:var(--teal)}
-.cxev{margin:6px 0 8px 18px;padding:0;font-size:13.5px}.cxev li{margin:3px 0}
-.cxmeta{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin:8px 0}.cxmeta span{display:flex;flex-direction:column;background:var(--chip);border-radius:10px;padding:7px 9px;min-width:0}.cxmeta small{font-size:11px;color:var(--mut)}.cxmeta b{font-size:13.5px}.cxmeta i{font-size:11px;color:var(--mut);font-style:normal}
-.cxact{font-size:13.5px;margin:6px 0}.cxout{font-size:13px;background:#f4f7f6;border-radius:10px;padding:8px 10px;margin:6px 0}
-.cxwts{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px;margin:8px 0;align-items:end}
+.cxdr{border:1px solid var(--tar)!important}
+.cxf2{border:1px solid var(--cxb);border-left:4px solid var(--amb);border-radius:12px;padding:16px;margin:0 0 16px;background:#fff}.cxf2.tinggi{border-left-color:var(--red)}.cxf2.rendah{border-left-color:var(--teal)}
+.cxev{margin:8px 0 8px 16px;padding:0;font-size:13.5px}.cxev li{margin:4px 0}
+.cxmeta{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin:8px 0}.cxmeta span{display:flex;flex-direction:column;background:#f6f8f7;border-radius:12px;padding:8px 12px;min-width:0}.cxmeta small{font-size:11px;color:var(--mut)}.cxmeta b{font-size:13.5px}.cxmeta i{font-size:11px;color:var(--mut);font-style:normal}
+.cxact{font-size:13.5px;margin:8px 0}.cxout{font-size:13px;background:#f6f8f7;border-radius:12px;padding:8px 16px;margin:8px 0}
+.cxwts{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px;margin:8px 0;align-items:end}.cxfl.grow{flex:1}.cxin{width:72px!important;display:inline-block;min-height:32px!important;padding:4px 8px!important}
+.cxsub{display:flex;gap:8px;overflow-x:auto;margin-bottom:16px;scrollbar-width:none}.cxsub button{flex:none;border:1px solid var(--cxb);background:#fff;border-radius:99px;padding:8px 16px;font:600 13px var(--bd);cursor:pointer;min-height:40px}.cxsub button[aria-current=true]{background:var(--tar);color:#fff;border-color:var(--tar)}
 .lnk{background:none;border:0;padding:0;color:var(--blue);font:600 13px var(--bd);text-decoration:underline;cursor:pointer;text-align:left}
-.cx .mixrow{grid-template-columns:minmax(90px,1.1fr) 2fr minmax(66px,auto)}.cx .mixrow.clk{cursor:pointer}
-.cx svg text{font-family:var(--bd)}.cx details summary{cursor:pointer;font-size:13px;color:var(--mut);margin-top:6px}
-@media print{.cxtabs,.cxf,.noprint,.cxwarn{display:none!important}.cxrep{border:0}.cx{max-width:none}}
-.cxk .row{flex-wrap:nowrap;align-items:flex-start}
-@media(max-width:520px){.cxgrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.cxk{padding:10px}.cxk b{font-size:19px}.cxd{font-size:11px}.cxk small{font-size:11.5px}}
+.cx .mixrow{grid-template-columns:minmax(90px,1.1fr) 2fr minmax(48px,auto)}.cx .mixrow.clk{cursor:pointer}
+.cx svg text{font-family:var(--bd)}.cx details summary{cursor:pointer}
+/* sidebar: satu navigasi, boleh dikecilkan */
+.ngl{font:700 11px var(--bd);letter-spacing:.08em;text-transform:uppercase;color:#8da1b1;margin:16px 12px 8px}.side nav .ngl:first-child{margin-top:0}
+.nt{min-width:0}.sb{display:flex;align-items:center;gap:8px}.sb .ic{width:18px;height:18px;flex:none}.pop .ngl{margin:8px 4px 4px}
+@media(min-width:960px){.shell.sc{grid-template-columns:72px 1fr}.shell.sc .side{padding:16px 8px}.shell.sc .nt,.shell.sc .logo b,.shell.sc .logo small,.shell.sc .ngl,.shell.sc .env,.shell.sc .sidef .btn:not(.sct){display:none}.shell.sc .nb,.shell.sc .sb,.shell.sc .sct{justify-content:center;padding:12px 0}.shell.sc .subs{margin:0;padding:0;border:0}.shell.sc .logo{justify-content:center;padding:0 0 16px}}
+.sct{background:none!important;border:1px solid #35485a!important}
+@media(max-width:560px){.cxhd{flex-direction:column;gap:8px}.cxst{align-items:flex-start;text-align:left}.cxhd h1{font-size:24px}.cxgrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.cxk{padding:16px}.cxk b{font-size:19px}}
+@media print{.cxbar,.noprint,.cxwarn,.cxst{display:none!important}.cxrep{border:0}.cx{max-width:none}}
 </style>
 </head>
 <body>
@@ -627,7 +661,7 @@ const vOpts=()=>[['','Pilih kenderaan'],...mine().map(v=>[v.id,v.plate+' · '+v.
 const hm=t=>new Date(t).toLocaleTimeString('ms-MY',{hour:'2-digit',minute:'2-digit'});
 
 const NAV=[
- {id:'master',t:'Gambaran Master',ic:'star',subs:[]},
+ {id:'master',t:'Pusat CEO',ic:'star',k:'cx',subs:[['ov','Ringkasan eksekutif','home'],['fin','Kewangan','till'],['brp','Prestasi cawangan','board'],['veh','Kenderaan & permintaan','wrench'],['prod','Produk & inventori','book'],['cg','Pertumbuhan pelanggan','people'],['sq','Kualiti servis','shield'],['exp','Strategi ekspansi','star'],['act','Keputusan CEO','brief'],['brd','Laporan lembaga','chat']]},
  {id:'mgr',t:'Pengurus Rangkaian',ic:'chart',subs:[]},
  {id:'arahan',t:'Arahan CEO',ic:'brief',subs:[]},
  {id:'cust',t:'Pelanggan (app)',ic:'user',k:'ct',subs:[['utama','Utama','home'],['tempah','Tempah','cal'],['pasport','Pasport','book'],['rakan','Rakan','shield'],['saya','Saya','user']]},
@@ -650,12 +684,14 @@ function ctrls(){return `<button class="btn" data-act="fbOpen">${I('chat')}Beri 
 
 const bdg=k=>{if(k!=='arahan')return '';const n=tkOpen(ui.branch==='ALL'?'KMN':ui.branch).length;return n?`<em class="bdg">${n}</em>`:''};
 function shell(){
-  const n=NAV.find(x=>x.id===ui.role);
-  const side=`<aside class="side"><div class="logo"><i></i><b>CARREPUBLIC</b><small>CareOS</small></div><nav aria-label="Peranan">${NAV.map(x=>`<button class="nb" aria-current="${ui.role===x.id}" data-act="role" data-v="${x.id}">${I(x.ic)}${x.t}</button>${ui.role===x.id&&x.subs.length?`<div class="subs">${x.subs.map(([k,t])=>`<button class="sb" aria-current="${ui[x.k]===k}" data-act="${x.k}" data-v="${k}">${t}${bdg(k)}</button>`).join('')}</div>`:''}`).join('')}</nav><div class="sidef">${ctrls()}<div class="env">Persekitaran demo. Data contoh disimpan dalam pelayar ini.</div></div></aside>`;
-  const mtop=`<header class="mtop"><div class="row1"><span class="logo2">CARREPUBLIC<small>CareOS</small></span><button class="menub" data-act="menu" aria-label="Menu" aria-expanded="${!!ui.menu}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">${ui.menu?'<path d="M6 6l12 12M18 6L6 18"/>':'<path d="M4 7h16M4 12h16M4 17h16"/>'}</svg></button></div><div class="chips">${NAV.map(x=>`<button class="chip-r" aria-pressed="${ui.role===x.id}" data-act="role" data-v="${x.id}">${x.t.replace(/ \(.*\)/,'')}</button>`).join('')}</div>${ui.menu?`<div class="pop">${ctrls()}</div>`:''}</header>`;
-  const bnav=n.subs.length?`<nav class="bnav" aria-label="Menu">${n.subs.map(([k,t,ic])=>`<button aria-current="${ui[n.k]===k}" data-act="${n.k}" data-v="${k}">${I(ic)}${t}${bdg(k)}</button>`).join('')}</nav>`:'';
+  const n=NAV.find(x=>x.id===ui.role),ws=x=>x.t.replace(/ \(.*\)/,'');
+  const nb=x=>`<button class="nb" aria-current="${ui.role===x.id}" data-act="role" data-v="${x.id}" title="${esc(x.t)}">${I(x.ic)}<span class="nt">${x.t}</span></button>${ui.role===x.id&&x.subs.length?`<div class="subs">${x.subs.map(([k,t,ic])=>`<button class="sb" aria-current="${ui[x.k]===k}" data-act="${x.k}" data-v="${k}" title="${esc(t)}">${I(ic||'chart')}<span class="nt">${t}</span>${bdg(k)}</button>`).join('')}</div>`:''}`;
+  const side=`<aside class="side"><div class="logo"><i></i><b>CARREPUBLIC</b><small>CareOS</small></div><nav aria-label="Navigasi utama"><div class="ngl">Pusat CEO</div>${nb(NAV[0])}<div class="ngl">Ruang kerja lain</div>${NAV.slice(1).map(nb).join('')}</nav><div class="sidef">${ctrls()}<button class="btn sct" data-act="sc" aria-label="${ui.sc?'Kembangkan':'Kecilkan'} bar sisi" aria-pressed="${!!ui.sc}">${I('board')}<span class="nt">${ui.sc?'Kembangkan':'Kecilkan'} menu</span></button><div class="env">Persekitaran demo. Data contoh disimpan dalam pelayar ini.</div></div></aside>`;
+  const chips=ui.role==='master'?NAV[0].subs.map(([k,t])=>`<button class="chip-r" aria-pressed="${ui.cx===k}" data-act="cx" data-v="${k}">${t}</button>`).join(''):NAV.map(x=>`<button class="chip-r" aria-pressed="${ui.role===x.id}" data-act="role" data-v="${x.id}">${ws(x)}</button>`).join('');
+  const mtop=`<header class="mtop"><div class="row1"><span class="logo2">CARREPUBLIC<small>CareOS</small></span><button class="menub" data-act="menu" aria-label="Menu" aria-expanded="${!!ui.menu}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">${ui.menu?'<path d="M6 6l12 12M18 6L6 18"/>':'<path d="M4 7h16M4 12h16M4 17h16"/>'}</svg></button></div><div class="chips">${chips}</div>${ui.menu?`<div class="pop"><div class="ngl">Ruang kerja</div>${NAV.map(x=>`<button class="btn ${ui.role===x.id?'alt':''}" data-act="role" data-v="${x.id}">${ws(x)}</button>`).join('')}<div class="ngl">Lain-lain</div>${ctrls()}</div>`:''}</header>`;
+  const bnav=n.subs.length&&ui.role!=='master'?`<nav class="bnav" aria-label="Menu">${n.subs.map(([k,t,ic])=>`<button aria-current="${ui[n.k]===k}" data-act="${n.k}" data-v="${k}">${I(ic)}${t}${bdg(k)}</button>`).join('')}</nav>`:'';
   const body=ui.role==='master'?viewMaster():ui.role==='mgr'?viewNetwork():ui.role==='arahan'?viewArahan():ui.role==='cust'?viewCust():ui.role==='branch'?viewBranch():ui.role==='kerja'?viewKerja():viewHQ();
-  return `<div class="shell">${side}${mtop}<main class="main" id="main">${body}</main>${bnav}</div><button class="fab" data-act="fbOpen">${I('chat')}<span>Komen</span></button>${ui.fb?fbModal():''}${msgBox()}`}
+  return `<div class="shell ${ui.sc?'sc':''}">${side}${mtop}<main class="main" id="main">${body}</main>${bnav}</div><button class="fab" data-act="fbOpen">${I('chat')}<span>Komen</span></button>${ui.fb?fbModal():''}${msgBox()}`}
 
 function fbModal(){return `<div class="modal" data-act="fbClose"><div role="dialog" aria-label="Beri komen"><h2>Beri komen</h2><p class="muted">Tulis apa yang baik, mengelirukan atau kurang. Komen dihantar kepada pemilik demo bersama nama paparan yang anda sedang lihat.</p>
 ${input('fb:n','Nama anda (pilihan)')}<label>Komen<textarea id="fb:t" data-ui="fb:t" rows="4" maxlength="1000" placeholder="Contoh: Saya mahu nampak harga insurans di sini.">${esc(ui.f['fb:t']||'')}</textarea></label>
@@ -1419,7 +1455,7 @@ const CXS=(()=>{
 let E=null,BUILT=0;const klNow=()=>new Date(Date.now()+8*36e5);
 const eng=()=>{if(!E){const k=klNow();E=buildEngine(buildCX(Math.floor(k/864e5),k.getUTCHours()+k.getUTCMinutes()/60));BUILT=Date.now()}return E};
 const SK='careos-cx6';
-const st0={tab:'ov',per:'mtd',from:'',to:'',rg:'',br:'',mat:'',brand:'',model:'',cat:'',dr:null,fin:'pl',pm:'sku',sort:'net',sdir:-1,prod:'sku',exp:{},w:null,acts:[],xs:null,vs:'',lv:'ov'};
+const st0={tab:'ov',per:'mtd',from:'',to:'',rg:'',st:'',cm:6,br:'',mat:'',brand:'',model:'',cat:'',dr:null,fin:'pl',pm:'sku',sort:'net',sdir:-1,prod:'sku',exp:{},w:null,acts:[],xs:null,vs:'',lv:'ov'};
 let S6=Object.assign({},st0);try{const x=JSON.parse(localStorage.getItem(SK)||'null');if(x)S6=Object.assign({},st0,x,{dr:null})}catch(e){}
 const save6=()=>{try{localStorage.setItem(SK,JSON.stringify(Object.assign({},S6,{dr:null})))}catch(e){}};
 /* ----- format ----- */
@@ -1449,8 +1485,8 @@ function period(){const D=eng().D,T=D.TODAY,[y,m,d]=ymdOf(T),per=S6.per;let from
   return {from,to,len,label,prev:{from:pf_,to:pt},py:pyF>=D.D0?{from:pyF,to:pyT}:null}}
 const MATN={m:'Matang (>18 bulan)',b:'Berkembang (6–18 bulan)',r:'Baharu / ramp-up (<6 bulan)'};
 const matOf=b=>{const mo=(eng().D.TODAY-b.od)/30.4;return mo>18?'m':mo>=6?'b':'r'};
-function brSel(){const D=eng().D;let a=D.BR.map((b,i)=>i);if(S6.rg)a=a.filter(i=>D.BR[i].rg===S6.rg);if(S6.br!=='')a=a.filter(i=>D.BR[i].id===S6.br);if(S6.mat)a=a.filter(i=>matOf(D.BR[i])===S6.mat);return a.length===D.BR.length?null:a}
-const veh=()=>({brand:S6.brand||null,model:S6.model===''?null:+S6.model,cat:S6.cat||null});
+function brSel(){const D=eng().D;let a=D.BR.map((b,i)=>i);if(S6.rg)a=a.filter(i=>D.BR[i].rg===S6.rg);if(S6.st)a=a.filter(i=>D.BR[i].st===S6.st);if(S6.br!=='')a=a.filter(i=>D.BR[i].id===S6.br);if(S6.mat)a=a.filter(i=>matOf(D.BR[i])===S6.mat);return a.length===D.BR.length?null:a}
+const veh=()=>(S6.tab==='veh'||S6.tab==='prod')?{brand:S6.brand||null,model:S6.model===''?null:+S6.model,cat:S6.cat||null}:{brand:null,model:null,cat:null};
 const FF=(r,ex)=>Object.assign({from:r.from,to:r.to,br:brSel()},veh(),ex||{});
 const cache=new Map();const memo=(k,f)=>{if(cache.has(k))return cache.get(k);const v=f();cache.set(k,v);return v};
 const KEY=F=>JSON.stringify([F.from,F.to,F.br,F.brand,F.model,F.cat]);
@@ -1458,7 +1494,7 @@ const PL=F=>memo('pl'+KEY(F),()=>eng().pl(F)),BUD=F=>memo('bd'+KEY(F),()=>eng().
 const AG=F=>memo('ag'+KEY(F),()=>eng().agg(F));
 /* ----- carta SVG ----- */
 const nice=v=>{if(v<=0)return 1;const p=Math.pow(10,Math.floor(Math.log10(v))),f=v/p;return (f<=1?1:f<=2?2:f<=2.5?2.5:f<=5?5:10)*p};
-function chart(o){const W=o.w||660,H=o.h||220,pl=60,pr=10,pt=10,pb=26,n=o.labels.length,all=[].concat((o.bars||[]).map(s=>s.vals),(o.lines||[]).map(s=>s.vals)).flat().filter(v=>v!=null&&isFinite(v));
+function chart(o){const W=o.w||(window.innerWidth<560?380:660),H=o.h||220,pl=60,pr=10,pt=10,pb=26,n=o.labels.length,all=[].concat((o.bars||[]).map(s=>s.vals),(o.lines||[]).map(s=>s.vals)).flat().filter(v=>v!=null&&isFinite(v));
   let mx=Math.max(0,...all),mn=Math.min(0,...all);mx=nice(mx||1);if(mn<0)mn=-nice(-mn);const y=v=>pt+(H-pt-pb)*(1-(v-mn)/((mx-mn)||1)),cw=(W-pl-pr)/n,x=i=>pl+cw*(i+.5);let g='';
   for(let i=0;i<=4;i++){const v=mn+(mx-mn)*i/4;g+=`<line x1="${pl}" x2="${W-pr}" y1="${y(v)}" y2="${y(v)}" stroke="#dce2e1"/><text x="${pl-6}" y="${y(v)+4}" text-anchor="end" font-size="10.5" fill="#5a6771">${o.fmt?o.fmt(v):nf(v)}</text>`}
   const nb=(o.bars||[]).length||1,bw=cw*.7/(o.stack?1:nb);let bs='';(o.bars||[]).forEach((s,si)=>{s.vals.forEach((v,i)=>{if(v==null)return;let a=0;if(o.stack)for(let q=0;q<si;q++)a+=o.bars[q].vals[i]||0;const y0=y(o.stack?a:0),y1=y(o.stack?a+v:v),xx=o.stack?x(i)-bw/2:x(i)-cw*.35+si*bw;bs+=`<rect x="${xx.toFixed(1)}" y="${Math.min(y0,y1).toFixed(1)}" width="${bw.toFixed(1)}" height="${Math.max(0,Math.abs(y0-y1)).toFixed(1)}" fill="${s.color}" ${o.click?`data-cx="${o.click}" data-v="${i}" style="cursor:pointer"`:''}><title>${o.labels[i]} · ${s.name}: ${o.fmt?o.fmt(v):nf(v)}</title></rect>`})});
@@ -1467,7 +1503,7 @@ function chart(o){const W=o.w||660,H=o.h||220,pl=60,pr=10,pt=10,pb=26,n=o.labels
   const lg=[...(o.bars||[]),...(o.lines||[])].map(s=>`<span><i style="background:${s.color}"></i>${esc(s.name)}</span>`).join('');
   return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(o.title||'Carta')}" style="width:100%;height:auto;display:block">${g}${bs}${ls}${lab}</svg><div class="legend">${lg}</div>`}
 function hbars(rows,fmt,o){o=o||{};const mx=Math.max(1,...rows.map(r=>Math.abs(r.v)));return rows.map(r=>`<div class="mixrow ${r.dr?'clk':''}" ${r.dr?`data-cx="${r.dr}" data-v="${r.id}"`:''}><span title="${esc(r.l)}">${esc(r.l)}</span><div class="split"><i style="width:${(Math.abs(r.v)/mx*100).toFixed(1)}%;background:${r.v<0?'var(--red)':r.c||'var(--tar)'}"></i></div><b>${fmt(r.v)}</b></div>`).join('')}
-function waterfall(steps,W){W=W||660;const H=230,pl=10,pt=22,pb=44,n=steps.length;let run=0,mx=0,mn=0;const bars=steps.map(s=>{const a=s.total?0:run,b=s.total?s.v:run+s.v;if(!s.total)run+=s.v;else run=s.v;mx=Math.max(mx,a,b);mn=Math.min(mn,a,b);return {a,b,s}});
+function waterfall(steps,W){W=W||(window.innerWidth<560?380:660);const H=230,pl=10,pt=22,pb=44,n=steps.length;let run=0,mx=0,mn=0;const bars=steps.map(s=>{const a=s.total?0:run,b=s.total?s.v:run+s.v;if(!s.total)run+=s.v;else run=s.v;mx=Math.max(mx,a,b);mn=Math.min(mn,a,b);return {a,b,s}});
   const y=v=>pt+(H-pt-pb)*(1-(v-mn)/((mx-mn)||1)),cw=(W-pl*2)/n;return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Jambatan untung" style="width:100%;height:auto;display:block"><line x1="${pl}" x2="${W-pl}" y1="${y(0)}" y2="${y(0)}" stroke="#9aa5ad"/>${bars.map((q,i)=>{const x=pl+cw*i+cw*.15,w=cw*.7,y0=y(q.a),y1=y(q.b),c=q.s.total?'#17212b':q.s.v>=0?'#0d8a73':'#d4372a';return `<rect x="${x.toFixed(1)}" y="${Math.min(y0,y1).toFixed(1)}" width="${w.toFixed(1)}" height="${Math.max(1,Math.abs(y0-y1)).toFixed(1)}" fill="${c}" rx="3"><title>${q.s.l}: ${rmf(q.s.v)}</title></rect><text x="${(x+w/2).toFixed(1)}" y="${Math.min(y0,y1)-5}" text-anchor="middle" font-size="10.5" font-weight="700" fill="#17212b">${rmk(q.s.v)}</text><text x="${(x+w/2).toFixed(1)}" y="${H-24}" text-anchor="middle" font-size="9.5" fill="#5a6771">${q.s.l.split(' ').slice(0,2).join(' ')}</text><text x="${(x+w/2).toFixed(1)}" y="${H-12}" text-anchor="middle" font-size="9.5" fill="#5a6771">${q.s.l.split(' ').slice(2,4).join(' ')}</text>`}).join('')}</svg>`}
 const heat=v=>v==null?'#eef1f0':v>=.2?'#0d8a73':v>=.1?'#7fcdbb':v>=.03?'#d6efe9':v>=0?'#fdf0c9':v>=-.15?'#f6b8b0':'#d4372a';
 /* ----- komponen ----- */
@@ -1485,7 +1521,7 @@ return {eng,S6,save6,period,brSel,veh,FF,PL,AG,BUD,rmf,rmk,pf,nf,sg,dmy,mlab,bad
 const {eng,S6,save6,period,brSel,veh,FF,PL,AG,BUD,rmf,rmk,pf,nf,sg,dmy,mlab,badge,DEMO,vsTxt,vsPct,unav,table,tr,chart,hbars,waterfall,heat,matOf,MATN,memo,ymdOf,utc,shiftY,klNow}=CXS;
 const HQN=n=>n==null||!isFinite(n)?'—':n.toFixed(1);
 const hhmm=()=>{const k=new Date((CXS.built||Date.now())+8*36e5);return String(k.getUTCHours()).padStart(2,'0')+':'+String(k.getUTCMinutes()).padStart(2,'0')};
-const hasV=()=>!!(S6.brand||S6.model!==''||S6.cat);
+const hasV=()=>{const v=veh();return !!(v.brand||v.model!=null||v.cat)};
 const mF=(m,extra)=>{const D=eng().D;return FF({from:D.mStart(m),to:Math.min(D.mStart(m+1)-1,D.TODAY)},extra)};
 const lastM=()=>eng().D.NM-2; /* bulan lengkap terakhir */
 const utilAll=(from,to)=>memo('ut'+from+'_'+to,()=>{const E=eng(),D=E.D,res=D.BR.map(()=>({dur:0,days:new Set(),n:0}));E.scan({from,to},j=>{const q=res[j.b];q.dur+=j.dur;q.days.add(j.d);q.n++});return res.map((q,i)=>{const cap=D.BR[i].bays*D.OPEN_MIN*D.CAPU*q.days.size;return {dur:q.dur,cap,u:cap?q.dur/cap:null,days:q.days.size,n:q.n}})});
@@ -1499,7 +1535,7 @@ const KD={
  gpm:{l:'Margin untung kasar',t:'pct',f:F=>PL(F).gpm,def:'Untung kasar ÷ jualan bersih.',frm:'Untung kasar ÷ Jualan bersih'},
  bE:{l:'EBITDA cawangan',t:'rm',f:F=>PL(F).bEbitda,bud:B=>B&&B.bEbitda,why:'Belanja cawangan tidak boleh diagih mengikut jenama/model/kategori.',def:'Untung kasar tolak belanja cawangan (sewa, pentadbiran, utiliti, perisian, penyelenggaraan, pemasaran, lain-lain). Sebelum kos HQ, susutan, faedah dan cukai.',frm:'Untung kasar − belanja cawangan'},
  nE:{l:'EBITDA rangkaian',t:'rm',f:F=>PL(F).nEbitda,why:'Hanya boleh dikira untuk seluruh rangkaian (kos HQ tidak diagih ke cawangan).',def:'EBITDA cawangan tolak kos HQ (gaji, pemasaran, perisian, sewa, lain-lain). Hanya untuk seluruh rangkaian.',frm:'EBITDA cawangan − kos HQ'},
- op:{l:'Untung operasi (EBIT)',t:'rm',f:F=>PL(F).op,why:'Memerlukan seluruh rangkaian tanpa penapis kenderaan.',def:'EBITDA rangkaian tolak susutan aset tetap (garis lurus 60 bulan). Belum termasuk faedah pinjaman dan cukai.',frm:'EBITDA rangkaian − susutan'},
+ op:{l:'Untung operasi (EBIT)',t:'rm',f:F=>PL(F).op,why:'',def:'EBITDA rangkaian tolak susutan aset tetap (garis lurus 60 bulan); belum termasuk faedah dan cukai. Bagi cawangan dipilih: EBITDA cawangan tolak susutan cawangan, sebelum kos HQ.',frm:'EBITDA rangkaian − susutan'},
  jobs:{l:'Bilangan kerja',t:'n',f:F=>PL(F).A.n,def:'Bilangan invois servis siap dalam tempoh.',frm:'Kiraan invois'},
  ticket:{l:'Purata invois',t:'rm',f:F=>{const A=PL(F).A;return A.n?A.rev/A.n:null},def:'Hasil invois ÷ bilangan kerja (sebelum bayaran balik).',frm:'Hasil invois ÷ kerja'},
  cust:{l:'Kenderaan unik dilayan',t:'n',f:F=>PL(F).A.veh,def:'Bilangan kenderaan berbeza yang dilayan dalam tempoh (satu pelanggan = satu kenderaan dalam data simulasi). Berbeza daripada bilangan kerja.',frm:'Kiraan unik pelanggan/kenderaan'},
@@ -1509,20 +1545,20 @@ const KD={
  tat:{l:'Siap ikut janji',t:'pct',f:F=>{const A=PL(F).A;return A.n?A.tatOn/A.n:null},def:'Kerja siap dalam masa yang dijanjikan kepada pelanggan ÷ semua kerja.',frm:'Kerja siap ikut janji ÷ kerja'},
  cs:{l:'Kepuasan pelanggan',t:'sc',f:F=>{const A=PL(F).A;return A.csN?A.cs/A.csN:null},def:'Purata skor 1–5 daripada pelanggan yang memberi maklum balas (bukan semua pelanggan).',frm:'Purata skor ÷ jawapan'},
  disc:{l:'Diskaun',t:'pct',down:1,f:F=>{const A=PL(F).A;return A.gross?A.disc/A.gross:null},def:'Jumlah diskaun ÷ hasil sebelum diskaun.',frm:'Diskaun ÷ hasil kasar'},
- cash:{l:'Tunai (akhir tempoh)',t:'rm',f:F=>null,def:'Baki tunai lejar disatukan pada hujung tempoh. Hanya seluruh rangkaian kerana tunai dipegang di peringkat syarikat.',frm:'Tunai awal + aliran tunai bersih',why:'Tunai dipegang di peringkat syarikat; tidak boleh dipecah ikut cawangan/kenderaan.'}
+ cash:{l:'Tunai (akhir tempoh)',t:'rm',f:F=>null,def:'Baki tunai lejar disatukan pada hujung tempoh. Hanya seluruh rangkaian kerana tunai dipegang di peringkat syarikat.',frm:'Tunai awal + aliran tunai bersih',why:null}
 };
 const fmtK=(k,v)=>{const t=KD[k].t;return v==null?null:t==='rm'?(Math.abs(v)>=1e4?rmk(v):rmf(v)):t==='pct'?pf(v):t==='sc'?v.toFixed(2)+' / 5':nf(v)};
-function kval(k,F,c){if(k==='cash'){if(c&&c.sel)return null;const L=eng().L,m=Math.min(L.length-1,mOf(F.to));return L[m].bs.cash}if(KD[k].why&&k!=='util'&&hasV()&&(k==='bE'))return null;if(k==='op'&&c&&c.sel)return null;if(KD[k].t!=='n'&&KD[k].t!=='rm'&&PL(F).A.n===0)return null;const v=KD[k].f(F);return v==null||!isFinite(v)?null:v}
+function kval(k,F,c){if(k==='cash'){const L=eng().L,m=Math.min(L.length-1,mOf(F.to));return L[m].bs.cash}if(KD[k].why&&k!=='util'&&hasV()&&(k==='bE'))return null;if(KD[k].t!=='n'&&KD[k].t!=='rm'&&PL(F).A.n===0)return null;const v=KD[k].f(F);return v==null||!isFinite(v)?null:v}
 function cmpLine(k,cur,base,lab){const d=KD[k];if(cur==null||base==null||!isFinite(base))return `<span class="cxd na">${lab}: tidak tersedia</span>`;const dd=cur-base,good=d.down?dd<=0:dd>=0;
  if(d.t==='pct')return `<span class="cxd ${good?'cg':'cb'}">${lab}: ${dd>=0?'+':''}${(dd*100).toFixed(1)} mata</span>`;
  if(d.t==='sc')return `<span class="cxd ${good?'cg':'cb'}">${lab}: ${dd>=0?'+':''}${dd.toFixed(2)}</span>`;
  const p=base>0&&cur>=0?dd/base:null;return `<span class="cxd ${good?'cg':'cb'}">${lab}: ${dd>=0?'+':'-'}${d.t==='rm'?rmk(Math.abs(dd)).replace('RM ',''):nf(Math.abs(dd))}${p!=null?' ('+sg(p)+')':''}</span>`}
-function ctx(){const key='ctx'+JSON.stringify([S6.per,S6.from,S6.to,S6.rg,S6.br,S6.mat,S6.brand,S6.model,S6.cat]);return memo(key,()=>{const r=period(),F=FF(r),Fp=FF(r.prev),Fy=r.py?FF(r.py):null,sel=brSel();return {r,F,Fp,Fy,sel,P:PL(F),Pp:PL(Fp),Py:Fy?PL(Fy):null,B:BUD(F)}})}
+function ctx(){const key='ctx'+JSON.stringify([S6.tab,S6.per,S6.from,S6.to,S6.rg,S6.st,S6.br,S6.brand,S6.model,S6.cat]);return memo(key,()=>{const r=period(),F=FF(r),Fp=FF(r.prev),Fy=r.py?FF(r.py):null,sel=brSel();return {r,F,Fp,Fy,sel,P:PL(F),Pp:PL(Fp),Py:Fy?PL(Fy):null,B:BUD(F)}})}
 function cxCard(k,c){const d=KD[k],v=kval(k,c.F,c);
- if(v==null)return `<button class="cxk" data-cx="dr" data-v="${k}"><div class="row sp"><small>${d.l}</small>${badge('Simulasi','sim')}</div><b class="na">Tidak tersedia</b><span class="sub">${d.why||'Tiada data untuk tempoh/penapis ini.'}</span></button>`;
+ if(v==null)return `<button class="cxk" data-cx="dr" data-v="${k}"><small>${d.l}</small><b class="na">Tidak tersedia</b><span class="sub">${d.why||'Tiada data untuk tempoh/penapis ini.'}</span></button>`;
  const p=kval(k,c.Fp,c),y=c.Fy?kval(k,c.Fy,c):null,bud=d.bud&&c.B?d.bud(c.B):null;
  const cmp=cmpLine(k,v,p,'vs '+(S6.per==='yst'||S6.per==='today'?'hari sebelum':'tempoh lalu'))+(c.Fy?cmpLine(k,v,y,'vs tahun lalu'):`<span class="cxd na">vs tahun lalu: tiada data (bermula Nov 2024)</span>`)+(d.bud?(bud!=null?cmpLine(k,v,bud,'vs bajet'):`<span class="cxd na">vs bajet: tidak tersedia</span>`):'');
- return `<button class="cxk" data-cx="dr" data-v="${k}" aria-label="${esc(d.l)}, tekan untuk butiran"><div class="row sp"><small>${d.l}</small>${badge('Simulasi','sim')}</div><b>${fmtK(k,v)}</b>${cmp}<span class="sub cxn">Dikemas kini ${hhmm()}</span></button>`}
+ return `<button class="cxk" data-cx="dr" data-v="${k}" aria-label="${esc(d.l)}, tekan untuk butiran"><small>${d.l}</small><b>${fmtK(k,v)}</b>${cmp}<span class="sub cxn">Dikemas kini ${hhmm()}</span></button>`}
 /* ---- siri bulanan (12 bulan lengkap terakhir) ---- */
 function mseries(){const D=eng().D,lm=lastM(),ms=[];for(let m=lm-11;m<=lm;m++)ms.push(m);return ms}
 const mFval=(k,m)=>kval(k,mF(m),ctx());
@@ -1537,25 +1573,24 @@ function drill(c){const k=S6.dr,d=KD[k];if(!d)return '';const D=eng().D;
  <h4>Pecahan ikut cawangan (tempoh dipilih)</h4>${table(['Cawangan','Nilai','Bahagian'],rows.map(x=>tr([esc(x.b.n),x.v==null?'<span class="cxu">Tidak tersedia</span>':fmtK(k,x.v),(d.t==='rm'||d.t==='n')&&x.v!=null&&tot?pf(x.v/tot):'—'])))}
  <h4>12 bulan lengkap terakhir</h4>${ch}</section>`}
 /* ---- penapis ---- */
+/* ---- bar alat ringkas + penapis kenderaan (hanya modul kenderaan/produk) ---- */
+let FO=false;
 const OPT=(a,v)=>a.map(([k,l])=>`<option value="${esc(k)}" ${String(v)===String(k)?'selected':''}>${esc(l)}</option>`).join('');
-function filters(){const D=eng().D,regs=[...new Set(D.BR.map(b=>b.rg))],brands=[...new Set(D.MODELS.map(m=>m.br))];
- const pers=[['today','Hari ini'],['yst','Semalam'],['wtd','Minggu ini'],['mtd','Bulan ini'],['qtd','Suku tahun'],['ytd','Tahun ini'],['r12','12 bulan'],['cus','Tersuai']];
- const bl=D.BR.filter(b=>!S6.rg||b.rg===S6.rg);
- const ml=D.MODELS.map((m,i)=>[String(i),m.n]).filter(([i])=>!S6.brand||D.MODELS[+i].br===S6.brand);
+const PERS=[['today','Hari ini'],['yst','Semalam'],['wtd','Minggu ini'],['mtd','Bulan ini'],['qtd','Suku tahun'],['ytd','Tahun ini'],['r12','12 bulan'],['cus','Tersuai']];
+const areaVal=()=>S6.st?'st:'+S6.st:S6.rg?'rg:'+S6.rg:'';
+function toolbar(){const D=eng().D,regs=[...new Set(D.BR.map(b=>b.rg))],sts=[...new Set(D.BR.map(b=>b.st))],r=period();
+ const bl=D.BR.filter(b=>(!S6.rg||b.rg===S6.rg)&&(!S6.st||b.st===S6.st));
+ const perL=(PERS.find(x=>x[0]===S6.per)||[])[1],arL=S6.st||S6.rg||'Nasional',brL=S6.br?(D.BR.find(b=>b.id===S6.br)||{}).n:'Semua cawangan';
  const f=(key,lab,opts)=>`<label class="cxfl"><span>${lab}</span><select data-cxf="${key}" aria-label="${lab}">${opts}</select></label>`;
- const r=period();
- return `<section class="card cxf"><div class="cxfg">${f('per','Tempoh',OPT(pers,S6.per))}
- ${S6.per==='cus'?`<label class="cxfl"><span>Dari</span><input type="date" data-cxf="from" value="${S6.from||''}" max="${D.ymd(D.TODAY)}"></label><label class="cxfl"><span>Hingga</span><input type="date" data-cxf="to" value="${S6.to||''}" max="${D.ymd(D.TODAY)}"></label>`:''}
- ${f('rg','Wilayah',OPT([['','Semua wilayah']].concat(regs.map(x=>[x,x])),S6.rg))}
- ${f('br','Cawangan',OPT([['','Semua cawangan']].concat(bl.map(b=>[b.id,b.n])),S6.br))}
- ${f('mat','Kematangan',OPT([['','Semua'],['m','Matang'],['b','Berkembang'],['r','Baharu']],S6.mat))}
- ${f('brand','Jenama',OPT([['','Semua jenama']].concat(brands.map(x=>[x,x])),S6.brand))}
- ${f('model','Model',OPT([['','Semua model']].concat(ml),S6.model))}
- ${f('cat','Kategori servis',OPT([['','Semua kategori']].concat(D.CATS.map(x=>[x,D.CATN[x]])),S6.cat))}</div>
- <p class="muted cxfn">${r.label}: ${dmy(r.from)} – ${dmy(r.to)} · banding: ${dmy(r.prev.from)} – ${dmy(r.prev.to)}${r.py?' · tahun lalu: '+dmy(r.py.from)+' – '+dmy(r.py.to):' · tahun lalu: tiada data'}${hasV()?` · <b>Penapis kenderaan aktif:</b> belanja cawangan, EBITDA, kapasiti dan kewangan tidak boleh diagih ikut model/kategori, jadi ditanda “Tidak tersedia”.`:''}${brSel()?' · '+brSel().length+' cawangan dipilih; EBITDA rangkaian, untung operasi dan tunai tidak dipaparkan.':''}</p></section>`}
-/* ---- bar tab ---- */
-const TABS=[['ov','Ringkasan'],['fin','Kewangan'],['brp','Portfolio cawangan'],['veh','Kenderaan & permintaan'],['prod','Produk & inventori'],['exp','Ekspansi'],['act','Keputusan & tindakan'],['brd','Laporan lembaga']];
-const tabsBar=()=>`<nav class="cxtabs" aria-label="Modul CEO">${TABS.map(([k,l])=>`<button data-cx="tab" data-v="${k}" ${S6.tab===k?'aria-current="true"':''}>${l}</button>`).join('')}</nav>`;
+ return `<div class="cxbar"><button class="cxftog" data-cx="ftog" aria-expanded="${FO}"><span>${perL} · ${esc(arL)} · ${esc(brL)}</span><b>Tapis</b></button>
+ <div class="cxfs ${FO?'open':''}">${f('per','Tempoh',OPT(PERS,S6.per))}${S6.per==='cus'?`<label class="cxfl"><span>Dari</span><input type="date" data-cxf="from" value="${S6.from||''}" max="${D.ymd(D.TODAY)}"></label><label class="cxfl"><span>Hingga</span><input type="date" data-cxf="to" value="${S6.to||''}" max="${D.ymd(D.TODAY)}"></label>`:''}
+ ${f('area','Kawasan',OPT([['','Nasional'],['__r','— Wilayah —']].slice(0,1).concat(regs.map(x=>['rg:'+x,'Wilayah '+x]),sts.map(x=>['st:'+x,x])),areaVal()))}
+ ${f('br','Cawangan',OPT([['','Semua cawangan']].concat(bl.map(b=>[b.id,b.n])),S6.br))}</div>
+ <p class="cxcmp">${r.label}: ${dmy(r.from)} – ${dmy(r.to)}. Dibanding dengan ${dmy(r.prev.from)} – ${dmy(r.prev.to)} (tempoh sama panjang sebelumnya)${r.py?' dan '+dmy(r.py.from)+' – '+dmy(r.py.to)+' (tahun lalu).':'; tiada data tahun lalu.'}</p></div>`}
+function vfilters(){const D=eng().D,brands=[...new Set(D.MODELS.map(m=>m.br))],ml=D.MODELS.map((m,i)=>[String(i),m.n]).filter(([i])=>!S6.brand||D.MODELS[+i].br===S6.brand);
+ const f=(key,lab,opts)=>`<label class="cxfl"><span>${lab}</span><select data-cxf="${key}" aria-label="${lab}">${opts}</select></label>`;
+ const on=!!(S6.brand||S6.model!==''||S6.cat);
+ return `<div class="cxbar cxvf"><div class="cxfs open">${f('brand','Jenama',OPT([['','Semua jenama']].concat(brands.map(x=>[x,x])),S6.brand))}${f('model','Model',OPT([['','Semua model']].concat(ml),S6.model))}${f('cat','Kategori servis',OPT([['','Semua kategori']].concat(D.CATS.map(x=>[x,D.CATN[x]])),S6.cat))}${on?'<button class="btn sm ghost" data-cx="vreset">Set semula</button>':''}</div>${on?`<p class="cxcmp"><b>Skop kenderaan aktif:</b> angka di halaman ini hanya untuk kerja kenderaan/servis dipilih. Untung operasi, tunai dan kewangan syarikat tidak terjejas; lihat Pusat CEO dan Kewangan.</p>`:''}</div>`}
 /* ---- Intelligence Feed (hanya berasaskan bukti dalam data) ---- */
 const RECOV={stok:.6,kapasiti:.4,tangguh:.2,harga:.15,pesaing:.1,tidaksokong:0,tidakdiketahui:.05,sebut:.25};
 const REASN={stok:'Stok habis',kapasiti:'Bay penuh',tangguh:'Pelanggan tangguh',harga:'Harga',pesaing:'Pergi pesaing',tidaksokong:'Tidak disokong cawangan',tidakdiketahui:'Sebab tidak diketahui',sebut:'Sebut harga tidak diterima'};
@@ -1602,37 +1637,51 @@ function feedHtml(list,n){return list.slice(0,n).map(f=>{const done=S6.acts.find
  <div class="cxmeta"><span><small>Kesan kewangan</small><b>${f.imp!=null?rmk(f.imp)+' / bulan':'tidak dikira'}</b><i>${esc(f.impL||'')}</i></span><span><small>Keyakinan</small><b>${f.conf}</b></span><span><small>Pemilik</small><b>${esc(f.owner)}</b></span><span><small>Tarikh akhir</small><b>${dmy(eng().D.TODAY+f.due)}</b></span></div>
  <p class="cxact"><b>Tindakan dicadangkan:</b> ${esc(f.act)}</p>
  ${done?`<span class="cxb ok">Arahan dikeluarkan · ${esc(done.st)}</span>`:`<button class="btn sm" data-cx="fx" data-v="${f.id}">Keluarkan arahan</button>`}</article>`}).join('')||'<p class="muted">Tiada penemuan yang mencapai ambang bukti pada data semasa.</p>'}
-/* ---- paparan Ringkasan ---- */
-function viewOv(c){const D=eng().D,ms=mseries(),lm=lastM(),lab=ms.map(m=>mlab(D.MKEY[m]));
- const act=ms.map(m=>mF(m)).map(F=>PL(F).net),bud=ms.map(m=>{const b=BUD(mF(m));return b?b.rev:null}),py=ms.map(m=>m-12>=0?PL(mF(m-12)).net:null);
- const gp=ms.map(m=>PL(mF(m)).gp),be=ms.map(m=>PL(mF(m)).bEbitda),ne=ms.map(m=>PL(mF(m)).nEbitda);
- const ledger=!c.sel&&!hasV();
- const cf=ms.map(m=>ledger?cashAt(m).cfNet:null),cash=ms.map(m=>ledger?cashAt(m).bs.cash:null);
- const keys=['net','gp','gpm','bE','nE','op','cash','jobs','ticket','cust','nw','util','rw','tat','cs','disc'];
- /* sumbangan cawangan */
- const brs=D.BR.map((b,i)=>({b,i,F:Object.assign({},FF(c.r),{br:[i]})})).filter(x=>!c.sel||c.sel.includes(x.i));
- const contrib=brs.map(x=>({l:x.b.n,id:x.i,v:hasV()?PL(x.F).gp:PL(x.F).bEbitda,dr:'br'})).sort((a,b)=>b.v-a.v);
- /* kedai sama */
- const sss=(()=>{if(!c.r.py)return null;const comp=D.BR.map((b,i)=>i).filter(i=>D.BR[i].od<c.r.py.from&&(!c.sel||c.sel.includes(i)));if(!comp.length)return null;const base=Object.assign({},veh()),a=PL(Object.assign({from:c.r.from,to:c.r.to,br:comp},base)).net,b=PL(Object.assign({from:c.r.py.from,to:c.r.py.to,br:comp},base)).net;return {g:b?a/b-1:null,n:comp.length,a,b}})();
- const mix=(()=>{const q={};E_scan(c.F,j=>{const x=q[j.cat]||(q[j.cat]={n:0,rev:0});x.n++;x.rev+=j.rev});return Object.entries(q).map(([k,v])=>({l:D.CATN[k],v:v.rev})).sort((a,b)=>b.v-a.v)})();
- const rep=ms.map(m=>{const A=PL(mF(m)).A;return A.n?1-A.nw/A.n:null});
- /* heatmap margin EBITDA cawangan x 6 bulan */
- const h6=ms.slice(-6);
- const heatT=hasV()?'<p class="muted">Peta haba margin cawangan tidak tersedia dengan penapis kenderaan (belanja cawangan tidak boleh diagih).</p>':table(['Cawangan'].concat(h6.map(m=>mlab(D.MKEY[m]))),D.BR.filter((b,i)=>!c.sel||c.sel.includes(i)).map((b)=>{const i=D.BR.indexOf(b);return tr([esc(b.n)].concat(h6.map(m=>{if(b.od>D.mStart(m+1)-1)return '<span class="muted">—</span>';const p=PL(Object.assign({},mF(m),{br:[i]}));return p.bm==null?'—':`<span class="hm" style="background:${heat(p.bm)};color:${p.bm>=.2||p.bm<-.15?'#fff':'#17212b'}">${pf(p.bm,0)}</span>`})))}))+'<p class="muted">Margin EBITDA cawangan = EBITDA cawangan ÷ jualan bersih bulan itu. Sel kosong = cawangan belum dibuka.</p>';
- const fl=findings(),top=fl.slice(0,3);
- const sev=c.sel?'<p class="muted">Penemuan di bawah dikira atas seluruh rangkaian, bukan tempoh/penapis di atas.</p>':'';
- return `<div class="cxgrid">${keys.map(k=>cxCard(k,c)).join('')}</div>
- ${S6.dr?drill(c):''}
- <section class="card"><h3>3 keputusan teratas untuk CEO</h3><p class="muted">Dipilih daripada Intelligence Feed ikut anggaran kesan kewangan. Semua berasaskan bukti dalam data simulasi.</p>${feedHtml(top,3)}</section>
- <section class="card"><h3>Jualan bersih: sebenar, bajet dan tahun lalu</h3>${chart({labels:lab,bars:[{name:'Sebenar',vals:act,color:'#17212b'}],lines:[{name:'Bajet (simulasi)',vals:bud,color:'#d98a00',dash:1},{name:'Tahun lalu',vals:py,color:'#8696a4'}],fmt:rmk,title:'Jualan bersih bulanan'})}<p class="muted">12 bulan lengkap; bulan semasa tidak dimasukkan kerana belum lengkap.${hasV()?' Bajet tidak tersedia dengan penapis kenderaan.':''}</p></section>
- <section class="card"><h3>Untung kasar, EBITDA cawangan dan rangkaian</h3>${chart({labels:lab,lines:[{name:'Untung kasar',vals:gp,color:'#0d8a73'},{name:'EBITDA cawangan',vals:be,color:'#1d5fb8'},{name:'EBITDA rangkaian',vals:ne,color:'#b3261e'}],fmt:rmk,title:'Trend untung'})}<p class="muted">Untung kasar bukan untung bersih. EBITDA rangkaian hanya dipaparkan untuk seluruh rangkaian.</p></section>
- <section class="card"><h3>Aliran tunai dan baki tunai</h3>${ledger?chart({labels:lab,bars:[{name:'Aliran tunai bersih',vals:cf,color:'#1d5fb8'}],lines:[{name:'Baki tunai',vals:cash,color:'#17212b'}],fmt:rmk,title:'Tunai'}):'<p class="muted">Tunai dipegang di peringkat syarikat; tidak tersedia untuk penapis cawangan/kenderaan.</p>'}</section>
- <section class="card"><h3>${hasV()?'Sumbangan untung kasar ikut cawangan':'Sumbangan EBITDA cawangan'}</h3>${hbars(contrib.map(x=>({l:x.l,v:x.v,id:x.id,dr:'brx'})),rmk)}<p class="muted">Tempoh: ${c.r.label}. Ketik cawangan untuk analisis di Portfolio.</p></section>
- <section class="card"><h3>Pertumbuhan kedai sama</h3>${sss&&sss.g!=null?`<div class="kpis"><div class="kpi"><small>${sss.n} cawangan dibuka sebelum tempoh tahun lalu</small><b>${sg(sss.g)}</b><span class="sub">${rmk(sss.b)} → ${rmk(sss.a)}</span></div></div><p class="muted">Hanya cawangan yang sudah beroperasi sebelum tempoh banding; cawangan baharu tidak dikira supaya pertumbuhan tidak dicemari pembukaan.</p>`:'<p class="muted">Tidak tersedia: tiada tempoh tahun lalu dalam data, atau tiada cawangan yang setanding.</p>'}</section>
- <section class="card"><h3>Campuran servis (hasil, ${c.r.label.toLowerCase()})</h3>${hbars(mix,rmk)}</section>
- <section class="card"><h3>Kadar pelanggan berulang</h3>${chart({labels:lab,lines:[{name:'Kerja daripada pelanggan berulang',vals:rep,color:'#0d8a73'}],fmt:v=>(v*100).toFixed(0)+'%',title:'Pelanggan berulang'})}</section>
- <section class="card"><h3>Peta haba: margin EBITDA cawangan</h3>${heatT}</section>
- <section class="card"><h3>Intelligence Feed</h3><p class="muted">Setiap penemuan: bukti → kesan kewangan → keyakinan → tindakan → pemilik → tarikh. Hanya dipaparkan jika data mencapai ambang. Dikira atas 3 bulan lengkap terakhir dan 90 hari terakhir.</p>${sev}${feedHtml(fl,8)}</section>`}
+/* ---- paparan Ringkasan Eksekutif ---- */
+const trendCls=(d,base,rel)=>{if(d==null||!isFinite(d))return 'n';const m=rel?Math.abs(base||0)*.03:0;return Math.abs(d)<=m?'n':d>0?'p':'b'};
+function pbCount(F,sel){const D=eng().D,set=(sel||D.BR.map((b,i)=>i)).filter(i=>D.BR[i].od<=F.to);let n=0;set.forEach(i=>{const p=PL(Object.assign({},F,{br:[i]}));if(p.bEbitda!=null&&p.bEbitda>0)n++});return {n,t:set.length}}
+function hero(c){const D=eng().D,L=eng().L,P=c.P,Pp=c.Pp,mi=t=>Math.min(D.NM-1,mOf(Math.min(t,D.TODAY)));
+ const cash=L[mi(c.r.to)].bs.cash,cashP=L[mi(c.Fp.to)].bs.cash,pb=pbCount(c.F,c.sel),pbp=pbCount(c.Fp,c.sel);
+ const arrow=cl=>cl==='p'?'▲':cl==='b'?'▼':'●';
+ const dpct=(cur,base)=>base>0&&cur!=null?(cur-base)/base:null;
+ const k=(id,act,v,lab,val,cls,cmp,scope,tip)=>`<button class="hk" data-cx="${act}" data-v="${v}" aria-describedby="hk-${id}" title="${esc(tip)}"><span class="hkl">${lab}</span><b>${val}</b><span class="hkd ${cls}">${cmp}</span><span class="hks">${scope}</span><span class="sr" id="hk-${id}">${esc(tip)}</span></button>`;
+ const dn=dpct(P.net,Pp.net),dop=P.op!=null&&Pp.op!=null?P.op-Pp.op:null,dc=cash-cashP,dpb=pb.n-pbp.n;
+ const cn=dn!=null&&Math.abs(dn)<.02?'n':trendCls(dn,0),co=trendCls(dop,Math.abs(Pp.op||0),1),cc=trendCls(dc,cashP,1),cb=trendCls(dpb,0);
+ return `<div class="hkrow">${k('net','dr','net','Hasil bersih',rmk(P.net),cn,`${arrow(cn)} ${dn==null?'tiada banding':(dn>=0?'+':'')+(dn*100).toFixed(1)+'% vs tempoh lalu'}`,(P.A.n===0?'Tiada kerja direkod (hari tutup)':'Selepas bayaran balik'),'Jualan invois tolak bayaran balik. Dibanding dengan tempoh sama panjang sebelumnya.')}
+ ${P.op==null?k('op','dr','op','Untung operasi','Tidak tersedia','n','','Data tidak lengkap','Tiada kos untuk kombinasi ini.'):k('op','dr','op','Untung operasi',rmk(P.op),co,`${arrow(co)} ${dop==null?'tiada banding':(dop>=0?'+':'-')+rmk(Math.abs(dop)).replace('RM ','RM ')+' vs tempoh lalu'}`,c.sel?'Cawangan dipilih, sebelum kos HQ':'Selepas kos HQ dan susutan, sebelum faedah & cukai','Untung selepas semua kos operasi dan susutan aset. Bukan untung kasar.')}
+ ${k('cash','tab','fin','Tunai tersedia',rmk(cash),cc,`${arrow(cc)} ${(dc>=0?'+':'-')+rmk(Math.abs(dc)).replace('RM ','RM ')} vs tempoh lalu`,'Baki bank syarikat (bukan ikut cawangan)','Baki tunai lejar syarikat pada hujung tempoh. Tekan untuk aliran tunai dan modal ekspansi.')}
+ ${k('pb','tab','brp','Cawangan untung',pb.n+' / '+pb.t,cb,`${arrow(cb)} ${dpb===0?'sama seperti tempoh lalu':(dpb>0?'+':'')+dpb+' vs tempoh lalu ('+pbp.n+')'}`,'EBITDA cawangan positif','Cawangan dengan EBITDA cawangan positif dalam tempoh, daripada cawangan yang sudah dibuka.')}</div>`}
+function ovChart(c){const D=eng().D,lm=lastM(),N=S6.cm===12?12:6,cur=D.NM-1,ms=[];for(let m=lm-N+1;m<=cur;m++)ms.push(m);
+ const lab=ms.map(m=>mlab(D.MKEY[m])+(m===cur?'*':''));
+ const rev=[],fc=[],bud=[],pos=[],negv=[];
+ const elapsed=D.TODAY-D.mStart(cur)+1,dimC=D.dim(cur);
+ ms.forEach(m=>{const F=mF(m),p=PL(F);if(m===cur){const base=PL(FF({from:D.TODAY-27,to:D.TODAY})).net/28;rev.push(p.net);fc.push(Math.max(0,base*(dimC-elapsed)));bud.push(null);pos.push(null);negv.push(null)}
+  else{rev.push(p.net);fc.push(null);const b=BUD(F);bud.push(b?b.rev:null);const o=p.op;pos.push(o!=null&&o>=0?o:null);negv.push(o!=null&&o<0?o:null)}});
+ const proj=rev[rev.length-1]+fc[fc.length-1];
+ return `<section class="card cxc"><div class="row sp"><h3>Hasil bersih dan untung operasi</h3><div class="cxseg" role="group" aria-label="Julat bulan"><button data-cx="set" data-v="cm=6" aria-pressed="${N===6}">6 bulan</button><button data-cx="set" data-v="cm=12" aria-pressed="${N===12}">12 bulan</button></div></div>
+ ${chart({labels:lab,stack:true,bars:[{name:'Hasil sebenar',vals:rev,color:'#17212b'},{name:'Ramalan baki bulan',vals:fc,color:'#c3ccd3'}],lines:[{name:'Bajet (simulasi)',vals:bud,color:'#c98400',dash:1}],fmt:rmk,h:200,title:'Hasil bersih bulanan'})}
+ ${chart({labels:lab,bars:[{name:'Untung operasi (positif)',vals:pos,color:'#0d8a73'},{name:'Untung operasi (negatif)',vals:negv,color:'#b3261e'}],fmt:rmk,h:130,title:'Untung operasi bulanan'})}
+ <p class="cxfoot">* Bulan semasa belum lengkap: bar gelap ialah sebenar setakat hari ini; bar pucat ialah ramalan baki bulan (purata harian 28 hari terakhir × baki hari), anggaran akhir bulan ${rmk(proj)}. Untung operasi bulan semasa tidak dipaparkan. Bajet ialah bajet simulasi.${c.sel?' Untung operasi di sini ialah untuk cawangan dipilih, sebelum kos HQ.':''}</p></section>`}
+function ovBranches(c){const D=eng().D,rows=brRows(c);rows.forEach(r=>{r.g=null;if(c.r.py&&D.BR[r.i].od<c.r.py.from){const y=PL({from:c.r.py.from,to:c.r.py.to,br:[r.i]}).net;r.g=y>0?r.net/y-1:null}});
+ rows.sort((a,b)=>(b.bm==null?-9:b.bm)-(a.bm==null?-9:a.bm));
+ const dot={'Margin kukuh':'ok','Perlu perhatian':'bad','Hampir penuh':'warn','Ramp-up':'info','Biasa':'n'};
+ return `<section class="card cxp"><div class="row sp"><h3>Prestasi cawangan</h3><button class="lnk" data-cx="tab" data-v="brp">Lihat butiran</button></div>
+ <div class="cxrk" role="table" aria-label="Kedudukan cawangan"><div class="cxrh" role="row"><span>Cawangan</span><span class="num">Hasil</span><span class="num">Margin</span><span class="num">vs thn lalu</span><span>Status</span></div>${rows.map(r=>`<button class="cxrr" role="row" data-cx="brx" data-v="${r.i}"><span class="nm">${esc(r.b.n)}</span><span class="num">${rmk(r.net)}</span><span class="num">${r.bm==null?'—':pf(r.bm,0)}</span><span class="num">${r.g==null?'—':sg(r.g,0)}</span><span class="st ${dot[r.cls]}">${r.cls}</span></button>`).join('')}</div>
+ <p class="cxfoot">Margin = EBITDA cawangan ÷ hasil bersih. Status ikut ambang di Prestasi cawangan.</p></section>`}
+function ovDemand(c){const D=eng().D,M={},C={};let n=0;E_scan(c.F,j=>{n++;const a=M[j.m]||(M[j.m]={n:0,rev:0});a.n++;a.rev+=j.rev;const b=C[j.cat]||(C[j.cat]={n:0,rev:0});b.n++;b.rev+=j.rev});
+ const mm=Object.entries(M).map(([k,v])=>({l:D.MODELS[k].br+' '+D.MODELS[k].n,v:v.n})).sort((a,b)=>b.v-a.v).slice(0,5),cc=Object.entries(C).map(([k,v])=>({l:D.CATN[k],v:v.rev})).sort((a,b)=>b.v-a.v).slice(0,4);
+ const tr_=cc.reduce((a,x)=>a+x.v,0);
+ return `<section class="card cxp"><div class="row sp"><h3>Permintaan kenderaan & servis</h3><button class="lnk" data-cx="tab" data-v="veh">Lihat butiran</button></div>
+ <h4>Model teratas (kerja siap, ${nf(n)} kerja)</h4>${hbars(mm.map(x=>({l:x.l,v:x.v,c:'#17212b'})),v=>pf(n?v/n:null,0))}
+ <h4>Kategori servis (hasil)</h4>${hbars(cc.map(x=>({l:x.l,v:x.v,c:'#1d5fb8'})),v=>pf(tr_?v/tr_:null,0))}</section>`}
+function ovDecisions(){const fl=findings().slice(0,3),D=eng().D;
+ return `<section class="card cxp"><div class="row sp"><h3>Keputusan utama CEO</h3><button class="lnk" data-cx="tab" data-v="act">Semua arahan</button></div>
+ ${fl.length?fl.map(f=>{const done=S6.acts.find(a=>a.fid===f.id);return `<article class="cxdc ${f.sev}"><div class="cxdh"><span class="cxb ${f.sev==='tinggi'?'hi':f.sev==='sederhana'?'md':'lo'}">${f.sev==='tinggi'?'Tinggi':'Sederhana'}</span><b>${esc(f.t)}</b></div>
+  <p class="cxev1">${esc(f.ev[0])}</p><div class="cxdm"><span><small>Kesan</small><b>${f.imp!=null?rmk(f.imp)+' / bulan':'—'}</b></span><span><small>Pemilik</small><b>${esc(f.owner)}</b></span><span><small>Keyakinan</small><b>${f.conf}</b></span></div>
+  <details><summary>Bukti penuh dan tindakan</summary><ul class="cxev">${f.ev.map(e=>`<li>${esc(e)}</li>`).join('')}</ul><p class="cxact"><b>Tindakan:</b> ${esc(f.act)}</p></details>
+  ${done?`<span class="cxb ok">Arahan dikeluarkan · ${esc(done.st)}</span>`:`<button class="btn sm" data-cx="fx" data-v="${f.id}">Keluarkan arahan</button>`}</article>`}).join(''):'<p class="muted">Tiada isu yang mencapai ambang bukti.</p>'}
+ <p class="cxfoot">Dikira atas 3 bulan lengkap dan 90 hari terakhir, tidak ikut penapis tempoh.</p></section>`}
+function viewOv(c){return hero(c)+(S6.dr?drill(c):'')+ovChart(c)+`<div class="cxtwo">${ovBranches(c)}${ovDemand(c)}</div>`+ovDecisions()}
 function E_scan(F,cb){eng().scan(F,cb)}
 
 /* ---------- CEO: Kewangan & Portfolio cawangan ---------- */
@@ -1851,15 +1900,16 @@ function viewBrd(c){const D=eng().D,keys=['net','gp','bE','nE','op','cash'],fl=f
  <h3>Arahan terbuka</h3>${open.length?`<ul class="cxev">${open.map(a=>`<li><b>${esc(a.t)}</b> · ${a.st} · ${esc(a.owner)} · akhir ${dmy(a.due)}</li>`).join('')}</ul>`:'<p class="muted">Tiada arahan terbuka.</p>'}
  <h3>Nota & had</h3><ul class="cxev"><li>Semua angka ialah simulasi untuk demo. Bukan data syarikat sebenar; cawangan dalam paparan ialah contoh.</li><li>Untung kasar bukan untung bersih. EBITDA bukan tunai. Faedah dan cukai belum dimasukkan dalam untung operasi.</li><li>Bajet ialah bajet simulasi yang dijana daripada rancangan ramp-up; bukan bajet lembaga.</li><li>Angka bulan semasa belum lengkap dan tidak dianualkan.</li><li>Ramalan dan model ekspansi bergantung pada andaian yang tertera pada setiap modul.</li></ul></section>`}
 /* ---------- paparan utama ---------- */
-function viewMaster(){const c=ctx(),D=eng().D;let body='';try{body=S6.tab==='fin'?viewFin(c):S6.tab==='brp'?viewBrp(c):S6.tab==='veh'?viewVeh(c):S6.tab==='prod'?viewProd(c):S6.tab==='exp'?viewExp(c):S6.tab==='act'?viewAct(c):S6.tab==='brd'?viewBrd(c):viewOv(c)}catch(e){body=`<section class="card"><h3>Modul tidak dapat dipaparkan</h3><p class="muted">${esc(String(e&&e.message||e))}</p></section>`;if(window.console)console.error(e)}
- return `<div class="cx"><header class="cxhd"><div><h1>Dashboard CEO</h1><p class="muted">CarRepublic · ${D.BR.length} cawangan contoh · dikemas kini ${hhmm()}</p></div>${DEMO}</header>
- <div class="cxwarn">Data simulasi untuk demo. Cawangan, pelanggan dan angka dijana secara rawak berstruktur, bukan rekod syarikat sebenar. Pengiraan padan antara modul (jualan → untung → tunai → kunci kira-kira).</div>
- ${tabsBar()}${filters()}${body}${S6.tab==='ov'?demoTail():''}</div>`}
+const MT={ov:['Ringkasan eksekutif','Prestasi rangkaian nasional'],fin:['Kewangan','Untung rugi, kunci kira-kira, aliran tunai dan modal'],brp:['Prestasi cawangan','Kedudukan, keuntungan, produktiviti dan kualiti'],veh:['Kenderaan & permintaan','Model, umur, odometer dan permintaan hilang'],prod:['Produk & inventori','Alat ganti, pakej, stok dan margin'],cg:['Pertumbuhan pelanggan','Pelanggan baharu, berulang dan saluran'],sq:['Kualiti servis','Kerja semula, ketepatan masa dan kepuasan'],exp:['Strategi ekspansi','Lokasi, modal, pulangan dan kapasiti'],act:['Keputusan CEO','Arahan, pemilik, tarikh dan hasil'],brd:['Laporan lembaga','Ringkasan untuk lembaga pengarah']};
+function viewMaster(){if(ui.cx){if(S6.tab!==ui.cx){S6.tab=ui.cx;save6()}}else ui.cx=S6.tab;if(!MT[S6.tab])S6.tab=ui.cx='ov';const c=ctx(),D=eng().D,T=S6.tab;let body='';
+ try{body=T==='fin'?viewFin(c):T==='brp'?viewBrp(c):T==='veh'?viewVeh(c):T==='prod'?viewProd(c):T==='cg'?viewCg(c):T==='sq'?viewSq(c):T==='exp'?viewExp(c):T==='act'?viewAct(c):T==='brd'?viewBrd(c):viewOv(c)}catch(e){body=`<section class="card"><h3>Modul tidak dapat dipaparkan</h3><p class="muted">${esc(String(e&&e.message||e))}</p></section>`;if(window.console)console.error(e)}
+ const bar=['exp','act'].includes(T)?'':toolbar(),vf=(T==='veh'||T==='prod')?vfilters():'';
+ return `<div class="cx"><header class="cxhd"><div><h1>${MT[T][0]}</h1><p>${MT[T][1]}</p></div><div class="cxst"><span class="cxsim" title="Semua angka ialah simulasi untuk demo; bukan rekod syarikat sebenar">Data simulasi</span><span>Dikemas kini ${hhmm()}</span></div></header>${bar}${vf}${body}${T==='ov'?`<details class="cxdemo"><summary>Cuba aliran demo dan beri komen</summary>${demoTail()}</details>`:''}</div>`}
 /* ---------- acara ---------- */
 function cxSet(k,v){const D=eng().D;
  if(k==='per'){S6.per=v;S6.dr=null}
- else if(k==='rg'){S6.rg=v;if(S6.br&&v&&D.BR.find(b=>b.id===S6.br).rg!==v)S6.br=''}
- else if(k==='brand'){S6.brand=v;S6.model=''}
+ else if(k==='area'){S6.rg=v.startsWith('rg:')?v.slice(3):'';S6.st=v.startsWith('st:')?v.slice(3):'';if(S6.br){const b=D.BR.find(x=>x.id===S6.br);if((S6.rg&&b.rg!==S6.rg)||(S6.st&&b.st!==S6.st))S6.br=''}}
+  else if(k==='brand'){S6.brand=v;S6.model=''}
  else if(['br','mat','model','cat','from','to'].includes(k))S6[k]=v;
  else if(k==='w')S6.w=v===''?null:Math.max(-40,Math.min(40,+v||0));
  else if(k.startsWith('rec:')){S6.rec=S6.rec||{};S6.rec[k.slice(4)]=Math.max(0,Math.min(100,+v||0))/100;CXS.cache.clear()}
@@ -1868,12 +1918,14 @@ function cxSet(k,v){const D=eng().D;
  else if(k.startsWith('note:')){const a=S6.acts.find(x=>x.id===k.slice(5));if(a&&v.trim())a.hist.push({ts:nowTs(),t:'Catatan: '+v.trim().slice(0,300)})}
  save6()}
 function cxClick(a,v,t){const D=eng().D;
- if(a==='tab'){S6.tab=v;S6.dr=null}
+ if(a==='tab'){S6.tab=v;ui.cx=v;S6.dr=null;window.scrollTo(0,0)}
+ else if(a==='ftog'){FO=!FO}
+ else if(a==='vreset'){S6.brand='';S6.model='';S6.cat=''}
  else if(a==='dr')S6.dr=S6.dr===v?null:v;
- else if(a==='set'){const [k,x]=v.split('=');S6[k]=x}
+ else if(a==='set'){const [k,x]=v.split('=');S6[k]=/^\d+$/.test(x)?+x:x}
  else if(a==='sort'){if(S6.sort===v)S6.sdir=-S6.sdir;else{S6.sort=v;S6.sdir=-1}}
- else if(a==='bsel'){S6.xs=v===''?null:+v;if(v!==''&&S6.tab!=='brp')S6.tab='brp'}
- else if(a==='brx'){S6.tab='brp';S6.xs=+v}
+ else if(a==='bsel'){S6.xs=v===''?null:+v;if(v!==''&&S6.tab!=='brp'){S6.tab='brp';ui.cx='brp'}}
+ else if(a==='brx'){S6.tab='brp';ui.cx='brp';S6.xs=+v;window.scrollTo(0,0)}
  else if(a==='resetw'){S6.wt=null;CXS.cache.clear()}
  else if(a==='fx'){const f=findings().find(x=>x.id===v);if(f&&!S6.acts.find(x=>x.fid===v)){S6.acts.push({id:'A'+nowTs().toString(36),fid:f.id,t:f.t,ev:f.ev,owner:f.owner,due:D.TODAY+f.due,st:'Baharu',ts:nowTs(),act:f.act,imp:f.imp,m:f.m||null,bv:f.m?metricVal(f.m):null,hist:[{ts:nowTs(),t:'Arahan dikeluarkan daripada Intelligence Feed'}]});setMsg('ok','Arahan dikeluarkan. Lihat tab Keputusan & tindakan.')}}
  else if(a==='newact'){const cd=cands()[0];if(cd){const id='cand-'+cd.i;if(!S6.acts.find(x=>x.fid===id)){S6.acts.push({id:'A'+nowTs().toString(36),fid:id,t:'Kajian kebolehlaksanaan cawangan di '+cd.t.n,ev:[`Skor lokasi ${cd.score.toFixed(0)} (keyakinan rendah; hanya faktor dalaman).`,`${cd.cust} pelanggan sedia ada berpusat di sini; permintaan hilang 12 bulan ${rmf(cd.lostV)}.`],owner:'CEO + Pengurus Rangkaian',due:D.TODAY+60,st:'Baharu',ts:nowTs(),act:'Kumpul data luar (penduduk, pesaing, sewa) sebelum memutuskan.',imp:null,m:null,bv:null,hist:[{ts:nowTs(),t:'Arahan dikeluarkan daripada Ekspansi'}]});setMsg('ok','Arahan kajian dikeluarkan.')}}}
@@ -1883,6 +1935,33 @@ function cxClick(a,v,t){const D=eng().D;
 document.addEventListener('click',ev=>{const t=ev.target.closest('[data-cx]');if(!t||ui.role!=='master')return;cxClick(t.dataset.cx,t.dataset.v,t);render()});
 document.addEventListener('change',ev=>{const t=ev.target;if(ui.role!=='master')return;if(t.dataset&&t.dataset.cxf!=null){cxSet(t.dataset.cxf,t.value);render();return}
  if(t.dataset&&t.dataset.cxa){const a=S6.acts.find(x=>x.id===t.dataset.cxa);if(a&&a.st!==t.value){a.hist.push({ts:nowTs(),t:'Status: '+a.st+' → '+t.value});a.st=t.value;save6();render()}}});
+
+try{ui.cx=S6.tab;ui.sc=!!localStorage.getItem('careos-sc')}catch(e){}
+
+/* ---------- Pertumbuhan pelanggan & Kualiti servis ---------- */
+function monthlyA(m){return PL(mF(m)).A}
+function viewCg(c){const D=eng().D,ms=mseries(),lab=ms.map(m=>mlab(D.MKEY[m])),sel=c.sel,F=c.F,T=D.TODAY;
+ const A=c.P.A,newJ=ms.map(m=>monthlyA(m).nw),repJ=ms.map(m=>{const a=monthlyA(m);return a.n-a.nw});
+ const nc=D.cust.filter(x=>x.fd>=F.from&&x.fd<=F.to&&(!sel||sel.includes(x.b)));
+ const elig=D.cust.filter(x=>x.fd<=T-180&&(!sel||sel.includes(x.b))),act=elig.filter(x=>x.last>=T-180);
+ /* saluran: pelanggan baharu dan belanja pemasaran dalam tempoh */
+ const set=sel||D.BR.map((b,i)=>i),rows=D.CH.map((ch,ci)=>{let spend=0;for(let m=0;m<D.NM;m++){const ms_=D.mStart(m),me=D.mStart(m+1)-1,a=Math.max(F.from,ms_),b=Math.min(F.to,me,T);if(b<a)continue;const sh=(b-a+1)/(me-ms_+1);set.forEach(bi=>{spend+=(D.MKTCH[bi][m][ci]||0)*sh})}const n=nc.filter(x=>x.ch===ci).length;return {l:ch[0],n,spend,cac:spend>0&&n>0?spend/n:null}}).filter(x=>x.n>0||x.spend>0).sort((a,b)=>b.n-a.n);
+ const totSp=rows.reduce((a,x)=>a+x.spend,0),paid=rows.filter(x=>x.spend>0).reduce((a,x)=>a+x.n,0);
+ const hk=(l,v,s)=>`<div class="hk static"><span class="hkl">${l}</span><b>${v}</b><span class="hks">${s}</span></div>`;
+ return `<div class="hkrow">${hk('Pelanggan baharu',nf(nc.length),'Kali pertama datang dalam tempoh')}${hk('Kerja pelanggan berulang',A.n?pf(1-A.nw/A.n,0):'—','Bahagian kerja daripada pelanggan lama')}${hk('Pelanggan aktif 6 bulan',elig.length?pf(act.length/elig.length,0):'—',`${nf(act.length)} daripada ${nf(elig.length)} pelanggan yang datang lebih 6 bulan lalu`)}${hk('Hasil seorang pelanggan',A.veh?rmf(A.rev/A.veh):'—','Hasil invois ÷ kenderaan unik dalam tempoh')}</div>
+ <section class="card"><h3>Pelanggan baharu dan berulang (kerja bulanan)</h3>${chart({labels:lab,stack:true,bars:[{name:'Berulang',vals:repJ,color:'#17212b'},{name:'Baharu',vals:newJ,color:'#1d5fb8'}],fmt:nf,h:200,title:'Baharu lawan berulang'})}</section>
+ <section class="card"><h3>Perolehan pelanggan ikut saluran</h3>${rows.length?table(['Saluran','Pelanggan baharu','Belanja pemasaran','Kos seorang pelanggan'],rows.map(x=>tr([esc(x.l),nf(x.n),x.spend>0?rmk(x.spend):'<span class="muted">tiada belanja</span>',x.cac==null?'—':rmf(x.cac)])).concat([`<tr class="cxtot"><td>Jumlah</td><td class="num">${nf(nc.length)}</td><td class="num">${rmk(totSp)}</td><td class="num">${paid?rmf(totSp/paid):'—'}</td></tr>`])):'<p class="muted">Tiada pelanggan baharu dalam tempoh ini.</p>'}
+ <p class="cxfoot">Kos seorang pelanggan = belanja saluran ÷ pelanggan baharu daripada saluran itu; jumlah dikira atas saluran berbayar sahaja. Atribusi ialah saluran pertama yang direkod.</p></section>
+ <section class="card"><h3>Peringatan servis</h3><p>${nf(A.remN)} daripada ${nf(A.n)} kerja (${A.n?pf(A.remN/A.n,0):'—'}) bermula daripada peringatan. Pelanggan yang memberi persetujuan peringatan: ${nf(elig.filter(x=>x.cons).length)} daripada ${nf(elig.length)} (${elig.length?pf(elig.filter(x=>x.cons).length/elig.length,0):'—'}).</p><p class="cxfoot">Pelanggan aktif 6 bulan = ada kunjungan dalam 180 hari terakhir, daripada pelanggan yang mula datang sekurang-kurangnya 180 hari lalu.</p></section>`}
+function viewSq(c){const D=eng().D,ms=mseries(),lab=ms.map(m=>mlab(D.MKEY[m])),A=c.P.A,E=eng();
+ const rw=ms.map(m=>{const a=monthlyA(m);return a.n?a.rw/a.n:null}),on=ms.map(m=>{const a=monthlyA(m);return a.n?a.tatOn/a.n:null});
+ const natRw=A.n?A.rw/A.n:0,brs=D.BR.map((b,i)=>i).filter(i=>!c.sel||c.sel.includes(i));
+ const rows=brs.map(i=>{const a=PL(Object.assign({},c.F,{br:[i]})).A;return {i,n:a.n,rw:a.n?a.rw/a.n:null,on:a.n?a.tatOn/a.n:null,cs:a.csN?a.cs/a.csN:null,tat:a.n?a.tat/a.n:null,ref:a.ref,refN:a.refN,an:a.an,wq:a.n?a.wq/a.n:null}});
+ const hk=(l,v,s)=>`<div class="hk static"><span class="hkl">${l}</span><b>${v}</b><span class="hks">${s}</span></div>`;
+ return `<div class="hkrow">${hk('Kerja semula',A.n?pf(A.rw/A.n):'—',nf(A.rw)+' kerja dibuka semula')}${hk('Siap ikut janji',A.n?pf(A.tatOn/A.n,0):'—','Masa sebenar ≤ masa dijanjikan')}${hk('Kepuasan pelanggan',A.csN?(A.cs/A.csN).toFixed(2)+' / 5':'—',nf(A.csN)+' jawapan')}${hk('Bayaran balik',rmf(Math.abs(A.ref)),nf(A.refN)+' kes')}</div>
+ <section class="card"><h3>Trend kualiti (bulanan)</h3>${chart({labels:lab,lines:[{name:'Siap ikut janji',vals:on,color:'#17212b'},{name:'Kerja semula',vals:rw,color:'#b3261e'}],fmt:v=>(v*100).toFixed(0)+'%',h:200,title:'Kualiti bulanan'})}</section>
+ <section class="card"><h3>Kualiti ikut cawangan</h3>${table(['Cawangan','Kerja','Kerja semula','Siap ikut janji','Kepuasan','Purata masa (min)','Bayaran balik','Perlu semak'],rows.map(r=>{const flag=r.n>100&&r.rw!=null&&r.rw>=Math.max(.04,natRw*2)||r.on!=null&&r.on<.8;return tr([esc(D.BR[r.i].n),nf(r.n),pf(r.rw),pf(r.on,0),r.cs==null?'—':r.cs.toFixed(2),r.tat==null?'—':Math.round(r.tat),r.refN?rmk(Math.abs(r.ref))+' ('+r.refN+')':'—',flag?'<span class="cxb hi">Ya</span>':'—'])}))}
+ <p class="cxfoot">“Perlu semak” = kerja semula ≥ 4% dan ≥ 2× purata, atau siap ikut janji < 80%. Ini isyarat untuk diperiksa, bukan bukti punca.</p></section>`}
 
 /* ---------- MOD STAF (data sebenar, Supabase) + tempahan awam ---------- */
 const SM=(()=>{
@@ -2227,9 +2306,10 @@ function render(){
   if(fid){const el=document.getElementById(fid);if(el){el.focus({preventScroll:true});try{if(fs!=null)el.setSelectionRange(fs,fs)}catch(e){}}}
 }
 /* ---------- tindakan ---------- */
-const SUBK={cust:'ct',branch:'bt',hq:'ht'};
+const SUBK={cust:'ct',branch:'bt',hq:'ht',master:'cx'};
 const A={
  role:e=>{ui.role=e.v;ui.menu=false;window.scrollTo(0,0)},
+ cx:e=>{ui.role='master';ui.cx=e.v;ui.menu=false;window.scrollTo(0,0)},sc:()=>{ui.sc=!ui.sc;try{localStorage.setItem('careos-sc',ui.sc?'1':'')}catch(e){}},
  ct:e=>{ui.ct=e.v;ui.role='cust';window.scrollTo(0,0)},bt:e=>{ui.bt=e.v;ui.role='branch';window.scrollTo(0,0)},ht:e=>{ui.ht=e.v;ui.role='hq';window.scrollTo(0,0)},
  go:e=>{const [r,s]=e.id.split(':');ui.role=r;if(SUBK[r])ui[SUBK[r]]=s;window.scrollTo(0,0)},
  menu:()=>{ui.menu=!ui.menu},goJob:e=>{const b=by('bookings',e.id);ui.branch=b.bid;ui.role='branch';ui.bt='papan';ui.sel=b.id;window.scrollTo(0,0)},per:e=>{ui.per=e.v},csv:csvMonths,
