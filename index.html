@@ -1236,7 +1236,7 @@ function viewMaster(){const m=ceoModel(),A=m.A,tg=sum(m.act.map(b=>S.targets[b.i
   const inp=(k,l,u)=>`<label class="asm">${l}<input inputmode="numeric" data-ui="as:${k}" value="${A[k]}"><span class="muted sm">${u}</span></label>`;
   const runTxt=m.runway==null?'Pertumbuhan mendatar, kapasiti tidak akan penuh pada kadar ini':m.runway===0?'Kapasiti rangkaian sudah hampir penuh sekarang':`Kapasiti rangkaian dijangka penuh (85%) dalam kira-kira <b>${m.runway} bulan</b>`;
   const proj=n=>m.lastRev+m.lin*n;
-  return `<div class="hero-m"><h1>Dashboard CEO</h1><p>Adakah syarikat bertumbuh dengan sihat, dan bila serta di mana untuk buka cawangan seterusnya.</p><div class="strip" style="margin:12px 0 0"><span class="pill warn">Data demo</span><span class="pill info">${m.act.length} cawangan aktif · ${S.branches.length-m.act.length} dalam pipeline</span></div></div>
+  return `<div class="hero-m"><h1>Dashboard CEO</h1><div class="strip" style="margin:12px 0 0"><span class="pill warn">Data demo</span></div></div>
   <h2 class="sec">1. Kewangan syarikat</h2>
   <div class="kpis ceo">${ck('Hasil 12 bulan',rm0(m.ttm),'bulan lengkap sahaja')}${ck('Untung kasar 12 bulan',rm0(m.ttmK.gm),pc(m.ttmK.gmp,1)+' margin')}${ck('Hasil bulan ini (ramalan)',rm0(m.proj),'setakat hari ini '+rm0(m.mtd)+(tg?' · sasaran '+rm0(tg):''))}${ck('Kadar tahunan semasa',rm0(m.proj*12),'ramalan bulan ini × 12')}${ck('Pertumbuhan bulanan',(m.g6*100).toFixed(1)+'%','purata 6 bulan terakhir')}</div>
   <div class="grid cg"><div class="card"><div class="row sp"><h2 style="margin:0">Hasil bulanan</h2><span class="legend">${bids.map(b=>`<span><i style="background:${bcol(b)}"></i>${esc(SHORT(b))}</span>`).join('')}</span></div>${stackChart(m.ser,bids)}</div>
