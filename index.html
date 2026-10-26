@@ -334,6 +334,23 @@ ol.tl li.ext::before{background:#aab5b3}
 .sct{background:none!important;border:1px solid #35485a!important}
 @media(max-width:560px){.cxhd{flex-direction:column;gap:8px}.cxst{align-items:flex-start;text-align:left}.cxhd h1{font-size:24px}.cxgrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.cxk{padding:16px}.cxk b{font-size:19px}}
 @media print{.cxbar,.noprint,.cxwarn,.cxst{display:none!important}.cxrep{border:0}.cx{max-width:none}}
+/* GM */
+.hkrow.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media(max-width:1100px){.hkrow.g3{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){.hkrow.g3{grid-template-columns:1fr}}
+.hkd.w{color:var(--amb)}
+.gm .cxrh.gmr,.gm .cxrr.gmr{grid-template-columns:minmax(0,1.3fr) .9fr .8fr .6fr .6fr 1.1fr}
+@media(max-width:560px){.gm .cxrh.gmr,.gm .cxrr.gmr{grid-template-columns:minmax(0,1.3fr) .9fr .8fr 1.1fr}.gm .cxrh.gmr span:nth-child(4),.gm .cxrr.gmr span:nth-child(4),.gm .cxrh.gmr span:nth-child(5),.gm .cxrr.gmr span:nth-child(5){display:none}}
+.gmb{display:flex;justify-content:space-between;gap:12px;align-items:baseline;padding:8px 0;border-top:1px solid #eef1f0;font-size:13px}.gmb:first-of-type{border-top:0}.gmb span{color:var(--mut);text-align:right}
+.gmreq{border-top:1px solid var(--cxb);padding:16px 0}.gmreq:first-of-type{border-top:0;padding-top:0}.gmreq .row{gap:8px;flex-wrap:wrap;align-items:center;margin:8px 0}
+.gmform{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end;margin:8px 0}
+.gmi{font:inherit;font-size:14px;padding:9px 10px;border:1px solid var(--cxb);border-radius:8px;background:#fff;min-width:0;flex:1 1 150px;color:inherit}textarea.gmi{width:100%;flex:1 1 100%}
+.gmrcv{display:inline-flex;gap:6px;flex:1 1 260px}
+.gmchk{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}@media(max-width:700px){.gmchk{grid-template-columns:1fr}}
+.gmck{display:flex;gap:10px;align-items:flex-start;padding:10px;border:1px solid var(--cxb);border-radius:8px;font-size:13px;cursor:pointer}.gmck small{display:block;color:var(--mut);font-size:11px}.gmck input{margin-top:3px;width:18px;height:18px}
+.gmreq.tinggi{border-left:3px solid var(--red);padding-left:12px}
+.cxev label{cursor:pointer}
+@media(max-width:560px){.gm .btn.sm{min-height:40px}}
 </style>
 </head>
 <body>
@@ -662,7 +679,8 @@ const hm=t=>new Date(t).toLocaleTimeString('ms-MY',{hour:'2-digit',minute:'2-dig
 
 const NAV=[
  {id:'master',t:'Pusat CEO',ic:'star',k:'cx',subs:[['ov','Ringkasan eksekutif','home'],['fin','Kewangan','till'],['brp','Prestasi cawangan','board'],['veh','Kenderaan & permintaan','wrench'],['prod','Produk & inventori','book'],['cg','Pertumbuhan pelanggan','people'],['sq','Kualiti servis','shield'],['exp','Strategi ekspansi','star'],['act','Keputusan CEO','brief'],['brd','Laporan lembaga','chat']]},
- {id:'mgr',t:'Pengurus Rangkaian',ic:'chart',subs:[]},
+ {id:'gm',t:'Pusat GM',ic:'board',k:'gx',subs:[['home','Ringkasan','home'],['net','Prestasi rangkaian','chart'],['ops','Operasi cawangan','board'],['wf','Tenaga kerja','people'],['cap','Kapasiti bengkel','wrench'],['inv','Stok & perolehan','book'],['qa','Kualiti & aduan','shield'],['sop','Pematuhan SOP','till'],['dir','Arahan CEO','brief'],['iss','Tindakan GM','star'],['rep','Laporan','chat']]},
+ {id:'mgr',t:'Pengurus Rangkaian',ic:'chart',subs:[],hide:true},
  {id:'arahan',t:'Arahan CEO',ic:'brief',subs:[]},
  {id:'cust',t:'Pelanggan (app)',ic:'user',k:'ct',subs:[['utama','Utama','home'],['tempah','Tempah','cal'],['pasport','Pasport','book'],['rakan','Rakan','shield'],['saya','Saya','user']]},
  {id:'branch',t:'Cawangan (BranchOS)',ic:'wrench',k:'bt',subs:[['ringkas','Ringkasan','chart'],['papan','Papan kerja','board'],['jadual','Jadual','cal'],['due','Akan due','chat'],['pos','POS','till'],['arahan','Arahan','brief'],['staf','Staf','people']]},
@@ -684,13 +702,13 @@ function ctrls(){return `<button class="btn" data-act="fbOpen">${I('chat')}Beri 
 
 const bdg=k=>{if(k!=='arahan')return '';const n=tkOpen(ui.branch==='ALL'?'KMN':ui.branch).length;return n?`<em class="bdg">${n}</em>`:''};
 function shell(){
-  const n=NAV.find(x=>x.id===ui.role),ws=x=>x.t.replace(/ \(.*\)/,'');
+  const n=NAV.find(x=>x.id===ui.role)||NAV[0],ws=x=>x.t.replace(/ \(.*\)/,'');
   const nb=x=>`<button class="nb" aria-current="${ui.role===x.id}" data-act="role" data-v="${x.id}" title="${esc(x.t)}">${I(x.ic)}<span class="nt">${x.t}</span></button>${ui.role===x.id&&x.subs.length?`<div class="subs">${x.subs.map(([k,t,ic])=>`<button class="sb" aria-current="${ui[x.k]===k}" data-act="${x.k}" data-v="${k}" title="${esc(t)}">${I(ic||'chart')}<span class="nt">${t}</span>${bdg(k)}</button>`).join('')}</div>`:''}`;
-  const side=`<aside class="side"><div class="logo"><i></i><b>CARREPUBLIC</b><small>CareOS</small></div><nav aria-label="Navigasi utama"><div class="ngl">Pusat CEO</div>${nb(NAV[0])}<div class="ngl">Ruang kerja lain</div>${NAV.slice(1).map(nb).join('')}</nav><div class="sidef">${ctrls()}<button class="btn sct" data-act="sc" aria-label="${ui.sc?'Kembangkan':'Kecilkan'} bar sisi" aria-pressed="${!!ui.sc}">${I('board')}<span class="nt">${ui.sc?'Kembangkan':'Kecilkan'} menu</span></button><div class="env">Persekitaran demo. Data contoh disimpan dalam pelayar ini.</div></div></aside>`;
-  const chips=ui.role==='master'?NAV[0].subs.map(([k,t])=>`<button class="chip-r" aria-pressed="${ui.cx===k}" data-act="cx" data-v="${k}">${t}</button>`).join(''):NAV.map(x=>`<button class="chip-r" aria-pressed="${ui.role===x.id}" data-act="role" data-v="${x.id}">${ws(x)}</button>`).join('');
-  const mtop=`<header class="mtop"><div class="row1"><span class="logo2">CARREPUBLIC<small>CareOS</small></span><button class="menub" data-act="menu" aria-label="Menu" aria-expanded="${!!ui.menu}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">${ui.menu?'<path d="M6 6l12 12M18 6L6 18"/>':'<path d="M4 7h16M4 12h16M4 17h16"/>'}</svg></button></div><div class="chips">${chips}</div>${ui.menu?`<div class="pop"><div class="ngl">Ruang kerja</div>${NAV.map(x=>`<button class="btn ${ui.role===x.id?'alt':''}" data-act="role" data-v="${x.id}">${ws(x)}</button>`).join('')}<div class="ngl">Lain-lain</div>${ctrls()}</div>`:''}</header>`;
-  const bnav=n.subs.length&&ui.role!=='master'?`<nav class="bnav" aria-label="Menu">${n.subs.map(([k,t,ic])=>`<button aria-current="${ui[n.k]===k}" data-act="${n.k}" data-v="${k}">${I(ic)}${t}${bdg(k)}</button>`).join('')}</nav>`:'';
-  const body=ui.role==='master'?viewMaster():ui.role==='mgr'?viewNetwork():ui.role==='arahan'?viewArahan():ui.role==='cust'?viewCust():ui.role==='branch'?viewBranch():ui.role==='kerja'?viewKerja():viewHQ();
+  const side=`<aside class="side"><div class="logo"><i></i><b>CARREPUBLIC</b><small>CareOS</small></div><nav aria-label="Navigasi utama"><div class="ngl">Pusat CEO</div>${nb(NAV[0])}<div class="ngl">Pusat GM</div>${nb(NAV[1])}<div class="ngl">Ruang kerja lain</div>${NAV.slice(2).filter(x=>!x.hide).map(nb).join('')}</nav><div class="sidef">${ctrls()}<button class="btn sct" data-act="sc" aria-label="${ui.sc?'Kembangkan':'Kecilkan'} bar sisi" aria-pressed="${!!ui.sc}">${I('board')}<span class="nt">${ui.sc?'Kembangkan':'Kecilkan'} menu</span></button><div class="env">Persekitaran demo. Data contoh disimpan dalam pelayar ini.</div></div></aside>`;
+  const chips=ui.role==='master'?NAV[0].subs.map(([k,t])=>`<button class="chip-r" aria-pressed="${ui.cx===k}" data-act="cx" data-v="${k}">${t}</button>`).join(''):ui.role==='gm'?NAV[1].subs.map(([k,t])=>`<button class="chip-r" aria-pressed="${ui.gx===k}" data-act="gx" data-v="${k}">${t}</button>`).join(''):NAV.filter(x=>!x.hide).map(x=>`<button class="chip-r" aria-pressed="${ui.role===x.id}" data-act="role" data-v="${x.id}">${ws(x)}</button>`).join('');
+  const mtop=`<header class="mtop"><div class="row1"><span class="logo2">CARREPUBLIC<small>CareOS</small></span><button class="menub" data-act="menu" aria-label="Menu" aria-expanded="${!!ui.menu}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">${ui.menu?'<path d="M6 6l12 12M18 6L6 18"/>':'<path d="M4 7h16M4 12h16M4 17h16"/>'}</svg></button></div><div class="chips">${chips}</div>${ui.menu?`<div class="pop"><div class="ngl">Ruang kerja</div>${NAV.filter(x=>!x.hide).map(x=>`<button class="btn ${ui.role===x.id?'alt':''}" data-act="role" data-v="${x.id}">${ws(x)}</button>`).join('')}<div class="ngl">Lain-lain</div>${ctrls()}</div>`:''}</header>`;
+  const bnav=n.subs.length&&ui.role!=='master'&&ui.role!=='gm'?`<nav class="bnav" aria-label="Menu">${n.subs.map(([k,t,ic])=>`<button aria-current="${ui[n.k]===k}" data-act="${n.k}" data-v="${k}">${I(ic)}${t}${bdg(k)}</button>`).join('')}</nav>`:'';
+  const body=ui.role==='master'?viewMaster():ui.role==='gm'?viewGM():ui.role==='mgr'?viewNetwork():ui.role==='arahan'?viewArahan():ui.role==='cust'?viewCust():ui.role==='branch'?viewBranch():ui.role==='kerja'?viewKerja():viewHQ();
   return `<div class="shell ${ui.sc?'sc':''}">${side}${mtop}<main class="main" id="main">${body}</main>${bnav}</div><button class="fab" data-act="fbOpen">${I('chat')}<span>Komen</span></button>${ui.fb?fbModal():''}${msgBox()}`}
 
 function fbModal(){return `<div class="modal" data-act="fbClose"><div role="dialog" aria-label="Beri komen"><h2>Beri komen</h2><p class="muted">Tulis apa yang baik, mengelirukan atau kurang. Komen dihantar kepada pemilik demo bersama nama paparan yang anda sedang lihat.</p>
@@ -1486,7 +1504,7 @@ function period(){const D=eng().D,T=D.TODAY,[y,m,d]=ymdOf(T),per=S6.per;let from
 const MATN={m:'Matang (>18 bulan)',b:'Berkembang (6–18 bulan)',r:'Baharu / ramp-up (<6 bulan)'};
 const matOf=b=>{const mo=(eng().D.TODAY-b.od)/30.4;return mo>18?'m':mo>=6?'b':'r'};
 function brSel(){const D=eng().D;let a=D.BR.map((b,i)=>i);if(S6.rg)a=a.filter(i=>D.BR[i].rg===S6.rg);if(S6.st)a=a.filter(i=>D.BR[i].st===S6.st);if(S6.br!=='')a=a.filter(i=>D.BR[i].id===S6.br);if(S6.mat)a=a.filter(i=>matOf(D.BR[i])===S6.mat);return a.length===D.BR.length?null:a}
-const veh=()=>(S6.tab==='veh'||S6.tab==='prod')?{brand:S6.brand||null,model:S6.model===''?null:+S6.model,cat:S6.cat||null}:{brand:null,model:null,cat:null};
+const veh=()=>(ui.role==='master'&&(S6.tab==='veh'||S6.tab==='prod'))?{brand:S6.brand||null,model:S6.model===''?null:+S6.model,cat:S6.cat||null}:{brand:null,model:null,cat:null};
 const FF=(r,ex)=>Object.assign({from:r.from,to:r.to,br:brSel()},veh(),ex||{});
 const cache=new Map();const memo=(k,f)=>{if(cache.has(k))return cache.get(k);const v=f();cache.set(k,v);return v};
 const KEY=F=>JSON.stringify([F.from,F.to,F.br,F.brand,F.model,F.cat]);
@@ -1553,7 +1571,7 @@ function cmpLine(k,cur,base,lab){const d=KD[k];if(cur==null||base==null||!isFini
  if(d.t==='pct')return `<span class="cxd ${good?'cg':'cb'}">${lab}: ${dd>=0?'+':''}${(dd*100).toFixed(1)} mata</span>`;
  if(d.t==='sc')return `<span class="cxd ${good?'cg':'cb'}">${lab}: ${dd>=0?'+':''}${dd.toFixed(2)}</span>`;
  const p=base>0&&cur>=0?dd/base:null;return `<span class="cxd ${good?'cg':'cb'}">${lab}: ${dd>=0?'+':'-'}${d.t==='rm'?rmk(Math.abs(dd)).replace('RM ',''):nf(Math.abs(dd))}${p!=null?' ('+sg(p)+')':''}</span>`}
-function ctx(){const key='ctx'+JSON.stringify([S6.tab,S6.per,S6.from,S6.to,S6.rg,S6.st,S6.br,S6.brand,S6.model,S6.cat]);return memo(key,()=>{const r=period(),F=FF(r),Fp=FF(r.prev),Fy=r.py?FF(r.py):null,sel=brSel();return {r,F,Fp,Fy,sel,P:PL(F),Pp:PL(Fp),Py:Fy?PL(Fy):null,B:BUD(F)}})}
+function ctx(){const key='ctx'+JSON.stringify([ui.role==='master',S6.tab,S6.per,S6.from,S6.to,S6.rg,S6.st,S6.br,S6.brand,S6.model,S6.cat]);return memo(key,()=>{const r=period(),F=FF(r),Fp=FF(r.prev),Fy=r.py?FF(r.py):null,sel=brSel();return {r,F,Fp,Fy,sel,P:PL(F),Pp:PL(Fp),Py:Fy?PL(Fy):null,B:BUD(F)}})}
 function cxCard(k,c){const d=KD[k],v=kval(k,c.F,c);
  if(v==null)return `<button class="cxk" data-cx="dr" data-v="${k}"><small>${d.l}</small><b class="na">Tidak tersedia</b><span class="sub">${d.why||'Tiada data untuk tempoh/penapis ini.'}</span></button>`;
  const p=kval(k,c.Fp,c),y=c.Fy?kval(k,c.Fy,c):null,bud=d.bud&&c.B?d.bud(c.B):null;
@@ -1867,7 +1885,7 @@ function viewExp(c){const D=eng().D,cd=cands(c),M=nbModel(),wt=Object.assign({},
 function E_pl3(bi){const D=eng().D,lm=lastM();const p=eng().pl({from:D.mStart(lm-2),to:D.mStart(lm+1)-1,br:[bi]});return p}
 
 /* ---------- CEO: Keputusan & tindakan, Laporan lembaga, acara, paparan utama ---------- */
-const AST=['Baharu','Dalam semakan','Diluluskan','Dilaksana','Selesai','Ditolak'];
+const AST=['Baharu','Dalam semakan','Diluluskan','Dilaksana','Bukti dihantar','Selesai','Ditolak'];
 const DIRN={bm:1,net:1,rw:-1,util:0,lostStock:-1,skumg:1};
 const nowTs=()=>Date.now();
 const dts=t=>{const k=new Date(t+8*36e5);return String(k.getUTCDate()).padStart(2,'0')+'/'+String(k.getUTCMonth()+1).padStart(2,'0')+'/'+k.getUTCFullYear()+' '+String(k.getUTCHours()).padStart(2,'0')+':'+String(k.getUTCMinutes()).padStart(2,'0')};
@@ -1932,8 +1950,8 @@ function cxClick(a,v,t){const D=eng().D;
  else if(a==='csv'){const c=ctx(),b=new Blob(['﻿'+csvBuild(c)],{type:'text/csv;charset=utf-8'}),u=URL.createObjectURL(b),l=document.createElement('a');l.href=u;l.download='carrepublic-ceo-simulasi.csv';document.body.appendChild(l);l.click();l.remove();setTimeout(()=>URL.revokeObjectURL(u),2000)}
  else if(a==='print'){setTimeout(()=>window.print(),50)}
  save6()}
-document.addEventListener('click',ev=>{const t=ev.target.closest('[data-cx]');if(!t||ui.role!=='master')return;cxClick(t.dataset.cx,t.dataset.v,t);render()});
-document.addEventListener('change',ev=>{const t=ev.target;if(ui.role!=='master')return;if(t.dataset&&t.dataset.cxf!=null){cxSet(t.dataset.cxf,t.value);render();return}
+document.addEventListener('click',ev=>{const t=ev.target.closest('[data-cx]');if(!t||(ui.role!=='master'&&ui.role!=='gm'))return;cxClick(t.dataset.cx,t.dataset.v,t);render()});
+document.addEventListener('change',ev=>{const t=ev.target;if(ui.role!=='master'&&ui.role!=='gm')return;if(t.dataset&&t.dataset.cxf!=null){cxSet(t.dataset.cxf,t.value);render();return}
  if(t.dataset&&t.dataset.cxa){const a=S6.acts.find(x=>x.id===t.dataset.cxa);if(a&&a.st!==t.value){a.hist.push({ts:nowTs(),t:'Status: '+a.st+' → '+t.value});a.st=t.value;save6();render()}}});
 
 try{ui.cx=S6.tab;ui.sc=!!localStorage.getItem('careos-sc')}catch(e){}
@@ -1962,6 +1980,257 @@ function viewSq(c){const D=eng().D,ms=mseries(),lab=ms.map(m=>mlab(D.MKEY[m])),A
  <section class="card"><h3>Trend kualiti (bulanan)</h3>${chart({labels:lab,lines:[{name:'Siap ikut janji',vals:on,color:'#17212b'},{name:'Kerja semula',vals:rw,color:'#b3261e'}],fmt:v=>(v*100).toFixed(0)+'%',h:200,title:'Kualiti bulanan'})}</section>
  <section class="card"><h3>Kualiti ikut cawangan</h3>${table(['Cawangan','Kerja','Kerja semula','Siap ikut janji','Kepuasan','Purata masa (min)','Bayaran balik','Perlu semak'],rows.map(r=>{const flag=r.n>100&&r.rw!=null&&r.rw>=Math.max(.04,natRw*2)||r.on!=null&&r.on<.8;return tr([esc(D.BR[r.i].n),nf(r.n),pf(r.rw),pf(r.on,0),r.cs==null?'—':r.cs.toFixed(2),r.tat==null?'—':Math.round(r.tat),r.refN?rmk(Math.abs(r.ref))+' ('+r.refN+')':'—',flag?'<span class="cxb hi">Ya</span>':'—'])}))}
  <p class="cxfoot">“Perlu semak” = kerja semula ≥ 4% dan ≥ 2× purata, atau siap ikut janji < 80%. Ini isyarat untuk diperiksa, bukan bukti punca.</p></section>`}
+
+/* ---------- GM: PUSAT OPERASI NASIONAL (data simulasi; demo, bukan pengeluaran) ---------- */
+const GMS=(()=>{let s={iss:[],tr:[],au:[],cmp:{},log:[]};try{const x=JSON.parse(localStorage.getItem('careos-gm1')||'null');if(x)s=Object.assign(s,x)}catch(e){}return s})();
+const gsave=()=>{try{localStorage.setItem('careos-gm1',JSON.stringify(GMS))}catch(e){}};
+const glog=(a,ref)=>{GMS.log.push({ts:Date.now(),by:'GM (demo)',a,ref:ref||''});if(GMS.log.length>400)GMS.log.shift()};
+const GF={};
+const GT={jobs:.95,on:.90,rw:.03,cs:4.2,uLo:.65,uHi:.85};
+const GST=['Baharu','Ditugaskan','Dalam tindakan','Menunggu pengesahan','Selesai'];
+const mgrOf=bi=>'Pengurus Cawangan '+eng().D.BR[bi].n;
+function gmRows(c){return memo('gmr'+JSON.stringify([c.F.from,c.F.to,c.F.br,c.sel]),()=>{const D=eng().D,set=c.sel||D.BR.map((b,i)=>i);
+ return set.map(i=>{const b=D.BR[i],F=Object.assign({},c.F,{br:[i]}),P=PL(F),A=P.A,bd=BUD(F),tr_=bd?bd.rev:null,tj=tr_?tr_/(245*.95):null;
+  const o={i,b,mat:matOf(b),n:A.n,net:P.net,tj,tr:tr_,jv:tj?A.n/tj:null,sv:tr_?P.net/tr_:null,ticket:A.n?A.rev/A.n:null,on:A.n?A.tatOn/A.n:null,rw:A.n?A.rw/A.n:null,cs:A.csN?A.cs/A.csN:null,tat:A.n?A.tat/A.n:null,wq:A.n?A.wq/A.n:null,util:utilSel(F),dur:A.dur,late:A.n-A.tatOn,rwN:A.rw};
+  const chk=[['Kerja ≥ 95% sasaran',o.jv==null?null:o.jv>=GT.jobs],['Siap ikut janji ≥ 90%',o.on==null?null:o.on>=GT.on],['Kerja semula ≤ 3%',o.rw==null?null:o.rw<=GT.rw],['Kepuasan ≥ 4.2',o.cs==null?null:o.cs>=GT.cs]];
+  o.chk=chk;o.ev=chk.filter(x=>x[1]!=null);o.ok=o.ev.filter(x=>x[1]).length;o.meet=o.ev.length>0&&o.ok===o.ev.length;return o})})}
+function gmNet(c){const D=eng().D,P=c.P,A=P.A,rows=gmRows(c),B=c.B;const tj=B?B.rev/(245*.95):null;
+ const el=rows.filter(r=>r.mat!=='r'&&r.n>0),meet=el.filter(r=>r.meet).length;
+ return {A,net:P.net,tj,tr:B&&B.rev,el,meet,on:A.n?A.tatOn/A.n:null,rw:A.n?A.rw/A.n:null,util:utilSel(c.F)}}
+/* ---- pengecualian operasi (bukti daripada rekod kerja) ---- */
+function gmExceptions(){return memo('gmex',()=>{const E=eng(),D=E.D,out=[],T=D.TODAY,d90={from:T-89,to:T},lm=D.NM-2;
+ const u30=utilAll(T-29,T);
+ const nat=E.agg(d90),natRf=nat.n?nat.refN/nat.n:0;
+ D.BR.forEach((b,bi)=>{if(matOf(b)==='r'&&D.TODAY-b.od<60)return;const a=E.agg(Object.assign({br:[bi]},d90));if(a.n<120)return;const on=a.tatOn/a.n,late=a.n-a.tatOn;
+  if(on<.85){const lj=[];E.scan({from:T-89,to:T,br:[bi]},j=>{if(j.tat>j.prom)lj.push(j.tat-j.prom)});const avg=lj.length?lj.reduce((x,y)=>x+y,0)/lj.length:0;
+   out.push({id:'ot-'+b.id,br:bi,sev:on<.75?'tinggi':'sederhana',kind:'ot',t:`${b.n}: kerja siap lewat daripada masa dijanjikan`,ev:[`Siap ikut janji ${pf(on,0)} (90 hari); sasaran ≥ 90%.`,`${nf(late)} daripada ${nf(a.n)} kerja lewat; purata lewat ${Math.round(avg)} minit.`,`Penggunaan kapasiti 30 hari ${u30[bi].u!=null?pf(u30[bi].u,0):'—'}; purata baris menunggu ${(a.wq/a.n).toFixed(1)}.`],imp:`${nf(Math.round(late/3))} kerja lewat sebulan`,n:late,act:'Semak penjadualan bay dan teknisyen waktu puncak; tetapkan janji masa lebih realistik atau tambah syif.',due:14})}
+  const rwr=a.rw/a.n;if(rwr>=Math.max(.04,(nat.rw/nat.n)*2))out.push({id:'rw-'+b.id,br:bi,sev:'sederhana',kind:'rw',t:`${b.n}: kadar kerja semula tinggi`,ev:[`Kerja semula ${pf(rwr)} (90 hari) berbanding rangkaian ${pf(nat.rw/nat.n)}; sasaran ≤ 3%.`,`${a.rw} kerja dibuka semula dalam 90 hari.`],imp:`${Math.round(a.rw/3)} kerja semula sebulan`,n:a.rw,act:'Audit semakan kualiti akhir dan latih semula; semak kes kerja semula yang berulang pada teknisyen/bay sama.',due:21});
+  if(u30[bi].u>=GT.uHi){const lc=D.lost.filter(l=>l.b===bi&&l.reason==='kapasiti'&&l.d>=T-89);if(lc.length)out.push({id:'cap-'+b.id,br:bi,sev:'tinggi',kind:'cap',t:`${b.n}: bay penuh dan pelanggan ditolak`,ev:[`Penggunaan kapasiti 30 hari ${pf(u30[bi].u,0)} (ambang 85%).`,`${lc.length} pelanggan ditolak kerana bay penuh dalam 90 hari.`],imp:`${Math.round(lc.length/3)} pelanggan ditolak sebulan`,n:lc.length,act:'Susun semula slot tempahan dan walk-in; nilai syif petang. Jika berterusan, rujuk CEO untuk bay tambahan.',due:14})}
+  if(a.n>0&&a.refN/a.n>=Math.max(.008,natRf*2)&&a.refN>=3)out.push({id:'rf-'+b.id,br:bi,sev:'sederhana',kind:'cmp',t:`${b.n}: bayaran balik/aduan melebihi purata`,ev:[`${a.refN} bayaran balik (${pf(a.refN/a.n)} kerja) berbanding rangkaian ${pf(natRf)}.`,`Nilai bayaran balik ${rmf(Math.abs(a.ref))}.`],imp:`${Math.round(a.refN/3)} kes sebulan`,n:a.refN,act:'Semak sebab bayaran balik dan caj; pastikan sebut harga disahkan pelanggan sebelum kerja tambahan.',due:14});
+  const bd=E.budget({from:D.mStart(lm-2),to:D.mStart(lm+1)-1,br:[bi]}),ac=E.agg({from:D.mStart(lm-2),to:D.mStart(lm+1)-1,br:[bi]});if(bd&&matOf(b)==='m'&&ac.n<(bd.rev/(245*.95))*.9)out.push({id:'tg-'+b.id,br:bi,sev:'sederhana',kind:'tg',t:`${b.n}: bilangan kerja bawah sasaran`,ev:[`${nf(ac.n)} kerja dalam 3 bulan berbanding sasaran ${nf(bd.rev/(245*.95))} (simulasi).`],imp:`${nf(Math.round((bd.rev/(245*.95)-ac.n)/3))} kerja kurang sebulan`,n:Math.round(bd.rev/(245*.95)-ac.n),act:'Semak aliran masuk pelanggan dan peringatan servis; kenal pasti slot kosong.',due:30})});
+ findings().filter(f=>f.id.startsWith('so-')).forEach(f=>out.push({id:f.id,br:f.br,sev:f.sev,kind:'so',t:f.t,ev:f.ev,imp:'Jualan hilang kerana stok habis',n:0,act:f.act,due:f.due}));
+ const rank={tinggi:0,sederhana:1};return out.sort((a,b)=>rank[a.sev]-rank[b.sev]||b.n-a.n)})}
+function gmIssueNew(x,sevOverride){if(GMS.iss.find(i=>i.fid===x.id&&i.st!=='Selesai'))return null;const D=eng().D,bn=x.br>=0?D.BR[x.br].n:'Rangkaian';
+ const it={id:'G'+Date.now().toString(36)+Math.random().toString(36).slice(2,5),fid:x.id,kind:x.kind,problem:x.t,br:x.br,brn:bn,ev:x.ev,impact:x.imp,sev:sevOverride||x.sev,owner:x.br>=0?mgrOf(x.br):'GM',due:D.TODAY+(x.due||14),action:x.act,st:'Ditugaskan',ver:'',ts:Date.now(),hist:[{ts:Date.now(),t:'Tindakan dibuka dan ditugaskan kepada '+(x.br>=0?mgrOf(x.br):'GM')}]};
+ GMS.iss.push(it);glog('Buka tindakan: '+x.t,it.id);gsave();return it}
+function gmIssCard(f,full){const done=GMS.iss.find(i=>i.fid===f.id&&i.st!=='Selesai');
+ return `<article class="cxdc ${f.sev}"><div class="cxdh"><span class="cxb ${f.sev==='tinggi'?'hi':'md'}">${f.sev==='tinggi'?'Tinggi':'Sederhana'}</span><b>${esc(f.t)}</b></div><p class="cxev1">${esc(f.ev[0])}</p>
+ <div class="cxdm"><span><small>Kesan</small><b>${esc(f.imp)}</b></span><span><small>Pemilik</small><b>${esc(mgrOf(f.br))}</b></span><span><small>Tarikh akhir</small><b>${dmy(eng().D.TODAY+f.due)}</b></span></div>
+ <details><summary>Bukti dan tindakan</summary><ul class="cxev">${f.ev.map(e=>`<li>${esc(e)}</li>`).join('')}</ul><p class="cxact"><b>Tindakan:</b> ${esc(f.act)}</p></details>
+ ${done?`<span class="cxb ok">Ditugaskan · ${esc(done.st)}</span>`:`<button class="btn sm" data-gm="assign" data-v="${f.id}">Tugaskan kepada pengurus</button>`}</article>`}
+const GTT={home:['Ringkasan operasi','Pusat Operasi Nasional'],net:['Prestasi rangkaian','Setiap cawangan lawan sasaran operasi'],ops:['Operasi cawangan','Pengecualian yang perlu perhatian'],wf:['Tenaga kerja & produktiviti','Teknisyen, jam produktif dan beban kerja'],cap:['Kapasiti bengkel','Bay, slot kosong dan kesesakan'],inv:['Stok & perolehan','Stok, permintaan beli dan pemindahan antara cawangan'],qa:['Pengalaman & kualiti','Aduan, kerja semula dan kepuasan'],sop:['Pematuhan SOP','Senarai semak, audit dan tindakan pembetulan'],dir:['Arahan CEO','Laksana, kemajuan dan bukti'],iss:['Tindakan GM','Daftar isu, pemilik dan pengesahan'],rep:['Laporan operasi','Semakan harian, mingguan dan bulanan']};
+/* ---- Ringkasan ---- */
+function gmHero(c){const m=gmNet(c),D=eng().D;
+ const st=(v,lo,hi,inv)=>v==null?'n':(inv?(v<=lo?'p':v<=hi?'w':'b'):(v>=hi?'p':v>=lo?'w':'b'));
+ const k=(id,l,val,sub,cls,dr)=>`<button class="hk" data-gm="drill" data-v="${dr}" aria-describedby="g-${id}"><span class="hkl">${l}</span><b>${val}</b><span class="hkd ${cls}">${sub[0]}</span><span class="hks" id="g-${id}">${sub[1]}</span></button>`;
+ const jv=m.tj?m.A.n/m.tj:null,sv=m.tr?m.net/m.tr:null;
+ return `<div class="hkrow g3">${k('jobs','Kerja siap vs sasaran',nf(m.A.n),[jv==null?'Tiada sasaran':pf(jv,0)+' daripada sasaran',m.tj?'Sasaran '+nf(m.tj)+' kerja (simulasi)':'Sasaran tidak tersedia'],st(jv,.9,.95),'jv')}
+ ${k('sales','Jualan rangkaian vs sasaran',rmk(m.net),[sv==null?'Tiada sasaran':pf(sv,0)+' daripada sasaran',m.tr?'Sasaran '+rmk(m.tr)+' (simulasi)':''],st(sv,.9,.97),'sv')}
+ ${k('on','Siap ikut janji',m.on==null?'—':pf(m.on,0),['Sasaran ≥ 90%',m.A.n-m.A.tatOn+' kerja lewat'],st(m.on,.85,.9),'on')}
+ ${k('meet','Cawangan capai sasaran operasi',`${m.meet} / ${m.el.length}`,['Semua 4 sasaran dipenuhi','Cawangan ramp-up dinilai berasingan'],m.el.length&&m.meet/m.el.length>=.6?'p':m.meet?'w':'b','meet')}
+ ${k('util','Penggunaan bay',m.util==null?'—':pf(m.util,0),['Sasaran 65% – 85%','Minit kerja ÷ minit bay tersedia'],m.util==null?'n':m.util>=GT.uLo&&m.util<=GT.uHi?'p':'w','util')}
+ ${k('rw','Kerja semula',m.rw==null?'—':pf(m.rw),['Sasaran ≤ 3%',m.A.rw+' kerja dibuka semula'],st(m.rw,.03,.04,1),'rw')}</div>`}
+function gmDrill(c){const k=GF.dr;if(!k)return '';const rows=gmRows(c),L={jv:'Kerja siap vs sasaran',sv:'Jualan vs sasaran',on:'Siap ikut janji',meet:'Sasaran operasi dicapai',util:'Penggunaan bay',rw:'Kerja semula'};
+ const cell=r=>k==='jv'?[nf(r.n),r.tj?nf(r.tj):'—',r.jv==null?'—':pf(r.jv,0)]:k==='sv'?[rmk(r.net),r.tr?rmk(r.tr):'—',r.sv==null?'—':pf(r.sv,0)]:k==='on'?[nf(r.n-r.late),nf(r.n),pf(r.on,0)]:k==='util'?[r.util==null?'—':pf(r.util,0),String(r.b.bays)+' bay','—']:k==='rw'?[nf(r.rwN),nf(r.n),pf(r.rw)]:[`${r.ok}/${r.ev.length}`,r.chk.filter(x=>x[1]===false).map(x=>x[0]).join('; ')||'—',r.mat==='r'?'Ramp-up':r.meet?'Capai':'Belum'];
+ const H={jv:['Kerja','Sasaran','Capaian'],sv:['Jualan','Sasaran','Capaian'],on:['Tepat masa','Semua kerja','Kadar'],util:['Penggunaan','Bay',''],rw:['Kerja semula','Semua kerja','Kadar'],meet:['Sasaran dicapai','Tidak dicapai','Status']}[k];
+ return `<section class="card cxdr"><div class="row sp"><h3>${L[k]} · ikut cawangan</h3><button class="btn sm ghost" data-gm="drill" data-v="${k}">Tutup</button></div>${table(['Cawangan',...H],rows.map(r=>tr([`<button class="lnk" data-gm="branch" data-v="${r.i}">${esc(r.b.n)}</button>`,...cell(r)])))}<p class="cxfoot">Jumlah cawangan sama dengan angka nasional di kad (rekod kerja yang sama dengan paparan CEO).</p></section>`}
+function gmRank(c,all){const rows=gmRows(c).slice().sort((a,b)=>(a.mat==='r')-(b.mat==='r')||b.ok-a.ok||(b.jv||0)-(a.jv||0));
+ const sc=r=>r.mat==='r'?['info','Ramp-up']:r.meet?['ok','Capai sasaran']:r.ev.length&&r.ok>=r.ev.length-1?['warn','Hampir']:['bad','Perlu tindakan'];
+ return `<section class="card"><div class="row sp"><h3>Kedudukan operasi cawangan</h3>${all?'':'<button class="lnk" data-act="gx" data-v="net">Lihat semua</button>'}</div><div class="cxrk"><div class="cxrh gmr" role="row"><span>Cawangan</span><span class="num">Kerja vs sasaran</span><span class="num">Tepat masa</span><span class="num">Bay</span><span class="num">Semula</span><span>Status</span></div>${rows.map(r=>{const s=sc(r);return `<button class="cxrr gmr" role="row" data-gm="branch" data-v="${r.i}"><span class="nm">${esc(r.b.n)}</span><span class="num">${r.jv==null?'—':pf(r.jv,0)}</span><span class="num">${r.on==null?'—':pf(r.on,0)}</span><span class="num">${r.util==null?'—':pf(r.util,0)}</span><span class="num">${r.rw==null?'—':pf(r.rw)}</span><span class="st ${s[0]}">${s[1]}</span></button>`}).join('')}</div><p class="cxfoot">Status: Capai sasaran = keempat-empat sasaran dipenuhi; Hampir = gagal satu; ramp-up (< 6 bulan) tidak dibanding dengan cawangan matang.</p></section>`}
+function gmThroughput(c){const D=eng().D,T=D.TODAY,day={};eng().scan({from:T-27,to:T-1,br:c.sel},j=>{day[j.d]=(day[j.d]||0)+1});const ds=[],v=[];for(let d=T-27;d<=T-1;d++){ds.push(String(new Date(d*864e5).getUTCDate()));v.push(day[d]||0)}
+ const ma=v.map((x,i)=>i<6?null:v.slice(i-6,i+1).reduce((a,b)=>a+b,0)/7);
+ return `<section class="card"><h3>Aliran kerja harian (28 hari lalu)</h3>${chart({labels:ds,bars:[{name:'Kerja siap',vals:v,color:'#c3ccd3'}],lines:[{name:'Purata 7 hari',vals:ma,color:'#17212b'}],fmt:nf,h:190,title:'Kerja siap harian'})}<p class="cxfoot">Hari tutup (Ahad) ialah sifar. Hari ini dikecualikan kerana belum lengkap.</p></section>`}
+function gmCapSummary(c){const D=eng().D,T=D.TODAY,u=utilAll(T-29,T),a=utilAll(T-6,T),set=c.sel||D.BR.map((b,i)=>i);
+ const rows=set.map(i=>({i,b:D.BR[i],u:u[i].u,u7:a[i].u,wq:(()=>{const A=AG({from:T-29,to:T,br:[i]});return A.n?A.wq/A.n:0})()})).filter(x=>x.u!=null).sort((x,y)=>y.u-x.u);
+ const hi=rows.filter(x=>x.u>=GT.uHi),lo=rows.filter(x=>x.u<GT.uLo&&matOf(x.b)!=='r');
+ return `<section class="card"><h3>Kapasiti dan kesesakan</h3>${hi.length?`<h4>Hampir penuh (≥ 85%)</h4>${hi.map(x=>`<div class="gmb"><b>${esc(x.b.n)}</b><span>${pf(x.u,0)} · 7 hari ${x.u7==null?'—':pf(x.u7,0)} · baris menunggu ${x.wq.toFixed(1)}</span></div>`).join('')}`:'<p class="muted">Tiada cawangan melebihi 85% dalam 30 hari.</p>'}
+ ${lo.length?`<h4>Kurang digunakan (&lt; 65%, bukan ramp-up)</h4>${lo.map(x=>`<div class="gmb"><b>${esc(x.b.n)}</b><span>${pf(x.u,0)} · ${x.b.bays} bay</span></div>`).join('')}`:''}<button class="lnk" data-act="gx" data-v="cap">Lihat kapasiti penuh</button></section>`}
+function gmDirBrief(){const a=S6.acts.filter(x=>['Diluluskan','Dilaksana','Bukti dihantar'].includes(x.st));
+ return `<section class="card"><div class="row sp"><h3>Arahan CEO untuk dilaksana</h3><button class="lnk" data-act="gx" data-v="dir">Buka semua</button></div>${a.length?a.slice(0,3).map(x=>`<div class="gmb"><b>${esc(x.t)}</b><span>${x.st} · akhir ${dmy(x.due)}</span></div>`).join(''):'<p class="muted">Tiada arahan diluluskan yang menunggu pelaksanaan. Arahan dikeluarkan CEO di Keputusan CEO.</p>'}</section>`}
+function gmHome(c){const ex=gmExceptions().slice(0,3);
+ return gmHero(c)+gmDrill(c)+`<div class="cxtwo">${gmRank(c)}<div>${gmCapSummary(c)}</div></div>`+gmThroughput(c)+`<section class="card"><div class="row sp"><h3>3 isu operasi paling mendesak</h3><button class="lnk" data-act="gx" data-v="iss">Daftar tindakan (${GMS.iss.filter(i=>i.st!=='Selesai').length} terbuka)</button></div>${ex.length?ex.map(f=>gmIssCard(f)).join(''):'<p class="muted">Tiada pengecualian yang mencapai ambang bukti.</p>'}<p class="cxfoot">Dikira atas 90 hari terakhir, tidak ikut penapis tempoh.</p></section>`+gmDirBrief()}
+/* ---- Prestasi rangkaian ---- */
+function gmNetView(c){const D=eng().D,rows=gmRows(c),reg={};rows.forEach(r=>{const g=reg[r.b.rg]||(reg[r.b.rg]={n:0,net:0,tj:0,on:0,late:0,br:0});g.n+=r.n;g.net+=r.net;g.tj+=r.tj||0;g.late+=r.late;g.br++});
+ const cols=['Cawangan','Kerja','vs sasaran','Jualan','vs sasaran','Purata invois','Siap janji','Purata masa (min)','Bay','Semula','Kepuasan','Sasaran'];
+ const line=r=>tr([`<button class="lnk" data-gm="branch" data-v="${r.i}">${esc(r.b.n)}</button>`,nf(r.n),r.jv==null?'—':pf(r.jv,0),rmk(r.net),r.sv==null?'—':pf(r.sv,0),r.ticket==null?'—':rmf(r.ticket),r.on==null?'—':pf(r.on,0),r.tat==null?'—':Math.round(r.tat),r.util==null?'—':pf(r.util,0),r.rw==null?'—':pf(r.rw),r.cs==null?'—':r.cs.toFixed(2),r.mat==='r'?'Ramp-up':`${r.ok}/${r.ev.length}`]);
+ const sumN=rows.reduce((a,r)=>a+r.n,0),sumNet=rows.reduce((a,r)=>a+r.net,0);
+ return `<section class="card"><h3>Cawangan matang dan berkembang</h3>${table(cols,rows.filter(r=>r.mat!=='r').map(line))}</section>
+ <section class="card"><h3>Cawangan baharu (ramp-up, kurang 6 bulan)</h3>${rows.filter(r=>r.mat==='r').length?table(cols,rows.filter(r=>r.mat==='r').map(line)):'<p class="muted">Tiada cawangan ramp-up dalam pilihan.</p>'}<p class="cxfoot">Cawangan baharu dipisahkan supaya tidak dibanding secara tidak adil dengan cawangan matang.</p></section>
+ <section class="card"><h3>Ikut wilayah</h3>${table(['Wilayah','Cawangan','Kerja','Jualan','vs sasaran kerja','Kerja lewat'],Object.entries(reg).map(([k,g])=>tr([esc(k),g.br,nf(g.n),rmk(g.net),g.tj?pf(g.n/g.tj,0):'—',nf(g.late)])).concat([`<tr class="cxtot"><td>Jumlah</td><td class="num">${rows.length}</td><td class="num">${nf(sumN)}</td><td class="num">${rmk(sumNet)}</td><td></td><td></td></tr>`]))}<p class="cxfoot">Semakan padanan dengan paparan CEO: kerja ${nf(c.P.A.n)} dan jualan ${rmk(c.P.net)} ${Math.abs(sumN-c.P.A.n)<1&&Math.abs(sumNet-c.P.net)<1?'✓ padan':'✗ tidak padan'}.</p></section>`}
+function gmBranchPanel(c){if(GF.bx==null)return '';const D=eng().D,i=+GF.bx,b=D.BR[i],rr=gmRows({F:c.F,sel:[i]}).find(x=>x.i===i);if(!rr)return '';
+ const ms=mseries(),vals=ms.map(m=>{const p=PL(Object.assign({},mF(m),{br:[i]}));return b.od>D.mStart(m+1)-1?null:p.A});
+ const iss=GMS.iss.filter(x=>x.br===i),ex=gmExceptions().filter(x=>x.br===i);
+ return `<section class="card cxdr"><div class="row sp"><h3>${esc(b.n)} · ${MATN[matOf(b)]}</h3><button class="btn sm ghost" data-gm="branch" data-v="">Tutup</button></div>
+ <div class="cxdm"><span><small>Bay / teknisyen</small><b>${b.bays} / ${Math.round(b.bays*D.TECH_PER_BAY)}</b></span><span><small>Kerja tempoh</small><b>${nf(rr.n)}</b></span><span><small>Siap janji</small><b>${rr.on==null?'—':pf(rr.on,0)}</b></span><span><small>Kapasiti</small><b>${rr.util==null?'—':pf(rr.util,0)}</b></span><span><small>Kerja semula</small><b>${rr.rw==null?'—':pf(rr.rw)}</b></span><span><small>Pengurus</small><b>${esc(mgrOf(i))}</b></span></div>
+ ${chart({labels:ms.map(m=>mlab(D.MKEY[m])),bars:[{name:'Kerja',vals:vals.map(a=>a&&a.n),color:'#17212b'}],lines:[{name:'Kerja lewat',vals:vals.map(a=>a&&a.n-a.tatOn),color:'#b3261e'}],fmt:nf,h:170,title:'Kerja bulanan'})}
+ <h4>Sasaran operasi</h4><ul class="cxev">${rr.chk.map(x=>`<li>${x[0]}: ${x[1]==null?'tiada data':x[1]?'dicapai':'belum dicapai'}</li>`).join('')}</ul>
+ <h4>Isu dikesan (${ex.length})</h4>${ex.length?ex.map(f=>gmIssCard(f)).join(''):'<p class="muted">Tiada pengecualian.</p>'}${iss.length?`<h4>Tindakan sedia ada</h4>${iss.map(x=>`<div class="gmb"><b>${esc(x.problem)}</b><span>${x.st} · akhir ${dmy(x.due)}</span></div>`).join('')}`:''}</section>`}
+/* ---- Operasi cawangan ---- */
+function gmOps(c){const D=eng().D,E=eng(),T=D.TODAY,d7={from:T-6,to:T,br:c.sel},late=[];E.scan(d7,j=>{if(j.tat>j.prom)late.push(j)});late.sort((a,b)=>(b.tat-b.prom)-(a.tat-a.prom));
+ const u7=utilAll(T-6,T),set=c.sel||D.BR.map((b,i)=>i),over=set.filter(i=>u7[i].u>=GT.uHi),q=set.map(i=>{const A=AG({from:T-6,to:T,br:[i]});return {i,q:A.n?A.wq/A.n:0,n:A.n}}).filter(x=>x.q>=1.2).sort((a,b)=>b.q-a.q);
+ const lateBy={};late.forEach(j=>{lateBy[j.b]=(lateBy[j.b]||0)+1});
+ return `<section class="card"><h3>Perkhidmatan lewat (7 hari terakhir)</h3>${late.length?`<p class="muted">${nf(late.length)} kerja lewat. Disenaraikan 12 yang paling lewat.</p>`+table(['Invois','Cawangan','Kenderaan','Servis','Dijanjikan (min)','Sebenar (min)','Lewat (min)'],late.slice(0,12).map(j=>tr([esc(j.inv),esc(D.BR[j.b].n),esc(D.MODELS[j.m].n),esc(D.SVCS[j.svc].n),j.prom,j.tat,`<b>${j.tat-j.prom}</b>`]))):'<p class="muted">Tiada kerja lewat dalam 7 hari.</p>'}</section>
+ <section class="card"><h3>Cawangan sesak dan baris menunggu</h3>${over.length||q.length?`<ul class="cxev">${over.map(i=>`<li><b>${esc(D.BR[i].n)}</b>: bay ${pf(u7[i].u,0)} dalam 7 hari (ambang 85%).</li>`).join('')}${q.map(x=>`<li><b>${esc(D.BR[x.i].n)}</b>: purata ${x.q.toFixed(1)} kenderaan menunggu bagi setiap kerja.</li>`).join('')}</ul>`:'<p class="muted">Tiada cawangan sesak dalam 7 hari.</p>'}</section>
+ <section class="card"><h3>Perkara yang belum dijejak sistem</h3><ul class="cxev"><li><b>Teknisyen tidak hadir:</b> tidak tersedia, tiada data kehadiran.</li><li><b>Senarai semak harian belum lengkap:</b> ${GMS.au.length?'lihat modul SOP':'tiada audit atau senarai semak direkod lagi; guna modul SOP'}.</li></ul></section>`}
+/* ---- Tenaga kerja ---- */
+function gmWf(c){const D=eng().D,rows=gmRows(c),T=D.TODAY,u=utilAll(c.F.from,c.F.to);
+ const body=rows.map(r=>{const tech=Math.round(r.b.bays*D.TECH_PER_BAY),days=u[r.i].days,hrs=r.dur/60;return tr([esc(r.b.n),tech,nf(r.n),hrs.toFixed(0),r.n?(hrs/r.n).toFixed(2):'—',days&&tech?(r.n/tech/days).toFixed(1):'—',days&&tech?(hrs/tech/days).toFixed(1):'—','<span class="cxu">Tiada data</span>'])});
+ return `<section class="card"><h3>Produktiviti teknisyen</h3>${table(['Cawangan','Teknisyen (anggaran)','Kerja','Jam produktif','Jam / kerja','Kerja / teknisyen / hari','Jam piawai / teknisyen / hari','Kehadiran'],body)}<p class="cxfoot">Jam produktif = jumlah minit piawai servis yang disiapkan, jadi kerja yang lebih kompleks dikira lebih panjang (laras kerumitan). Bilangan teknisyen dianggar daripada bay × 1.6 kerana tiada daftar staf dalam data simulasi. Gaji tidak dipaparkan kepada GM.</p></section>
+ <section class="card"><h3>Perkara yang tidak dapat diukur</h3><ul class="cxev"><li><b>Kehadiran sebenar, jadual syif dan lebih masa:</b> tidak tersedia. Perlu modul kehadiran/HR.</li><li><b>Keperluan latihan dan kekurangan staf:</b> tidak tersedia. Tanda kekurangan hanya boleh dianggar daripada beban: cawangan dengan jam piawai > 7 jam / teknisyen / hari ditanda di bawah.</li></ul>${(()=>{const hot=body&&rows.filter(r=>{const t=Math.round(r.b.bays*D.TECH_PER_BAY),d=u[r.i].days;return d&&t&&(r.dur/60/t/d)>7});return hot.length?`<p>Beban tinggi: ${hot.map(r=>esc(r.b.n)).join(', ')}.</p>`:'<p class="muted">Tiada cawangan melebihi 7 jam piawai / teknisyen / hari.</p>'})()}</section>`}
+/* ---- Kapasiti ---- */
+function gmCap(c){const D=eng().D,T=D.TODAY,u=utilAll(c.F.from,c.F.to),u30=utilAll(T-29,T),set=c.sel||D.BR.map((b,i)=>i);
+ const rows=set.map(i=>{const b=D.BR[i],q=u[i],days=q.days||1,avgDur=q.n?q.dur/q.n:60,cap=b.bays*D.OPEN_MIN*D.CAPU,freeMin=Math.max(0,cap-q.dur/days),lost=D.lost.filter(l=>l.b===i&&l.reason==='kapasiti'&&l.d>=c.F.from&&l.d<=c.F.to);return {i,b,u:q.u,u30:u30[i].u,occ:q.dur/60,cap:q.cap/60,free:freeMin/avgDur,lostN:lost.length,lostV:lost.reduce((a,l)=>a+l.val,0),per:q.n/days/b.bays}});
+ return `<section class="card"><h3>Kapasiti bay</h3>${table(['Cawangan','Bay','Penggunaan (tempoh)','30 hari','Jam bay digunakan','Jam bay tersedia','Slot kosong sehari (anggaran)','Kerja / bay / hari','Ditolak kerana penuh'],rows.map(r=>tr([esc(r.b.n),r.b.bays,r.u==null?'—':pf(r.u,0),r.u30==null?'—':pf(r.u30,0),r.occ.toFixed(0),r.cap.toFixed(0),r.free.toFixed(1),r.per.toFixed(1),r.lostN?`${r.lostN} (${rmk(r.lostV)})`:'—'])))}
+ <p class="cxfoot">Penggunaan = minit kerja ÷ minit bay tersedia (bay × 540 min × 92% × hari beroperasi). Slot kosong = baki minit ÷ purata minit kerja. Tempahan lebih had, walk-in dan masa mula/siap sebenar tidak dijejak berasingan dalam data simulasi.</p></section>
+ <section class="card"><h3>Potensi kenaikan kapasiti</h3>${rows.filter(r=>r.u30!=null&&r.u30>=GT.uHi).length?`<ul class="cxev">${rows.filter(r=>r.u30>=GT.uHi).map(r=>`<li><b>${esc(r.b.n)}</b>: ${pf(r.u30,0)} (30 hari) dengan ${r.lostN} pelanggan ditolak. Cadangan: susun slot dan syif petang dahulu; jika berterusan, serahkan kepada CEO (modul Strategi ekspansi). GM tidak meluluskan belanja modal.</li>`).join('')}</ul>`:'<p class="muted">Tiada cawangan melebihi 85%; tiada keperluan kapasiti tambahan dikesan.</p>'}</section>`}
+
+/* ---------- GM bahagian 2: stok, kualiti, SOP, arahan, tindakan, laporan, acara ---------- */
+GF.f=GF.f||{};
+const gv=k=>GF.f[k]==null?'':GF.f[k];
+const gin=(k,ph,o)=>`<input class="gmi" data-gmf="${k}" value="${esc(gv(k))}" placeholder="${esc(ph||'')}" ${o||''} aria-label="${esc(ph||k)}">`;
+const gsel=(k,opts,o)=>`<select class="gmi" data-gmf="${k}" ${o&&o.r?'data-gmr="1"':''} aria-label="${esc(o&&o.l||k)}">${OPT(opts,gv(k))}</select>`;
+const gta=(k,ph)=>`<textarea class="gmi" rows="2" data-gmf="${k}" placeholder="${esc(ph||'')}" aria-label="${esc(ph||k)}">${esc(gv(k))}</textarea>`;
+const brOpts=()=>eng().D.BR.map((b,i)=>[String(i),b.n]);
+const fmtTs=t=>dts(t);
+/* ---- stok ---- */
+const jobMap=()=>memo('gmjm',()=>{const m=new Map();eng().D.jobs.forEach(j=>m.set(j.id,j));return m});
+const SKU_BEL=5000;
+function trEff(bi,si){const D=eng().D;let q=D.CLOSE[bi][si][D.NM-1];GMS.tr.forEach(t=>{if(t.si!==si)return;if(t.kind==='pindah'&&t.from===bi&&(t.st==='Dihantar'||t.st==='Diterima'))q-=t.qty;if(t.to===bi&&t.st==='Diterima')q+=(t.rcv!=null?t.rcv:t.qty)});return q}
+const skuDaily=(bi,si)=>{const D=eng().D,lm=D.NM-2;return D.usage[bi][si][lm]/D.dim(lm)};
+function invPairs(){const D=eng().D,out=[];D.BR.forEach((b,bi)=>{if(b.od>D.TODAY-45)return;D.SKUS.forEach((s,si)=>{const d=skuDaily(bi,si);if(d<.3)return;const e=trEff(bi,si);out.push({bi,si,s,d,e,cover:e/d,val:e*D.pc(bi,si,D.NM-1)})})});return out}
+function gmInv(c){const D=eng().D,P=invPairs(),sel=c.sel?new Set(c.sel):null,inSel=x=>!sel||sel.has(x.bi);
+ const low=P.filter(x=>inSel(x)&&x.cover<7).sort((a,b)=>a.cover-b.cover).slice(0,8);
+ const sug=x=>{const need=Math.ceil(x.d*21-x.e);const don=P.filter(y=>y.si===x.si&&y.bi!==x.bi&&y.cover>40).map(y=>({y,av:Math.floor(y.e-y.d*30)})).filter(z=>z.av>=Math.min(need,4)).sort((a,b)=>b.av-a.av)[0];
+  if(don){const q=Math.min(need,don.av);return {kind:'pindah',from:don.y.bi,qty:q,txt:`Pindah ${q} unit daripada ${D.BR[don.y.bi].n} (${don.y.cover.toFixed(0)} hari stok)`}}
+  const q=Math.max(1,Math.ceil(x.d*30*1.15-x.e));return {kind:'beli',qty:q,txt:`Beli ${q} unit (tiada cawangan berlebihan)`}};
+ const slow=P.filter(x=>inSel(x)&&x.cover>90&&x.val>300).sort((a,b)=>b.val-a.val).slice(0,6);
+ const fast=D.SKUS.map((s,si)=>{let u=0,so=0,st=0;(sel?[...sel]:D.BR.map((b,i)=>i)).forEach(bi=>{if(D.BR[bi].od>D.TODAY)return;u+=D.usage[bi][si][D.NM-2];st+=trEff(bi,si);(D.SO[bi][si]||[]).forEach(([a,b])=>{so+=Math.max(0,Math.min(b,D.TODAY)-Math.max(a,D.TODAY-89)+1)})});return {s,si,u,st,so,d:u/D.dim(D.NM-2)}}).sort((a,b)=>b.u-a.u).slice(0,8);
+ const reqs=GMS.tr.slice().reverse();
+ return `<section class="card"><h3>Stok berisiko habis (kurang 7 hari)</h3>${low.length?table(['Cawangan','Item','Stok','Guna / hari','Hari stok','Cadangan',''],low.map(x=>{const g=sug(x);return tr([esc(D.BR[x.bi].n),esc(x.s.n),nf(x.e),x.d.toFixed(1),x.cover.toFixed(1),esc(g.txt),`<button class="btn sm" data-gm="trsug" data-v="${x.bi}|${x.si}|${g.kind}|${g.from==null?-1:g.from}|${g.qty}">Minta</button>`])})):'<p class="muted">Tiada item di bawah 7 hari stok.</p>'}<p class="cxfoot">Stok = baki akhir rekod simulasi ditambah pindahan yang telah dihantar atau diterima. Masa tunggu pembekal: tidak tersedia dalam data simulasi.</p></section>
+ <section class="card"><h3>Item laju (guna bulan lepas)</h3>${table(['Item','Guna bulan lepas','Guna / hari','Stok sekarang','Hari stok','Hari stok habis (90 hari)'],fast.map(f=>tr([esc(f.s.n),nf(f.u),f.d.toFixed(1),nf(f.st),f.d?(f.st/f.d).toFixed(0):'—',f.so||'—'])))}</section>
+ <section class="card"><h3>Stok perlahan / berlebihan (&gt; 90 hari)</h3>${slow.length?table(['Cawangan','Item','Stok','Hari stok','Nilai kos'],slow.map(x=>tr([esc(D.BR[x.bi].n),esc(x.s.n),nf(x.e),x.cover.toFixed(0),rmf(x.val)]))):'<p class="muted">Tiada stok berlebihan bernilai lebih RM 300.</p>'}</section>
+ <section class="card"><h3>Permintaan baharu</h3><div class="gmform">${gsel('tk',[['pindah','Pindahan antara cawangan'],['beli','Permintaan beli']],{r:1,l:'Jenis'})}${gsel('tsku',D.SKUS.map((s,i)=>[String(i),s.n]),{l:'Item'})}${gv('tk')==='beli'?'':gsel('tfrom',[['','Daripada cawangan']].concat(brOpts()),{l:'Daripada'})}${gsel('tto',[['','Ke cawangan']].concat(brOpts()),{l:'Ke'})}${gin('tqty','Kuantiti','inputmode="numeric"')}<button class="btn" data-gm="trnew">Hantar permintaan</button></div><p class="cxfoot">Pindahan memerlukan kelulusan, penghantaran dan rekod penerimaan. Permintaan beli melebihi RM ${nf(SKU_BEL)} dirujuk kepada CEO; GM tidak meluluskan perbelanjaan itu.</p></section>
+ <section class="card"><h3>Jejak permintaan (${reqs.length})</h3>${reqs.length?reqs.map(trCard).join(''):'<p class="muted">Belum ada permintaan.</p>'}</section>`}
+function trCard(t){const D=eng().D,s=D.SKUS[t.si],nx=trNext(t);
+ return `<article class="gmreq"><div class="row sp"><b>${t.kind==='pindah'?'Pindahan':'Beli'} · ${esc(s.n)} × ${nf(t.qty)}</b><span class="cxb ${t.st==='Diterima'?'ok':t.st==='Ditolak'?'bad':'md'}">${t.st}</span></div>
+ <p class="muted">${t.kind==='pindah'?esc(D.BR[t.from].n)+' → ':''}${esc(D.BR[t.to].n)} · anggaran ${rmf(t.val)} · diminta ${fmtTs(t.ts)}</p>
+ ${nx.length?`<div class="row">${nx.map(n=>n[0]==='Diterima'?`<span class="gmrcv">${gin('rcv:'+t.id,'Diterima ('+t.qty+')','inputmode="numeric" size="6"')}${gin('rn:'+t.id,'Catatan terima')}</span><button class="btn sm" data-gm="trstep" data-v="${t.id}|Diterima">Rekod penerimaan</button>`:`<button class="btn sm ${n[0]==='Ditolak'?'ghost':''}" data-gm="trstep" data-v="${t.id}|${n[0]}">${n[1]}</button>`).join('')}</div>`:''}
+ ${t.st==='Dirujuk CEO'?'<p class="muted">Melebihi had kelulusan GM. Menunggu CEO (di luar demo ini).</p>':''}
+ <details><summary>Jejak audit (${t.hist.length})</summary><ul class="cxev">${t.hist.map(h=>`<li>${fmtTs(h.ts)} · ${esc(h.t)}</li>`).join('')}</ul></details></article>`}
+function trNext(t){const k=t.kind;if(t.st==='Diminta')return k==='pindah'?[['Diluluskan','Lulus'],['Ditolak','Tolak']]:t.val>SKU_BEL?[['Dirujuk CEO','Rujuk CEO'],['Ditolak','Tolak']]:[['Diluluskan','Lulus'],['Ditolak','Tolak']];
+ if(t.st==='Diluluskan')return k==='pindah'?[['Dihantar','Tandakan dihantar']]:[['Dipesan','Tandakan dipesan']];
+ if(t.st==='Dihantar'||t.st==='Dipesan')return [['Diterima','Terima']];return []}
+function trMake(kind,bi,si,from,qty){const D=eng().D;qty=Math.floor(+qty);
+ if(!(qty>0&&qty<=100000))return 'Kuantiti mesti nombor positif.';if(bi==null||bi<0||bi>=D.BR.length)return 'Pilih cawangan penerima.';
+ if(kind==='pindah'){if(from==null||from<0)return 'Pilih cawangan sumber.';if(from===bi)return 'Cawangan sumber dan penerima mesti berbeza.';const av=Math.floor(trEff(from,si)-skuDaily(from,si)*7);if(qty>Math.max(0,av))return `Sumber hanya boleh melepaskan ${Math.max(0,av)} unit tanpa kurang 7 hari stok.`}
+ const val=qty*D.pc(bi,si,D.NM-1),t={id:'T'+Date.now().toString(36)+Math.random().toString(36).slice(2,4),kind,si,from:kind==='pindah'?from:null,to:bi,qty,val,st:'Diminta',ts:Date.now(),by:'GM (demo)',hist:[{ts:Date.now(),t:'Permintaan dibuat oleh GM'}]};
+ GMS.tr.push(t);glog('Permintaan '+kind+' '+D.SKUS[si].n+' ×'+qty,t.id);gsave();return null}
+function trStep(id,to){const t=GMS.tr.find(x=>x.id===id),D=eng().D;if(!t)return 'Permintaan tidak dijumpai.';if(!trNext(t).some(n=>n[0]===to))return 'Peralihan status tidak dibenarkan.';
+ if(to==='Diluluskan'&&t.kind==='beli'&&t.val>SKU_BEL)return 'Melebihi had GM.';
+ if(to==='Dihantar'&&trEff(t.from,t.si)<t.qty)return 'Stok sumber tidak mencukupi untuk dihantar.';
+ let note='';if(to==='Diterima'){const raw=gv('rcv:'+id),q=raw===''?t.qty:Math.floor(+raw);if(!(q>=0&&q<=t.qty))return 'Kuantiti diterima mesti 0 hingga '+t.qty+'.';t.rcv=q;note=q<t.qty?` (kurang ${t.qty-q}; ${gv('rn:'+id)||'tiada catatan'})`:gv('rn:'+id)?' · '+gv('rn:'+id):''}
+ t.hist.push({ts:Date.now(),t:`${t.st} → ${to}${to==='Diterima'?' · diterima '+t.rcv+' / '+t.qty:''}${note}`});t.st=to;glog('Status permintaan '+to,t.id);gsave();return null}
+/* ---- kualiti & aduan ---- */
+function qaCases(){return memo('gmqa',()=>{const E=eng(),D=E.D,T=D.TODAY,JM=jobMap(),out=[];
+ D.refunds.filter(r=>r.d>=T-59).forEach(r=>{const j=JM.get(r.job);out.push({id:'rf-'+r.job,d:r.d,b:r.b,inv:j?j.inv:r.job,src:'Bayaran balik',amt:Math.abs(r.amt),why:r.rs,m:j?j.m:null,svc:j?j.svc:null})});
+ const seen=new Set(out.map(x=>x.id));E.scan({from:T-29,to:T},j=>{if(j.cs&&j.cs<=2&&!seen.has('rf-'+j.id))out.push({id:'cs-'+j.id,d:j.d,b:j.b,inv:j.inv,src:'Kepuasan rendah',amt:0,why:'Skor '+j.cs+' / 5',m:j.m,svc:j.svc})});
+ return out.sort((a,b)=>b.d-a.d)})}
+const cmpSt=id=>GMS.cmp[id]||{st:'Baharu',hist:[]};
+function gmQa(c){const D=eng().D,rows=gmRows(c),cases=qaCases().filter(x=>!c.sel||c.sel.includes(x.b)),open=cases.filter(x=>cmpSt(x.id).st!=='Selesai');
+ return `<section class="card"><h3>Kualiti ikut cawangan</h3>${table(['Cawangan','Siap janji','Kerja semula','Kepuasan','Bayaran balik','Kes terbuka'],rows.map(r=>{const rf=eng().agg(Object.assign({},c.F,{br:[r.i]}));return tr([esc(r.b.n),r.on==null?'—':pf(r.on,0),r.rw==null?'—':pf(r.rw),r.cs==null?'—':r.cs.toFixed(2),rf.refN,open.filter(x=>x.b===r.i).length])}))}<p class="cxfoot">Kes waranti: tidak dijejak dalam data simulasi (tiada rekod kes waranti berasingan).</p></section>
+ <section class="card"><h3>Aduan dan kes tidak puas hati (${open.length} terbuka)</h3>${cases.length?cases.slice(0,14).map(x=>{const s=cmpSt(x.id);return `<article class="gmreq"><div class="row sp"><b>${esc(D.BR[x.b].n)} · ${esc(x.src)}</b><span class="cxb ${s.st==='Selesai'?'ok':s.st==='Dieskalasi'?'bad':'md'}">${s.st}</span></div><p class="muted">${dmy(x.d)} · ${esc(x.inv)} · ${x.m!=null?esc(D.MODELS[x.m].n)+' · ':''}${x.svc!=null?esc(D.SVCS[x.svc].n)+' · ':''}${esc(x.why||'')}${x.amt?' · '+rmf(x.amt):''}</p>
+  ${s.st==='Selesai'?'':`<div class="row">${gin('cn:'+x.id,'Catatan siasatan / penyelesaian')}${s.st==='Baharu'?`<button class="btn sm" data-gm="cmp" data-v="${x.id}|Dalam siasatan">Siasat</button>`:''}${s.st!=='Dieskalasi'?`<button class="btn sm ghost" data-gm="cmp" data-v="${x.id}|Dieskalasi">Eskalasi ke pengurus</button>`:''}<button class="btn sm" data-gm="cmp" data-v="${x.id}|Selesai">Tutup</button></div>`}
+  ${s.hist.length?`<details><summary>Jejak (${s.hist.length})</summary><ul class="cxev">${s.hist.map(h=>`<li>${fmtTs(h.ts)} · ${esc(h.t)}</li>`).join('')}</ul></details>`:''}</article>`}).join(''):'<p class="muted">Tiada aduan atau kes tidak puas hati dalam tempoh.</p>'}${cases.length>14?`<p class="cxfoot">Memaparkan 14 terkini daripada ${cases.length}.</p>`:''}<p class="cxfoot">Sumber: bayaran balik 60 hari dan kerja dengan skor kepuasan 2 ke bawah 30 hari. Menghubungi pelanggan tidak dibuat dari sini; kes dieskalasi kepada pengurus cawangan.</p></section>`}
+function cmpStep(id,to){const x=qaCases().find(y=>y.id===id);if(!x)return 'Kes tidak dijumpai.';const s=GMS.cmp[id]||(GMS.cmp[id]={st:'Baharu',hist:[]}),note=gv('cn:'+id).trim();
+ if(to==='Selesai'&&note.length<5)return 'Tulis catatan penyelesaian (sekurang-kurangnya 5 aksara) sebelum menutup.';
+ if(to==='Dieskalasi'){const D=eng().D;gmIssueNew({id:'cmp-'+id,br:x.b,kind:'cmp',sev:'sederhana',t:`${D.BR[x.b].n}: aduan pelanggan ${x.inv} perlu ditangani`,ev:[`${x.src}: ${x.why||''}${x.amt?' ('+rmf(x.amt)+')':''}.`,`Tarikh ${dmy(x.d)}, invois ${x.inv}.`],imp:x.amt?rmf(x.amt)+' dipulangkan':'Risiko pelanggan hilang',n:0,act:'Hubungi pelanggan, sahkan punca, dan rekod penyelesaian.',due:7})}
+ s.hist.push({ts:Date.now(),t:`${s.st} → ${to}${note?' · '+note:''}`});s.st=to;glog('Aduan '+to,id);gsave();return null}
+/* ---- SOP ---- */
+const SOPI=[['Keselamatan','Lif/jek dan penyokong kenderaan diperiksa dan berfungsi',1],['Keselamatan','Alat pemadam api dan kit pertolongan cemas lengkap dan tidak tamat tarikh',1],['Keselamatan','Tumpahan minyak dibersihkan dan lantai kerja selamat',1],['Keselamatan','Teknisyen memakai PPE ketika bekerja',1],['Kualiti','Senarai semak pemeriksaan kenderaan diisi sebelum kerja',0],['Kualiti','Pemeriksaan kualiti akhir dilakukan dan ditandatangani',0],['Kualiti','Tork roda dan minyak enjin disahkan sebelum serah',0],['Pelanggan','Sebut harga tambahan disahkan pelanggan sebelum kerja',0],['Pelanggan','Kenderaan dibersihkan dan alat ganti lama ditunjuk jika diminta',0],['Dokumen','Invois dan bayaran sepadan dengan kad kerja',0],['Dokumen','Stok digunakan direkod pada kad kerja',0],['Dokumen','Mesin POS dan resit diperiksa pada penutupan',0]];
+function gmSop(){const D=eng().D,T=D.TODAY,last={};GMS.au.forEach(a=>{if(!last[a.b]||a.d>last[a.b].d)last[a.b]=a});
+ const bi=gv('sb'),sopIss=GMS.iss.filter(i=>i.kind==='sop');
+ return `<section class="card"><h3>Status audit cawangan</h3>${table(['Cawangan','Audit terakhir','Skor','Tindakan pembetulan terbuka'],D.BR.map((b,i)=>{const a=last[i];return tr([esc(b.n),a?dmy(a.d)+(T-a.d>30?' <span class="cxb md">lebih 30 hari</span>':''):'<span class="cxb bad">Tiada audit</span>',a?pf(a.score,0):'—',sopIss.filter(x=>x.br===i&&x.st!=='Selesai').length])}))}<p class="cxfoot">Senarai semak harian dan penutupan oleh cawangan: belum dijejak (modul Pengurus Cawangan, fasa seterusnya).</p></section>
+ <section class="card"><h3>Audit baharu</h3><div class="gmform">${gsel('sb',[['','Pilih cawangan']].concat(brOpts()),{r:1,l:'Cawangan'})}</div>${bi!==''?`<div class="gmchk">${SOPI.map((x,i)=>`<label class="gmck"><input type="checkbox" data-gmf="sp${i}" ${GF.f['sp'+i]===false?'':'checked'}><span><small>${x[0]}${x[2]?' · kritikal':''}</small>${esc(x[1])}</span></label>`).join('')}</div><p class="muted">Tanda = lulus. Nyahtanda item yang gagal; setiap kegagalan menjana tindakan pembetulan kepada pengurus cawangan.</p>${gta('sn','Catatan audit')}<button class="btn" data-gm="auditsave">Simpan audit</button>`:'<p class="muted">Pilih cawangan untuk mula audit.</p>'}</section>
+ <section class="card"><h3>Audit terkini</h3>${GMS.au.length?GMS.au.slice().reverse().slice(0,8).map(a=>`<div class="gmb"><b>${esc(D.BR[a.b].n)} · ${pf(a.score,0)}</b><span>${dmy(a.d)} · ${a.fails.length} gagal${a.fails.length?': '+a.fails.map(i=>esc(SOPI[i][1])).join('; '):''}</span></div>`).join(''):'<p class="muted">Belum ada audit direkod.</p>'}</section>`}
+function auditSave(){const D=eng().D,b=gv('sb');if(b==='')return 'Pilih cawangan.';const bi=+b,fails=[];SOPI.forEach((x,i)=>{if(GF.f['sp'+i]===false)fails.push(i)});
+ const a={id:'AU'+Date.now().toString(36),b:bi,d:D.TODAY,ts:Date.now(),score:(SOPI.length-fails.length)/SOPI.length,fails,note:gv('sn'),by:'GM (demo)'};GMS.au.push(a);
+ fails.forEach(i=>gmIssueNew({id:'sop-'+D.BR[bi].id+'-'+i,br:bi,kind:'sop',sev:SOPI[i][2]?'tinggi':'sederhana',t:`${D.BR[bi].n}: SOP gagal · ${SOPI[i][1]}`,ev:[`Audit ${dmy(D.TODAY)} · kategori ${SOPI[i][0]}${SOPI[i][2]?' (kritikal)':''}.`,a.note?'Catatan: '+a.note:'Tiada catatan tambahan.'],imp:SOPI[i][2]?'Risiko keselamatan':'Risiko kualiti / pematuhan',n:0,act:'Betulkan dan lampirkan bukti pembetulan.',due:SOPI[i][2]?3:14}));
+ SOPI.forEach((x,i)=>delete GF.f['sp'+i]);GF.f.sn='';glog(`Audit SOP ${D.BR[bi].n}: ${pf(a.score,0)}`,a.id);gsave();return null}
+/* ---- arahan CEO ---- */
+const DIRST=['Diluluskan','Dilaksana','Bukti dihantar','Selesai'];
+function gmDir(){const D=eng().D,list=S6.acts.filter(a=>DIRST.includes(a.st)),pend=S6.acts.filter(a=>['Baharu','Dalam semakan'].includes(a.st)).length;
+ const owners=['GM Operasi','Pembelian'].concat(D.BR.map(b=>mgrOf(D.BR.indexOf(b))));
+ return `<section class="card"><h3>Arahan CEO untuk dilaksana (${list.filter(a=>a.st!=='Selesai').length} terbuka)</h3>${list.length?list.map(a=>{a.gm=a.gm||{owner:'',ms:[]};const g=a.gm,done=g.ms.filter(m=>m.done).length;
+  return `<article class="gmreq"><div class="row sp"><b>${esc(a.t)}</b><span class="cxb ${a.st==='Selesai'?'ok':a.st==='Bukti dihantar'?'md':'info'}">${a.st}</span></div>
+  <p class="muted">Tarikh akhir ${dmy(a.due)} · pemilik asal ${esc(a.owner)} · ${g.ms.length?`${done}/${g.ms.length} pencapaian`:'tiada pencapaian'}</p>
+  ${a.act?`<p class="cxact"><b>Tindakan:</b> ${esc(a.act)}</p>`:''}
+  ${a.st==='Selesai'?'':`<div class="row"><label class="cxfl"><span>Pengurus bertanggungjawab</span><select data-gmf="do:${a.id}" data-gmr="1">${OPT([['','Belum ditetapkan']].concat(owners.map(o=>[o,o])),g.owner)}</select></label></div>
+  <ul class="cxev">${g.ms.map((m,i)=>`<li><label><input type="checkbox" ${m.done?'checked':''} data-gm="msdone" data-v="${a.id}|${i}"> ${esc(m.t)}</label></li>`).join('')}</ul>
+  <div class="row">${gin('mn:'+a.id,'Tambah pencapaian')}<button class="btn sm ghost" data-gm="msadd" data-v="${a.id}">Tambah</button></div>
+  ${a.st==='Diluluskan'?`<button class="btn sm" data-gm="dirstart" data-v="${a.id}">Mula laksana</button>`:''}
+  ${a.st==='Dilaksana'?`<div class="row">${gta('ev:'+a.id,'Bukti pelaksanaan (apa dibuat, hasil, rujukan)')}<button class="btn sm" data-gm="direv" data-v="${a.id}">Hantar bukti kepada CEO</button></div>`:''}
+  ${a.st==='Bukti dihantar'?'<p class="muted">Menunggu CEO mengesahkan dan menutup arahan di Keputusan CEO.</p>':''}`}
+  ${(g.ev||[]).length?`<details><summary>Bukti dihantar (${g.ev.length})</summary><ul class="cxev">${g.ev.map(e=>`<li>${fmtTs(e.ts)} · ${esc(e.t)}</li>`).join('')}</ul></details>`:''}</article>`}).join(''):`<p class="muted">Tiada arahan diluluskan untuk dilaksana. ${pend?pend+' arahan masih menunggu semakan CEO.':'CEO mengeluarkan dan meluluskan arahan di Pusat CEO · Keputusan CEO.'}</p><button class="lnk" data-act="cx" data-v="act">Buka Keputusan CEO</button>`}</section>`}
+function dirChange(id,fn){const a=S6.acts.find(x=>x.id===id);if(!a)return 'Arahan tidak dijumpai.';a.gm=a.gm||{owner:'',ms:[]};const e=fn(a,a.gm);if(e)return e;save6();gsave();return null}
+const dirHist=(a,t)=>a.hist.push({ts:Date.now(),t:'GM: '+t});
+/* ---- daftar tindakan ---- */
+function gmIssues(){const D=eng().D,T=D.TODAY,f=gv('isf')||'terbuka',list=GMS.iss.filter(i=>f==='semua'||(f==='terbuka'?i.st!=='Selesai':i.st===f)).slice().reverse();
+ const owners=['GM Operasi'].concat(D.BR.map((b,i)=>mgrOf(i)));
+ return `<section class="card"><div class="row sp"><h3>Daftar tindakan GM</h3>${gsel('isf',[['terbuka','Terbuka'],['semua','Semua'],['Selesai','Selesai']],{r:1,l:'Penapis'})}</div>
+ ${list.length?list.map(i=>{const od=i.st!=='Selesai'&&i.due<T;return `<article class="gmreq ${i.sev}"><div class="row sp"><b>${esc(i.problem)}</b><span class="cxb ${i.sev==='tinggi'?'hi':'md'}">${i.sev==='tinggi'?'Tinggi':'Sederhana'}</span></div>
+  <div class="cxdm"><span><small>Cawangan</small><b>${esc(i.brn)}</b></span><span><small>Pemilik</small><b>${esc(i.owner)}</b></span><span><small>Akhir</small><b>${dmy(i.due)}${od?' · lewat':''}</b></span><span><small>Status</small><b>${i.st}</b></span><span><small>Kesan</small><b>${esc(i.impact)}</b></span></div>
+  <ul class="cxev">${i.ev.map(e=>`<li>${esc(e)}</li>`).join('')}</ul><p class="cxact"><b>Tindakan pembetulan:</b> ${esc(i.action)}</p>
+  ${i.st==='Selesai'?`<p><b>Bukti pengesahan:</b> ${esc(i.ver)}</p>`:`<div class="row"><label class="cxfl"><span>Pemilik</span><select data-gmf="io:${i.id}" data-gmr="1">${OPT(owners.map(o=>[o,o]),i.owner)}</select></label>${gin('iv:'+i.id,'Bukti pengesahan (wajib sebelum tutup)')}</div>
+  <div class="row">${i.st==='Ditugaskan'?`<button class="btn sm" data-gm="isstep" data-v="${i.id}|Dalam tindakan">Mula tindakan</button>`:''}${i.st==='Dalam tindakan'?`<button class="btn sm" data-gm="isstep" data-v="${i.id}|Menunggu pengesahan">Hantar untuk pengesahan</button>`:''}${i.st==='Menunggu pengesahan'?`<button class="btn sm" data-gm="isstep" data-v="${i.id}|Selesai">Sahkan dan tutup</button><button class="btn sm ghost" data-gm="isstep" data-v="${i.id}|Dalam tindakan">Kembalikan</button>`:''}</div>`}
+  <details><summary>Jejak audit (${i.hist.length})</summary><ul class="cxev">${i.hist.map(h=>`<li>${fmtTs(h.ts)} · ${esc(h.t)}</li>`).join('')}</ul></details></article>`}).join(''):'<p class="muted">Tiada tindakan dalam penapis ini. Isu dikesan muncul di Ringkasan dan Operasi cawangan.</p>'}</section>
+ <section class="card"><h3>Isu baharu (manual)</h3><div class="gmform">${gsel('nbr',[['','Cawangan']].concat(brOpts()),{l:'Cawangan'})}${gin('np','Masalah')}${gsel('nsv',[['sederhana','Sederhana'],['tinggi','Tinggi']],{l:'Tahap'})}${gin('nd','Hari sehingga akhir','inputmode="numeric"')}${gin('na','Tindakan pembetulan')}<button class="btn" data-gm="issnew">Daftar isu</button></div></section>`}
+function issStep(id,to){const i=GMS.iss.find(x=>x.id===id);if(!i)return 'Isu tidak dijumpai.';const ok={Ditugaskan:['Dalam tindakan'],'Dalam tindakan':['Menunggu pengesahan'],'Menunggu pengesahan':['Selesai','Dalam tindakan']};if(!(ok[i.st]||[]).includes(to))return 'Peralihan status tidak dibenarkan.';
+ const ver=gv('iv:'+id).trim();if((to==='Menunggu pengesahan'||to==='Selesai')&&ver.length<8)return 'Bukti pengesahan diperlukan (sekurang-kurangnya 8 aksara).';
+ if(to==='Menunggu pengesahan'||to==='Selesai')i.ver=ver;i.hist.push({ts:Date.now(),t:`${i.st} → ${to}${ver&&to!=='Dalam tindakan'?' · bukti: '+ver:''}`});i.st=to;glog('Tindakan '+to,id);gsave();return null}
+/* ---- laporan ---- */
+function repRange(k){const D=eng().D,T=D.TODAY,lm=D.NM-2;if(k==='hari')return {l:'Harian (semalam)',a:{from:T-1,to:T-1},b:{from:T-8,to:T-8},bl:'hari sama minggu lepas'};if(k==='minggu')return {l:'Mingguan (7 hari lalu)',a:{from:T-7,to:T-1},b:{from:T-14,to:T-8},bl:'7 hari sebelumnya'};return {l:'Bulanan ('+mlab(D.MKEY[lm])+')',a:{from:D.mStart(lm),to:D.mStart(lm+1)-1},b:{from:D.mStart(lm-1),to:D.mStart(lm)-1},bl:'bulan sebelumnya'}}
+function repRows(k){const D=eng().D,R=repRange(k);return {R,rows:D.BR.map((b,i)=>{const f=r=>Object.assign({brand:null,model:null,cat:null},r,{br:[i]}),A=eng().agg(f(R.a)),B=eng().agg(f(R.b)),P=PL(f(R.a));return {i,b,n:A.n,pn:B.n,net:P.net,on:A.n?A.tatOn/A.n:null,rw:A.n?A.rw/A.n:null,cs:A.csN?A.cs/A.csN:null,u:utilSel(f(R.a))}}),A:eng().agg(Object.assign({brand:null,model:null,cat:null},R.a))}}
+function gmRep(){const D=eng().D,k=gv('rk')||'minggu',{R,rows,A}=repRows(k),sum=rows.reduce((a,r)=>a+r.n,0),open=GMS.iss.filter(i=>i.st!=='Selesai'),od=open.filter(i=>i.due<D.TODAY).length;
+ return `<section class="card cxrep"><div class="row sp noprint"><h3>Laporan operasi</h3><div class="row">${gsel('rk',[['hari','Harian'],['minggu','Mingguan'],['bulan','Bulanan']],{r:1,l:'Jenis laporan'})}<button class="btn sm" data-gm="csv">Muat turun CSV</button><button class="btn sm ghost" data-gm="print">Cetak / simpan PDF</button></div></div>
+ <h2>${R.l}</h2><p class="muted">${dmy(R.a.from)} – ${dmy(R.a.to)} · dibanding ${R.bl} · <span class="cxsim">Data simulasi</span> · data hingga ${dmy(D.TODAY-1)} (hari ini belum lengkap)</p>
+ ${table(['Cawangan','Kerja','Sebelum','Perubahan','Jualan','Siap janji','Kerja semula','Kepuasan','Bay'],rows.map(r=>tr([esc(r.b.n),nf(r.n),nf(r.pn),r.pn>0?sg((r.n-r.pn)/r.pn):'—',rmk(r.net),r.on==null?'—':pf(r.on,0),r.rw==null?'—':pf(r.rw),r.cs==null?'—':r.cs.toFixed(2),r.u==null?'—':pf(r.u,0)])).concat([`<tr class="cxtot"><td>Jumlah</td><td class="num">${nf(sum)}</td><td></td><td></td><td class="num">${rmk(rows.reduce((a,r)=>a+r.net,0))}</td><td class="num">${A.n?pf(A.tatOn/A.n,0):'—'}</td><td class="num">${A.n?pf(A.rw/A.n):'—'}</td><td></td><td></td></tr>`]))}
+ <p class="cxfoot">Jumlah cawangan ${Math.abs(sum-A.n)<1?'✓ padan':'✗ tidak padan'} dengan jumlah rangkaian (${nf(A.n)} kerja).</p>
+ <h3>Tindakan</h3><p>${open.length} tindakan terbuka, ${od} lewat tarikh akhir. ${GMS.iss.length-open.length} telah diselesaikan.</p>${open.length?`<ul class="cxev">${open.slice(0,8).map(i=>`<li><b>${esc(i.problem)}</b> · ${i.st} · akhir ${dmy(i.due)}</li>`).join('')}</ul>`:''}</section>
+ <section class="card noprint"><h3>Jejak audit GM</h3>${GMS.log.length?`<ul class="cxev">${GMS.log.slice(-12).reverse().map(l=>`<li>${fmtTs(l.ts)} · ${esc(l.by)} · ${esc(l.a)} <small>${esc(l.ref)}</small></li>`).join('')}</ul>`:'<p class="muted">Belum ada tindakan direkod.</p>'}<p class="cxfoot">Jejak ini disimpan dalam pelayar ini (demo). Fasa pangkalan data akan menyimpannya di pelayan dengan kebenaran peranan.</p></section>`}
+function repCsv(){const k=gv('rk')||'minggu',{R,rows}=repRows(k),q=x=>'"'+String(x).replace(/"/g,'""')+'"',L=[['Laporan GM',R.l+' (data simulasi)'],['Tempoh',dmy(R.a.from)+' - '+dmy(R.a.to)],[],['Cawangan','Kerja','Sebelum','Jualan RM','Siap janji','Kerja semula','Kepuasan','Bay']];
+ rows.forEach(r=>L.push([r.b.n,r.n,r.pn,Math.round(r.net),r.on==null?'':(r.on*100).toFixed(1)+'%',r.rw==null?'':(r.rw*100).toFixed(1)+'%',r.cs==null?'':r.cs.toFixed(2),r.u==null?'':(r.u*100).toFixed(1)+'%']));
+ const b=new Blob(['﻿'+L.map(r=>r.map(q).join(',')).join('\n')],{type:'text/csv;charset=utf-8'}),u=URL.createObjectURL(b),l=document.createElement('a');l.href=u;l.download='carrepublic-gm-'+k+'-simulasi.csv';document.body.appendChild(l);l.click();l.remove();setTimeout(()=>URL.revokeObjectURL(u),2000)}
+/* ---- paparan ---- */
+function viewGM(){if(!GTT[ui.gx])ui.gx='home';if(!GF.init){GF.init=1;S6.per='mtd';S6.rg='';S6.st='';S6.br='';save6()}
+ const k=ui.gx,c=ctx(),D=eng().D;let body='';
+ try{body=k==='net'?gmNetView(c):k==='ops'?gmOps(c):k==='wf'?gmWf(c):k==='cap'?gmCap(c):k==='inv'?gmInv(c):k==='qa'?gmQa(c):k==='sop'?gmSop():k==='dir'?gmDir():k==='iss'?gmIssues():k==='rep'?gmRep():gmHome(c)+gmBranchPanel(c)}catch(e){body=`<section class="card"><h3>Modul tidak dapat dipaparkan</h3><p class="muted">${esc(String(e&&e.message||e))}</p></section>`;if(window.console)console.error(e)}
+ if(k==='net'||k==='ops'||k==='wf'||k==='cap')body+=gmBranchPanel(c);
+ const bar=['home','net','ops','wf','cap','qa'].includes(k)?toolbar():'';
+ return `<div class="cx gm"><header class="cxhd"><div><h1>${GTT[k][0]}</h1><p>${GTT[k][1]}</p></div><div class="cxst"><span class="cxsim" title="Semua angka ialah simulasi untuk demo; bukan rekod syarikat sebenar">Data simulasi</span><span>Data hingga ${dmy(D.TODAY-1)} · dikemas kini ${hhmm()}</span></div></header>${bar}${body}</div>`}
+function gmClick(a,v,t){const D=eng().D;let e=null;
+ if(a==='drill')GF.dr=GF.dr===v?null:v;
+ else if(a==='branch'){GF.bx=v===''||GF.bx===v?null:v;if(GF.bx!=null){ui.gx=ui.gx==='home'||ui.gx==='net'||ui.gx==='ops'||ui.gx==='wf'||ui.gx==='cap'?ui.gx:'net'}}
+ else if(a==='assign'){const f=gmExceptions().find(x=>x.id===v);if(f){const it=gmIssueNew(f);if(it)setMsg('ok','Tindakan ditugaskan kepada '+it.owner+'. Lihat Tindakan GM.')}}
+ else if(a==='trsug'){const [bi,si,kind,from,qty]=v.split('|');e=trMake(kind,+bi,+si,+from,+qty);if(!e)setMsg('ok','Permintaan dihantar untuk kelulusan.')}
+ else if(a==='trnew'){const kind=gv('tk')||'pindah';e=trMake(kind,gv('tto')===''?null:+gv('tto'),+(gv('tsku')||0),gv('tfrom')===''?null:+gv('tfrom'),gv('tqty'));if(!e){setMsg('ok','Permintaan direkod.');GF.f.tqty=''}}
+ else if(a==='trstep'){const [id,to]=v.split('|');e=trStep(id,to);if(!e)setMsg('ok','Status dikemas kini: '+to+'.')}
+ else if(a==='cmp'){const [id,to]=v.split('|');e=cmpStep(id,to);if(!e)setMsg('ok','Aduan: '+to+'.')}
+ else if(a==='auditsave'){e=auditSave();if(!e)setMsg('ok','Audit disimpan. Tindakan pembetulan dijana untuk setiap kegagalan.')}
+ else if(a==='msadd'){e=dirChange(v,(x,g)=>{const t=gv('mn:'+v).trim();if(t.length<3)return 'Tulis pencapaian (sekurang-kurangnya 3 aksara).';g.ms.push({t,done:false});dirHist(x,'Pencapaian ditambah: '+t);GF.f['mn:'+v]=''})}
+ else if(a==='msdone'){const [id,i]=v.split('|');e=dirChange(id,(x,g)=>{const m=g.ms[+i];if(m){m.done=!m.done;dirHist(x,(m.done?'Pencapaian siap: ':'Pencapaian dibuka semula: ')+m.t)}})}
+ else if(a==='dirstart'){e=dirChange(v,(x,g)=>{if(x.st!=='Diluluskan')return 'Hanya arahan diluluskan boleh dimulakan.';if(!g.owner)return 'Tetapkan pengurus bertanggungjawab dahulu.';x.hist.push({ts:Date.now(),t:'Status: Diluluskan → Dilaksana (GM)'});x.st='Dilaksana'})}
+ else if(a==='direv'){e=dirChange(v,(x,g)=>{const t=gv('ev:'+v).trim();if(x.st!=='Dilaksana')return 'Arahan mesti dalam pelaksanaan.';if(t.length<10)return 'Bukti diperlukan (sekurang-kurangnya 10 aksara).';g.ev=(g.ev||[]).concat([{ts:Date.now(),t}]);x.hist.push({ts:Date.now(),t:'Status: Dilaksana → Bukti dihantar · '+t});x.st='Bukti dihantar';GF.f['ev:'+v]=''});if(!e)setMsg('ok','Bukti dihantar kepada CEO untuk pengesahan.')}
+ else if(a==='isstep'){const [id,to]=v.split('|');e=issStep(id,to);if(!e)setMsg('ok','Tindakan: '+to+'.')}
+ else if(a==='issnew'){const b=gv('nbr'),p=gv('np').trim(),ac=gv('na').trim(),d=Math.floor(+gv('nd')||14);if(b==='')e='Pilih cawangan.';else if(p.length<5)e='Terangkan masalah (sekurang-kurangnya 5 aksara).';else if(ac.length<5)e='Tulis tindakan pembetulan.';else if(d<1||d>180)e='Hari sehingga akhir mesti 1 hingga 180.';else{gmIssueNew({id:'man-'+Date.now(),br:+b,kind:'man',sev:gv('nsv')||'sederhana',t:`${D.BR[+b].n}: ${p}`,ev:['Didaftar manual oleh GM.'],imp:'Belum dinilai',n:0,act:ac,due:d});['np','na','nd'].forEach(k=>GF.f[k]='');setMsg('ok','Isu didaftar dan ditugaskan.')}}
+ else if(a==='csv')repCsv();
+ else if(a==='print')setTimeout(()=>window.print(),50);
+ if(e)setMsg('err',e)}
+document.addEventListener('click',ev=>{const t=ev.target.closest('[data-gm]');if(!t||ui.role!=='gm')return;if(t.type==='checkbox'){gmClick(t.dataset.gm,t.dataset.v,t);render();return}gmClick(t.dataset.gm,t.dataset.v,t);render()});
+const gmStore=t=>{const k=t.dataset.gmf;GF.f[k]=t.type==='checkbox'?t.checked:t.value;
+ if(k.startsWith('do:')){const a=S6.acts.find(x=>x.id===k.slice(3));if(a){a.gm=a.gm||{owner:'',ms:[]};a.gm.owner=t.value;a.hist.push({ts:Date.now(),t:'GM tetapkan pengurus: '+(t.value||'—')});save6()}}
+ if(k.startsWith('io:')){const i=GMS.iss.find(x=>x.id===k.slice(3));if(i&&i.owner!==t.value){i.hist.push({ts:Date.now(),t:`Pemilik: ${i.owner} → ${t.value}`});i.owner=t.value;glog('Tukar pemilik',i.id);gsave()}}};
+document.addEventListener('input',ev=>{const t=ev.target;if(ui.role==='gm'&&t.dataset&&t.dataset.gmf&&t.type!=='checkbox'&&t.tagName!=='SELECT')GF.f[t.dataset.gmf]=t.value});
+document.addEventListener('change',ev=>{const t=ev.target;if(ui.role!=='gm'||!t.dataset||!t.dataset.gmf)return;gmStore(t);if(t.dataset.gmr)render()});
 
 /* ---------- MOD STAF (data sebenar, Supabase) + tempahan awam ---------- */
 const SM=(()=>{
@@ -2306,9 +2575,10 @@ function render(){
   if(fid){const el=document.getElementById(fid);if(el){el.focus({preventScroll:true});try{if(fs!=null)el.setSelectionRange(fs,fs)}catch(e){}}}
 }
 /* ---------- tindakan ---------- */
-const SUBK={cust:'ct',branch:'bt',hq:'ht',master:'cx'};
+const SUBK={cust:'ct',branch:'bt',hq:'ht',master:'cx',gm:'gx'};
 const A={
  role:e=>{ui.role=e.v;ui.menu=false;window.scrollTo(0,0)},
+ gx:e=>{ui.role='gm';ui.gx=e.v;ui.menu=false;GF.bx=null;GF.dr=null;window.scrollTo(0,0)},
  cx:e=>{ui.role='master';ui.cx=e.v;ui.menu=false;window.scrollTo(0,0)},sc:()=>{ui.sc=!ui.sc;try{localStorage.setItem('careos-sc',ui.sc?'1':'')}catch(e){}},
  ct:e=>{ui.ct=e.v;ui.role='cust';window.scrollTo(0,0)},bt:e=>{ui.bt=e.v;ui.role='branch';window.scrollTo(0,0)},ht:e=>{ui.ht=e.v;ui.role='hq';window.scrollTo(0,0)},
  go:e=>{const [r,s]=e.id.split(':');ui.role=r;if(SUBK[r])ui[SUBK[r]]=s;window.scrollTo(0,0)},
