@@ -485,7 +485,7 @@ const now=()=>new Date(Date.now()+S.skip*DAY);
 const by=(a,id)=>S[a].find(x=>x.id===id);
 const authGet=()=>{try{return sessionStorage.getItem('careos-auth')==='1'}catch(e){return false}};
 const authSet=v=>{try{v?sessionStorage.setItem('careos-auth','1'):sessionStorage.removeItem('careos-auth')}catch(e){}};
-const ui={logged:authGet(),role:'master',ct:'utama',bt:'papan',ht:'ringkas',branch:'ALL',per:'3',f:{le:'master@carrepublic.demo',lp:'Demo#2026'},msg:null,slot:null,done:null,sel:null,fb:false,menu:false};
+const ui={logged:authGet(),role:'master',ct:'utama',bt:'ringkas',ht:'ringkas',branch:'ALL',per:'3',f:{le:'master@carrepublic.demo',lp:'Demo#2026'},msg:null,slot:null,done:null,sel:null,fb:false,menu:false};
 
 /* ---------- domain ---------- */
 function slotsFor(bid,svc,date){
@@ -597,7 +597,7 @@ const NAV=[
  {id:'master',t:'Gambaran Master',ic:'star',subs:[]},
  {id:'arahan',t:'Arahan CEO',ic:'brief',subs:[]},
  {id:'cust',t:'Pelanggan (app)',ic:'user',k:'ct',subs:[['utama','Utama','home'],['tempah','Tempah','cal'],['pasport','Pasport','book'],['rakan','Rakan','shield'],['saya','Saya','user']]},
- {id:'branch',t:'Cawangan (BranchOS)',ic:'wrench',k:'bt',subs:[['papan','Papan kerja','board'],['jadual','Jadual','cal'],['due','Akan due','chat'],['pos','POS','till'],['arahan','Arahan','brief'],['staf','Staf','people']]},
+ {id:'branch',t:'Cawangan (BranchOS)',ic:'wrench',k:'bt',subs:[['ringkas','Ringkasan','chart'],['papan','Papan kerja','board'],['jadual','Jadual','cal'],['due','Akan due','chat'],['pos','POS','till'],['arahan','Arahan','brief'],['staf','Staf','people']]},
  {id:'hq',t:'HQ',ic:'chart',k:'ht',subs:[['ringkas','Ringkasan','chart'],['rakan','Rakan','shield'],['wa','WhatsApp','chat'],['rekrut','Rekrutmen','people']]},
  {id:'kerja',t:'Kerjaya (calon)',ic:'brief',subs:[]}];
 
@@ -715,8 +715,21 @@ function viewBranch(){if(ui.branch==='ALL')ui.branch='KMN';const bid=ui.branch,b
   const act=S.bookings.filter(b=>b.bid===bid&&activeB(b)),done=S.records.filter(r=>r.bid===bid&&r.src==='verified'),today=ymd(now());
   let h=`${scopeBar(false)}<div style="margin-bottom:8px"><h1 style="margin:0">${esc(br.name)}</h1><p class="muted">${esc(br.city)}, ${esc(br.state)} · ${br.st==='aktif'?'Aktif':'Onboarding'} · ${esc(br.note)} Waktu ${br.open} hingga ${br.close} · ${br.bays} bay.</p></div>
   <div class="kpis"><div class="kpi"><small>Kerja aktif</small><b>${act.length}</b></div><div class="kpi ${act.some(b=>b.st==='awaiting')?'hot':''}"><small>Tunggu kelulusan</small><b>${act.filter(b=>b.st==='awaiting').length}</b></div><div class="kpi"><small>Jualan hari ini</small><b>${rm(done.filter(r=>r.date===today).reduce((a,r)=>a+r.total,0))}</b></div><div class="kpi"><small>Bay</small><b>${br.bays}</b></div></div>`;
-  h=tkBanner(bid)+h;h+=t==='arahan'?tkBranchView(bid):t==='papan'?bBoard(bid,act):t==='jadual'?bJadual(bid):t==='due'?bDue(bid):t==='pos'?viewPOS(bid):branchJobs(bid);
+  h=tkBanner(bid)+h;h+=t==='ringkas'?bSummary(bid,act):t==='arahan'?tkBranchView(bid):t==='papan'?bBoard(bid,act):t==='jadual'?bJadual(bid):t==='due'?bDue(bid):t==='pos'?viewPOS(bid):branchJobs(bid);
   return h+`<div class="hint" style="margin-top:12px">Cawangan tidak nampak tempahan cawangan lain, maklumat insurans atau roadtax pelanggan, atau kos cawangan lain. Sejarah cawangan lain hanya kelihatan semasa tempahan aktif dan dengan persetujuan pelanggan.</div>`}
+function bSummary(bid,act){const nowT=now().getTime(),lewat=act.filter(b=>b.s<=nowT&&b.e<nowT&&b.st!=='ready'&&b.st!=='confirmed'),wait=act.filter(b=>b.st==='awaiting'),dxn=act.filter(b=>b.insp&&b.insp.fm&&dxCount(b.insp).kritikal),
+  over=S.reminders.filter(r=>remStatus(r)==='overdue'&&(S.records.find(x=>x.id===r.rec)||{}).bid===bid).length,tl=tkLateN(bid),tu=S.tasks.filter(t=>tgtOf(t).includes(bid)&&tkSt(t,bid)==='baru').length;
+  const L=[];const add=(sev,t,v,b)=>L.push([sev,t,v,b]);
+  if(dxn.length)add('r',dxn.length+' kenderaan ada penemuan keselamatan segera. Maklumkan pelanggan.','papan','Buka papan');
+  if(lewat.length)add('r',lewat.length+' kerja lewat melepasi anggaran siap','papan','Buka papan');
+  if(tl)add('r',tl+' arahan CEO lewat. Siapkan atau laporkan halangan.','arahan','Buka arahan');
+  if(wait.length)add('a',wait.length+' kerja menunggu kelulusan pelanggan. Hubungi pelanggan.','papan','Buka papan');
+  if(tu)add('a',tu+' arahan CEO belum dibaca','arahan','Buka arahan');
+  if(over)add('a',over+' pelanggan tertunggak servis. Hantar peringatan.','due','Akan due');
+  const st=k=>act.filter(b=>b.st===k).length,inShop=act.filter(b=>b.st!=='confirmed').length;
+  return `<h2>Ringkasan hari ini</h2><div class="kpis"><div class="kpi"><small>Dalam bengkel</small><b>${inShop}</b></div><div class="kpi"><small>Akan tiba</small><b>${st('confirmed')}</b></div><div class="kpi ${wait.length?'hot':''}"><small>Tunggu kelulusan</small><b>${wait.length}</b></div><div class="kpi ${lewat.length?'hot':''}"><small>Lewat siap</small><b>${lewat.length}</b></div><div class="kpi"><small>Sedia diambil</small><b>${st('ready')}</b></div></div>
+  <div class="card attn"><div class="row sp"><h2 style="margin:0">Perlu tindakan anda</h2><span class="pill ${L.length?(L.some(x=>x[0]==='r')?'bad':'warn'):'ok'}">${L.length?L.length+' perkara':'Semua terkawal'}</span></div>${L.length?`<div class="todo">${L.map(([sv,t,v,b])=>`<button class="${sv}" data-act="bt" data-v="${v}"><span>${esc(t)}</span><span class="pill info">${b}</span></button>`).join('')}</div>`:'<p class="muted" style="margin:8px 0 0">Tiada perkara mendesak di cawangan ini.</p>'}</div>
+  <h3>Kerja di bengkel sekarang</h3><div class="jobs">${act.filter(b=>b.st!=='confirmed').sort((a,b)=>a.s-b.s).map(b=>{const v=by('vehicles',b.vid),i=TRKI[b.st];return `<button class="job ${b.st==='awaiting'?'wait':''}" data-act="goJob" data-id="${b.id}">${plate(v.plate,'sm')} <span class="pill ${b.st==='awaiting'?'warn':'info'}">${esc(ST[b.st])}</span><div class="jt">${esc(v.make)} ${esc(v.model)}</div><div class="jm">${esc(SV[b.svc].n)}</div><div class="stg" aria-hidden="true">${TRK.map((n,k)=>`<i class="${k<i?'d':k===i?'n':''}"></i>`).join('')}</div></button>`}).join('')||'<p class="muted">Tiada kereta dalam bengkel.</p>'}</div>`}
 function kcard(b){const v=by('vehicles',b.vid);return `<button class="kc ${b.st==='awaiting'?'wait':''}" aria-pressed="${ui.sel===b.id}" data-act="sel" data-id="${b.id}"><div class="row sp">${plate(v.plate,'sm')}<span class="sm" style="color:var(--mut)">${b.insp&&b.insp.fm&&dxCount(b.insp).kritikal?'<i class="dot bad" title="Penemuan segera"></i> ':''}${hm(b.s)}</span></div><div style="font-weight:700;margin-top:6px">${esc(v.make)} ${esc(v.model)}</div><div class="t">${SV[b.svc].n}<br>${esc(ownerName(v))}</div></button>`}
 function bBoard(bid,act){const list=act.slice().sort((a,b)=>a.s-b.s);
   const cols=COLS.map(([ks,n])=>{const l=list.filter(b=>ks.split(',').includes(b.st));return `<section class="col" aria-label="${n}"><h3><span>${n}</span><span class="cnt">${l.length}</span></h3>${l.map(kcard).join('')||'<p class="muted" style="padding:2px 6px">Kosong</p>'}</section>`}).join('');
