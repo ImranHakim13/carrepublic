@@ -196,6 +196,16 @@ ol.tl li.ext::before{background:#aab5b3}
 .todo{display:grid;gap:8px}.todo button{display:flex;justify-content:space-between;gap:10px;align-items:center;text-align:left;border:1px solid var(--line);background:#fff;border-radius:14px;padding:11px 13px;font:600 14px var(--bd);cursor:pointer;color:var(--ink)}
 .scopebar{margin:0 0 14px}.scopebar label{margin:0;font-weight:700;color:var(--ink);max-width:460px}.scopebar select{font-weight:700;border:2px solid var(--ink)}
 .net td,.net th{padding:9px 6px}.net tr[data-act]{cursor:pointer}
+.kpis.ceo{grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
+.kpi.ceo{display:flex;flex-direction:column;gap:2px}.kpi .sub{font-size:12px;color:var(--mut)}
+.dl{display:inline-block;margin-top:4px;border-radius:99px;font-size:11.5px;font-weight:700;padding:2px 8px;background:var(--chip);color:var(--mut);align-self:flex-start}.dl.up{background:var(--teal-bg);color:#0a6a58}.dl.dn{background:var(--red-bg);color:var(--red)}
+.cg{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.legend{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:12px;color:var(--mut)}.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.seg{display:inline-flex;background:#e0e6e4;border-radius:12px;padding:3px;gap:2px;margin-bottom:14px}
+.seg button{border:0;background:none;border-radius:9px;padding:8px 13px;font:700 13.5px var(--bd);color:var(--mut);cursor:pointer}.seg button[aria-pressed=true]{background:var(--ink);color:#fff}
+.prog{position:relative;height:14px;border-radius:99px;background:var(--chip);margin:10px 0 6px}.prog i{position:absolute;left:0;top:0;bottom:0;border-radius:99px;background:var(--teal)}.prog u{position:absolute;top:-4px;bottom:-4px;width:3px;background:var(--ink);border-radius:2px}
+.split{display:flex;height:12px;border-radius:99px;overflow:hidden;background:var(--chip);flex:1}.split i{display:block;height:100%}
+.mixrow{display:grid;grid-template-columns:minmax(90px,1.1fr) 2fr 44px;gap:10px;align-items:center;padding:5px 0;font-size:13px}.mixrow b{text-align:right}
 .cm{border-bottom:1px solid var(--line);padding:8px 0}
 </style>
 </head>
@@ -240,6 +250,15 @@ const STOPLINE='\nBalas BERHENTI untuk hentikan peringatan.';
 const STAGES=['baharu','saringan','temu duga','tawaran','diterima','tidak diteruskan'];
 /* ---------- data contoh (semua DEMO; nama dan plat rekaan) ---------- */
 const SB_URL='https://yzlwshrywctlcwfbpddp.supabase.co',SB_KEY='sb_publishable_yA1MJyxUca8tUbjnQVN3Eg_2Is0jjYG';
+function genHist(){const out=[],t=new Date(),dim=new Date(t.getFullYear(),t.getMonth()+1,0).getDate(),frac=t.getDate()/dim;
+  const P={KMN:{j0:55,g:1.12,avg:128,cr:.57},SHA:{j0:24,g:1.085,avg:139,cr:.56}};
+  for(const bid of ['KMN','SHA']){const p=P[bid],o=bid==='KMN'?0:2;
+    for(let k=14;k>=0;k--){const j=14-k,d=new Date(t.getFullYear(),t.getMonth()-k,1),m=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'),f=k===0?frac:1;
+      const jobs=Math.max(1,Math.round(p.j0*Math.pow(p.g,j)*(1+.07*Math.sin(j*1.7+o))*f)),rev=jobs*p.avg*(1+.03*Math.cos(j*2.1+o)),cost=rev*(p.cr+.015*Math.sin(j+o));
+      const newc=Math.min(jobs,Math.round(jobs*Math.max(.35,.72-.025*j))),bk=Math.round(jobs*1.08),ns=Math.round(bk*Math.max(.03,.07-.002*j)),tat=Math.round(100-1.8*j+4*Math.sin(j+o));
+      const oil=Math.round(jobs*(.62+.02*Math.sin(j))),ac=Math.round(jobs*.14),br=Math.round(jobs*.12),ty=Math.max(0,jobs-oil-ac-br);
+      out.push({m,bid,jobs,rev:Math.round(rev),cost:Math.round(cost),newc,rep:jobs-newc,bk,noshow:ns,tat,svc:{oil,ac,brake:br,tyre:ty}})}}
+  return out}
 function seed(){
   const t=new Date(),D=n=>ymd(addDays(t,n)),T=(h,m)=>{const d=new Date(t);d.setHours(h,m,0,0);return d.getTime()};
   const veh=(id,own,plate,make,model,year,km,col,rt,ins)=>({id,own,plate,make,model,year,km,ik:10000,im:6,rt:D(rt),ins:D(ins),col});
@@ -295,7 +314,7 @@ function seed(){
   const apps=[
     {id:'a1',jid:'j1',name:'Calon contoh A',phone:'(contoh)',email:'',exp:2,lic:true,must:[true,true,true,false],ans:['Saya dengar dahulu, minta maaf, kemudian terangkan langkah seterusnya.','Saya semak rekod pemeriksaan dan tunjuk bukti kepada pelanggan.','Boleh.'],st:'saringan',ts:Date.now()-5*3600e3},
     {id:'a2',jid:'j1',name:'Calon contoh B',phone:'(contoh)',email:'',exp:0,lic:false,must:[true,false,false,true],ans:['','',''],st:'baharu',ts:Date.now()-2*3600e3}];
-  return {v:5,seq:300,skip:0,
+  return {v:6,seq:300,skip:0,hist:genHist(),targets:{KMN:36000,SHA:11500},
     branches:[
       {id:'KMN',st:'aktif',name:'CARREPUBLIC Kemaman',city:'Kemaman',state:'Terengganu',postcode:'24000',bays:2,open:'09:00',close:'18:00',closed:[0],note:'Cawangan perintis. Alamat, waktu dan harga sebenar belum diisi; nilai di sini ialah contoh.'},
       {id:'SHA',st:'aktif',name:'[Contoh] Cawangan Shah Alam',city:'Shah Alam',state:'Selangor',postcode:'40000',bays:1,open:'09:00',close:'18:00',closed:[0],note:'Cawangan contoh untuk menunjukkan perjalanan merentas negeri.'},
@@ -312,14 +331,14 @@ function seed(){
 }
 const KEY5='careos-demo-v5';
 let S;try{S=JSON.parse(store.get())}catch(e){}
-if(!S||S.v!==5)S=seed();
+if(!S||S.v!==6)S=seed();
 const save=()=>store.set(JSON.stringify(S));
 const nid=p=>p+(++S.seq);
 const now=()=>new Date(Date.now()+S.skip*DAY);
 const by=(a,id)=>S[a].find(x=>x.id===id);
 const authGet=()=>{try{return sessionStorage.getItem('careos-auth')==='1'}catch(e){return false}};
 const authSet=v=>{try{v?sessionStorage.setItem('careos-auth','1'):sessionStorage.removeItem('careos-auth')}catch(e){}};
-const ui={logged:authGet(),role:'master',ct:'utama',bt:'papan',ht:'ringkas',branch:'ALL',f:{le:'master@carrepublic.demo',lp:'Demo#2026'},msg:null,slot:null,done:null,sel:null,fb:false,menu:false};
+const ui={logged:authGet(),role:'master',ct:'utama',bt:'papan',ht:'ringkas',branch:'ALL',per:'3',f:{le:'master@carrepublic.demo',lp:'Demo#2026'},msg:null,slot:null,done:null,sel:null,fb:false,menu:false};
 
 /* ---------- domain ---------- */
 function slotsFor(bid,svc,date){
@@ -466,28 +485,6 @@ function stats(){const rs=S.records.filter(r=>r.src==='verified'&&inS(r.bid)),re
   const act=S.bookings.filter(b=>activeB(b)&&inS(b.bid));
   return {rs,rev,act,wait:act.filter(b=>b.st==='awaiting').length,over:S.reminders.filter(r=>remStatus(r)==='overdue'&&inS((S.records.find(x=>x.id===r.rec)||{}).bid)).length,leads:ui.branch==='ALL'?S.leads.filter(l=>l.st==='baharu').length:null,apps:S.apps.filter(a=>a.st==='baharu'&&inS((by('jobs',a.jid)||{}).bid)).length}}
 const PIPE=[['confirmed','Akan tiba'],['arrived','Tiba'],['inspection','Pemeriksaan'],['awaiting','Tunggu kelulusan'],['service','Diservis'],['quality','Semakan kualiti'],['ready','Sedia diambil']];
-function netTable(){const today=ymd(now());
-  return `<h2 class="sec">Rangkaian cawangan</h2><div class="card scroll net"><table><thead><tr><th>Cawangan</th><th>Negeri</th><th>Status</th><th class="num">Bay</th><th class="num">Kerja aktif</th><th class="num">Servis</th><th class="num">Hasil</th><th></th></tr></thead><tbody>${S.branches.map(b=>{const rs=S.records.filter(r=>r.src==='verified'&&r.bid===b.id),act=S.bookings.filter(k=>k.bid===b.id&&activeB(k)).length;
-   return `<tr><td><b>${esc(b.name)}</b><div class="muted">${esc(b.city)}</div></td><td>${esc(b.state)}</td><td><span class="pill ${b.st==='aktif'?'ok':'warn'}">${b.st==='aktif'?'Aktif':'Onboarding'}</span></td><td class="num">${b.bays}</td><td class="num">${act}</td><td class="num">${rs.length}</td><td class="num">${rm(rs.reduce((a,r)=>a+r.total,0))}</td><td><button class="btn sm ghost" data-act="goBranch" data-id="${b.id}">Buka</button></td></tr>`}).join('')}</tbody></table></div>`}
-function viewMaster(){const x=stats();
-  const stp=(n,role,sub,t,d)=>`<li><div><b>${t}</b><span class="muted">${d}</span></div><button class="btn sm ghost" data-act="go" data-id="${role}:${sub}">Buka</button></li>`;
-  return `<div class="hero-m"><h1>Gambaran Master</h1><p>Anda melihat seluruh CareOS sekaligus: apa yang pelanggan nampak di telefon, apa yang cawangan buat di bengkel, dan apa yang HQ pantau. Cawangan perintis ialah Kemaman.</p><div class="strip" style="margin:12px 0 0"><span class="pill warn">Data contoh</span><span class="pill info">${S.branches.filter(b=>b.st==='aktif').length} cawangan aktif · ${S.branches.length} dalam rangkaian</span></div></div>
-  ${scopeBar(true)}<div class="kpis"><div class="kpi"><small>Kereta dalam bengkel</small><b>${x.act.length}</b></div><div class="kpi ${x.wait?'hot':''}"><small>Menunggu kelulusan pelanggan</small><b>${x.wait}</b></div><div class="kpi"><small>Hasil direkod (contoh)</small><b>${rm(x.rev)}</b></div><div class="kpi"><small>Peringatan tertunggak</small><b>${x.over}</b></div><div class="kpi"><small>Permohonan rakan baharu</small><b>${x.leads==null?'-':x.leads}</b></div><div class="kpi"><small>Calon baharu</small><b>${x.apps}</b></div></div>
-  <h2 class="sec">Bengkel sekarang: ${esc(scopeName())}</h2><div class="pipe">${PIPE.map(([k,n])=>{const l=S.bookings.filter(b=>inS(b.bid)&&b.st===k);return `<div><b>${l.length}</b><small>${n}</small></div>`}).join('')}</div>
-  ${ui.branch==='ALL'?netTable():''}
-  <h2 class="sec">Lihat sebagai</h2><div class="roles">
-  <div class="card"><h3>Pelanggan</h3><p class="muted">Garaj, status servis, sebut harga untuk diluluskan, tempahan, pasport servis, ruangan insurans dan roadtax.</p><button class="btn" data-act="go" data-id="cust:utama">Buka app pelanggan</button></div>
-  <div class="card"><h3>Cawangan (BranchOS)</h3><p class="muted">Papan kerja bengkel, jadual bay, senarai pelanggan akan due, jualan dan staf bagi cawangan yang dipilih.</p><button class="btn" data-act="go" data-id="branch:papan">Buka papan kerja</button></div>
-  <div class="card"><h3>HQ</h3><p class="muted">Prestasi rangkaian, rakan insurans dan roadtax, WhatsApp peringatan, rekrutmen staf.</p><button class="btn" data-act="go" data-id="hq:ringkas">Buka HQ</button></div></div>
-  <h2 class="sec">Cuba aliran penuh (lebih kurang 5 minit)</h2><ol class="flow">
-  ${stp(1,'cust','utama','Pelanggan: luluskan sebut harga','Aisyah ada sebut harga servis Myvi menunggu kelulusan.')}
-  ${stp(2,'branch','papan','Cawangan: gerakkan kerja hingga siap','Buka kad kerja, lengkapkan semakan, isi odometer keluar, jana invois.')}
-  ${stp(3,'cust','tempah','Pelanggan: tempah servis baharu','Pilih servis, hari dan slot. Slot dikira ikut bay bengkel.')}
-  ${stp(4,'hq','wa','HQ: lihat baris gilir WhatsApp','Tekan Simulasi +6 bulan di menu, kemudian semak siapa layak diingatkan.')}
-  ${stp(5,'hq','rakan','HQ: rakan insurans dan roadtax','Pelanggan memohon sebut harga rakan selepas memberi persetujuan.')}
-  ${stp(6,'hq','rekrut','HQ: rekrutmen staf','Buka jawatan dengan syarat wajib, lihat calon bersama skor padanan.')}</ol>
-  <h2 class="sec">Komen anda</h2><div class="card">${S.fb.length?S.fb.slice().reverse().map(c=>`<div class="cm"><div class="row sp"><b>${esc(c.name||'Tanpa nama')}</b><span class="pill ${c.sent?'ok':'warn'}">${c.sent?'Sampai ke pemilik':'Simpan setempat'}</span></div><div>${esc(c.body)}</div><div class="muted">${dtfmt(c.ts)} · ${esc(c.ctx)}</div></div>`).join(''):'<p class="muted">Belum ada komen. Tekan butang Komen di mana-mana skrin.</p>'}<button class="btn alt" data-act="fbOpen" style="margin-top:8px">Tulis komen</button></div>`}
-
 /* ---------- pelanggan ---------- */
 const TRK=['Disahkan','Tiba','Periksa','Kelulusan','Servis','Siap'];
 const TRKI={confirmed:0,arrived:1,inspection:2,awaiting:3,service:4,quality:4,ready:5,completed:5};
@@ -617,6 +614,105 @@ function hqRakan(){const lead=t=>S.leads.filter(l=>l.type===t).length;
   <div class="grid">${['insurance','roadtax'].map(t=>{const p=S.partners[t];return `<div class="card"><h3>${t==='insurance'?'Slot insurans':'Slot roadtax'}</h3><label style="color:var(--ink)"><input type="checkbox" id="pon:${t}" data-act="pon" data-id="${t}" ${p.on?'checked':''}>Paparkan kepada pelanggan</label>${input('pn:'+t,'Nama rakan (kosong = slot kosong)',{ph:'cth. nama syarikat rakan'})}<button class="btn ghost" data-act="pname" data-id="${t}">Simpan nama rakan</button></div>`}).join('')}</div>
   <div class="card scroll"><table><thead><tr><th>Jenis</th><th>Plat</th><th>Telefon</th><th>Tamat</th><th>Rakan</th><th>Status</th></tr></thead><tbody>${S.leads.length?S.leads.slice().reverse().map(l=>`<tr><td>${l.type==='insurance'?'Insurans':'Roadtax'}</td><td>${esc(l.plate)}</td><td>${esc(l.phone)}</td><td>${l.exp?dfmt(l.exp):'-'}</td><td>${esc(l.partner)}</td><td><select data-act="lst" data-id="${l.id}" style="margin:0;width:auto">${['baharu','dihubungi','sebut harga','berjaya','tidak berminat'].map(s=>`<option ${l.st===s?'selected':''}>${s}</option>`).join('')}</select></td></tr>`).join(''):'<tr><td colspan="6" class="muted">Belum ada permohonan.</td></tr>'}</tbody></table></div>`}
 
+/* ---------- dashboard CEO (Master) ---------- */
+const MS=['Jan','Feb','Mac','Apr','Mei','Jun','Jul','Ogo','Sep','Okt','Nov','Dis'];
+const mLabel=m=>MS[+m.slice(5)-1]+' '+m.slice(2,4);
+const monthsBack=n=>{const t=now(),o=[];for(let i=n-1;i>=0;i--){const d=new Date(t.getFullYear(),t.getMonth()-i,1);o.push(d.getFullYear()+'-'+pad(d.getMonth()+1))}return o};
+const rm0=n=>'RM '+Math.round(n).toLocaleString('en-MY');
+const pc=(x,d)=>(x*100).toFixed(d||0)+'%';
+const BCOL=['#17212b','#ffd21f','#0d8a73','#1d5fb8'];
+const bcol=id=>BCOL[Math.max(0,S.branches.findIndex(b=>b.id===id))%BCOL.length];
+function aggM(ms,pred){return ms.map(m=>{const a={m,rev:0,cost:0,jobs:0,newc:0,rep:0,noshow:0,bk:0,tatw:0,svc:{oil:0,ac:0,brake:0,tyre:0},byB:{}};
+  const add=(bid,rev,cost,jobs)=>{a.rev+=rev;a.cost+=cost;a.jobs+=jobs;a.byB[bid]=(a.byB[bid]||0)+rev};
+  S.hist.filter(h=>h.m===m&&pred(h.bid)).forEach(h=>{add(h.bid,h.rev,h.cost,h.jobs);a.newc+=h.newc;a.rep+=h.rep;a.noshow+=h.noshow;a.bk+=h.bk;a.tatw+=h.tat*h.jobs;for(const k in h.svc)a.svc[k]+=h.svc[k]});
+  S.records.filter(r=>r.src==='verified'&&r.date.slice(0,7)===m&&pred(r.bid)).forEach(r=>add(r.bid,r.total,r.cost||0,1));
+  return a})}
+function kpi(l){const s={rev:0,cost:0,jobs:0,newc:0,rep:0,noshow:0,bk:0,tatw:0,svc:{oil:0,ac:0,brake:0,tyre:0}};
+  l.forEach(a=>{s.rev+=a.rev;s.cost+=a.cost;s.jobs+=a.jobs;s.newc+=a.newc;s.rep+=a.rep;s.noshow+=a.noshow;s.bk+=a.bk;s.tatw+=a.tatw;for(const k in a.svc)s.svc[k]+=a.svc[k]});
+  s.gm=s.rev-s.cost;s.gmp=s.rev?s.gm/s.rev:0;s.avg=s.jobs?s.rev/s.jobs:0;s.repP=(s.newc+s.rep)?s.rep/(s.newc+s.rep):0;s.nsP=s.bk?s.noshow/s.bk:0;s.tat=s.jobs?s.tatw/s.jobs:0;return s}
+const capOf=(pred,months)=>S.branches.filter(b=>b.st==='aktif'&&pred(b.id)).reduce((a,b)=>a+b.bays*26*7,0)*months;
+function dayFrac(){const t=now();return t.getDate()/new Date(t.getFullYear(),t.getMonth()+1,0).getDate()}
+const niceMax=v=>{const p=Math.pow(10,Math.floor(Math.log10(v))),f=v/p;return (f<=1?1:f<=2?2:f<=5?5:10)*p};
+const kfmt=v=>v>=1000?(v/1000).toLocaleString('en-MY',{maximumFractionDigits:1})+'k':String(Math.round(v));
+
+function stackChart(ms,bids){
+  const W=660,H=240,pl=46,pr=8,pt=12,pb=28,cw=(W-pl-pr)/ms.length,mx=niceMax(Math.max(1,...ms.map(a=>a.rev))),y=v=>pt+(H-pt-pb)*(1-v/mx);
+  let g='';for(let i=0;i<=4;i++){const v=mx*i/4;g+=`<line x1="${pl}" x2="${W-pr}" y1="${y(v)}" y2="${y(v)}" stroke="#dce2e1"/><text x="${pl-6}" y="${y(v)+4}" text-anchor="end" font-size="10.5" fill="#5a6771">${kfmt(v)}</text>`}
+  const bars=ms.map((a,i)=>{let acc=0,x=pl+i*cw+cw*.16,w=cw*.68;
+    const segs=bids.map(b=>{const v=a.byB[b]||0;if(!v)return '';const y1=y(acc+v),y0=y(acc);acc+=v;return `<rect x="${x.toFixed(1)}" y="${y1.toFixed(1)}" width="${w.toFixed(1)}" height="${Math.max(0,y0-y1).toFixed(1)}" fill="${bcol(b)}"><title>${esc(by('branches',b).name)}: ${rm0(v)}</title></rect>`}).join('');
+    return `<g>${segs}<text x="${(x+w/2).toFixed(1)}" y="${H-9}" text-anchor="middle" font-size="10.5" fill="#5a6771">${mLabel(a.m)}</text><title>${mLabel(a.m)}: ${rm0(a.rev)}</title></g>`}).join('');
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Hasil bulanan 12 bulan, ditindan ikut cawangan" style="width:100%;height:auto;display:block">${g}${bars}</svg>`}
+function lineChart(ms,vals,fmt,color){
+  const W=660,H=170,pl=46,pr=14,pt=14,pb=26,n=ms.length,lo=Math.min(...vals),hi=Math.max(...vals),a=Math.floor((lo-(hi-lo)*.2)*100)/100,b=Math.ceil((hi+(hi-lo)*.2)*100)/100||1,
+   x=i=>pl+(W-pl-pr)*(n===1?.5:i/(n-1)),y=v=>pt+(H-pt-pb)*(1-(v-a)/((b-a)||1));
+  let g='';for(let i=0;i<=3;i++){const v=a+(b-a)*i/3;g+=`<line x1="${pl}" x2="${W-pr}" y1="${y(v)}" y2="${y(v)}" stroke="#dce2e1"/><text x="${pl-6}" y="${y(v)+4}" text-anchor="end" font-size="10.5" fill="#5a6771">${fmt(v)}</text>`}
+  const pts=vals.map((v,i)=>`${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(' ');
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Trend bulanan" style="width:100%;height:auto;display:block">${g}<polyline points="${pts}" fill="none" stroke="${color}" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/>${vals.map((v,i)=>`<circle cx="${x(i).toFixed(1)}" cy="${y(v).toFixed(1)}" r="${i===n-1?4.5:3}" fill="${i===n-1?'#ffd21f':color}" stroke="${color}" stroke-width="1.5"><title>${mLabel(ms[i].m)}: ${fmt(v)}</title></circle>`).join('')}${ms.map((m,i)=>i%2===n%2?'':`<text x="${x(i).toFixed(1)}" y="${H-8}" text-anchor="middle" font-size="10.5" fill="#5a6771">${mLabel(m.m)}</text>`).join('')}</svg>`}
+let DL='vs tempoh lalu';
+function delta(cur,prev,down){if(prev==null||!isFinite(prev)||prev===0)return '';const d=(cur-prev)/Math.abs(prev),good=down?d<0:d>0,flat=Math.abs(d)<.005;return `<span class="dl ${flat?'':good?'up':'dn'}">${d>0?'+':''}${(d*100).toFixed(1)}% ${DL}</span>`}
+const ck=(l,v,s,d)=>`<div class="kpi ceo"><small>${l}</small><b>${v}</b>${s?`<span class="sub">${s}</span>`:''}${d||''}</div>`;
+
+function viewMaster(){
+  const n=+ui.per||3,ms=monthsBack(n),pms=monthsBack(2*n).slice(0,n),m12=monthsBack(12);
+  const cur=kpi(aggM(ms,inS)),hasP=pms.every(m=>S.hist.some(h=>h.m===m)),prv=hasP?kpi(aggM(pms,inS)):null;
+  DL=n===1?'vs bulan lalu (pro rata)':'vs tempoh lalu';if(prv&&n===1){const f=dayFrac();['rev','cost','jobs','gm','bk','noshow','newc','rep'].forEach(k=>{prv[k]*=f})}
+  const util=cur.jobs/Math.max(1,capOf(inS,n)),putil=prv?prv.jobs/Math.max(1,capOf(inS,n)):null;
+  const A12=aggM(m12,inS),bids=S.branches.filter(b=>inS(b.id)&&(A12.some(a=>a.byB[b.id])||false)).map(b=>b.id);
+  const tgt=S.branches.filter(b=>inS(b.id)).reduce((a,b)=>a+(S.targets[b.id]||0),0),thisM=A12[A12.length-1],pace=dayFrac();
+  const x=stats(),svcT=Object.values(cur.svc).reduce((a,b)=>a+b,0)||1;
+  const per=[['1','Bulan ini'],['3','3 bulan'],['12','12 bulan']];
+  const alerts=[];
+  if(x.wait)alerts.push([`${x.wait} kerja menunggu kelulusan pelanggan`,'branch:papan','Buka papan']);
+  if(x.over)alerts.push([`${x.over} pelanggan tertunggak servis (peringatan belum dihantar atau belum ditempah)`,'hq:wa','Buka WhatsApp']);
+  if(ui.branch==='ALL'&&x.leads)alerts.push([`${x.leads} permohonan rakan insurans atau roadtax baharu`,'hq:rakan','Buka rakan']);
+  if(x.apps)alerts.push([`${x.apps} calon baharu menunggu saringan`,'hq:rekrut','Buka rekrutmen']);
+  const ob=S.branches.filter(b=>b.st!=='aktif').length;if(ui.branch==='ALL'&&ob)alerts.push([`${ob} cawangan dalam onboarding`,'master:','Lihat rangkaian']);
+  const stp=(role,sub,t,d)=>`<li><div><b>${t}</b><span class="muted">${d}</span></div><button class="btn sm ghost" data-act="go" data-id="${role}:${sub}">Buka</button></li>`;
+  return `<div class="hero-m"><h1>Pusat Kawalan CEO</h1><p>Operasi, kewangan dan jualan seluruh rangkaian di satu skrin. Pilih cawangan atau lihat semua, dan tukar tempoh untuk bandingkan dengan tempoh sebelumnya.</p><div class="strip" style="margin:12px 0 0"><span class="pill warn">Data demo</span><span class="pill info">${S.branches.filter(b=>b.st==='aktif').length} cawangan aktif · ${S.branches.length} dalam rangkaian</span></div></div>
+  <div class="row sp" style="margin-bottom:6px">${scopeBar(true)}<div class="seg" role="group" aria-label="Tempoh">${per.map(([k,t])=>`<button aria-pressed="${String(n)===k}" data-act="per" data-v="${k}">${t}</button>`).join('')}</div></div>
+  <div class="kpis ceo">
+   ${ck('Hasil',rm0(cur.rev),n===1?'Bulan semasa (setakat hari ini)':ms.length+' bulan',prv&&delta(cur.rev,prv.rev))}
+   ${ck('Margin kasar',rm0(cur.gm),pc(cur.gmp,1)+' daripada hasil',prv&&delta(cur.gm,prv.gm))}
+   ${ck('Servis selesai',cur.jobs.toLocaleString('en-MY'),'',prv&&delta(cur.jobs,prv.jobs))}
+   ${ck('Purata invois',rm0(cur.avg),'',prv&&delta(cur.avg,prv.avg))}
+   ${ck('Pelanggan ulang',pc(cur.repP),'daripada pelanggan dilayan',prv&&delta(cur.repP,prv.repP))}
+   ${ck('Utilisasi bay',pc(util),'servis lawan kapasiti anggaran',prv&&delta(util,putil))}
+   ${ck('Tempahan tidak hadir',pc(cur.nsP,1),'',prv&&delta(cur.nsP,prv.nsP,true))}
+   ${ck('Masa siap purata',Math.round(cur.tat)+' min','setiap servis',prv&&delta(cur.tat,prv.tat,true))}
+  </div>
+  <div class="grid cg"><div class="card"><div class="row sp"><h2 style="margin:0">Hasil bulanan</h2><span class="legend">${bids.map(b=>`<span><i style="background:${bcol(b)}"></i>${esc(by('branches',b).name.replace('[Contoh] Cawangan ','').replace('CARREPUBLIC ',''))}</span>`).join('')}</span></div>${stackChart(A12,bids)}</div>
+  <div class="card"><h2>Margin kasar (%)</h2>${lineChart(A12,A12.map(a=>a.rev?(a.rev-a.cost)/a.rev:0),v=>(v*100).toFixed(0)+'%','#0d8a73')}<p class="muted">Margin kasar = hasil tolak kos langsung (bahagian dan upah). Perbelanjaan operasi tetap belum dimasukkan.</p></div></div>
+  <div class="grid cg"><div class="card"><h2>Sasaran bulan ini</h2>${tgt?`<div class="row sp"><b style="font:800 26px var(--hd)">${rm0(thisM.rev)}</b><span class="muted">sasaran ${rm0(tgt)}</span></div><div class="prog" role="img" aria-label="Pencapaian sasaran"><i style="width:${Math.min(100,thisM.rev/tgt*100).toFixed(1)}%"></i><u style="left:${(pace*100).toFixed(1)}%"></u></div><p class="muted">${pc(thisM.rev/tgt)} daripada sasaran. Garis menegak ialah rentak sepatutnya pada hari ini (${pc(pace)} bulan). ${thisM.rev/tgt>=pace?'<b>Mendahului rentak.</b>':'<b>Di bawah rentak.</b>'}</p>`:'<p class="muted">Tiada sasaran ditetapkan.</p>'}
+   <h3 style="margin-top:12px">Pelanggan baharu lawan ulang</h3><div class="split" role="img" aria-label="Pelanggan baharu dan ulang"><i style="width:${(100-cur.repP*100).toFixed(1)}%;background:var(--tar)"></i><i style="width:${(cur.repP*100).toFixed(1)}%;background:var(--lane)"></i></div><div class="legend"><span><i style="background:var(--tar)"></i>Baharu ${pc(1-cur.repP)}</span><span><i style="background:var(--lane)"></i>Ulang ${pc(cur.repP)}</span></div></div>
+  <div class="card"><h2>Servis mengikut kategori</h2>${Object.entries(cur.svc).map(([k,v])=>`<div class="mixrow"><span>${SV[k].n.replace(' & penapis','').replace(' (visual)','')}</span><div class="split"><i style="width:${(v/svcT*100).toFixed(1)}%;background:var(--tar)"></i></div><b>${pc(v/svcT)}</b></div>`).join('')}<p class="muted">Kategori servis hanya dikira daripada data latar demo.</p></div>
+  <div class="card"><h2>Perlu tindakan</h2>${alerts.length?`<div class="todo">${alerts.map(([t,g,b])=>`<button data-act="go" data-id="${g}"><span>${esc(t)}</span><span class="pill info">${b}</span></button>`).join('')}</div>`:'<p class="muted">Tiada perkara mendesak.</p>'}</div></div>
+  <h2 class="sec">Operasi langsung: ${esc(scopeName())}</h2><div class="pipe">${PIPE.map(([k,t])=>{const l=S.bookings.filter(b=>inS(b.bid)&&b.st===k);return `<div><b>${l.length}</b><small>${t}</small></div>`}).join('')}</div>
+  ${netTable(ms,n)}
+  ${monthTable(A12)}
+  <details class="card" style="margin-top:12px"><summary>Definisi KPI dan sumber data</summary><ul class="sm"><li><b>Hasil</b>: jumlah invois servis selesai dalam tempoh.</li><li><b>Margin kasar</b>: hasil tolak kos langsung. Tidak termasuk gaji tetap, sewa dan pemasaran.</li><li><b>Pelanggan ulang</b>: pelanggan yang pernah dilayan sebelum ini.</li><li><b>Utilisasi bay</b>: servis selesai dibahagi kapasiti anggaran (bay × 26 hari × 7 servis sehari).</li><li><b>Tidak hadir</b>: tempahan yang tidak hadir dibahagi jumlah tempahan.</li><li><b>Sumber</b>: <span class="pill warn">demo</span> latar 15 bulan yang dijana untuk menunjukkan susun atur, ditambah rekod yang anda jana dalam demo ini. Tiada angka di sini daripada operasi sebenar. Sasaran ialah contoh.</li></ul></details>
+  <h2 class="sec">Lihat sebagai</h2><div class="roles">
+  <div class="card"><h3>Pelanggan</h3><p class="muted">Garaj, status servis, sebut harga untuk diluluskan, tempahan, pasport servis, ruangan insurans dan roadtax.</p><button class="btn" data-act="go" data-id="cust:utama">Buka app pelanggan</button></div>
+  <div class="card"><h3>Cawangan (BranchOS)</h3><p class="muted">Papan kerja bengkel, jadual bay, senarai pelanggan akan due, jualan dan staf bagi cawangan yang dipilih.</p><button class="btn" data-act="go" data-id="branch:papan">Buka papan kerja</button></div>
+  <div class="card"><h3>HQ</h3><p class="muted">Rakan insurans dan roadtax, WhatsApp peringatan, rekrutmen staf dan ringkasan operasi.</p><button class="btn" data-act="go" data-id="hq:ringkas">Buka HQ</button></div></div>
+  <h2 class="sec">Cuba aliran penuh (lebih kurang 5 minit)</h2><ol class="flow">
+  ${stp('cust','utama','Pelanggan: luluskan sebut harga','Aisyah ada sebut harga servis Myvi menunggu kelulusan.')}
+  ${stp('branch','papan','Cawangan: gerakkan kerja hingga siap','Buka kad kerja, lengkapkan semakan, isi odometer keluar, jana invois. Hasil dalam dashboard ini bertambah.')}
+  ${stp('cust','tempah','Pelanggan: tempah servis baharu','Pilih servis, hari dan slot. Slot dikira ikut bay bengkel.')}
+  ${stp('hq','wa','HQ: baris gilir WhatsApp','Tekan Simulasi +6 bulan di menu, kemudian semak siapa layak diingatkan.')}
+  ${stp('hq','rakan','HQ: rakan insurans dan roadtax','Pelanggan memohon sebut harga rakan selepas memberi persetujuan.')}
+  ${stp('hq','rekrut','HQ: rekrutmen staf','Buka jawatan dengan syarat wajib, lihat calon bersama skor padanan.')}</ol>
+  <h2 class="sec">Komen anda</h2><div class="card">${S.fb.length?S.fb.slice().reverse().map(c=>`<div class="cm"><div class="row sp"><b>${esc(c.name||'Tanpa nama')}</b><span class="pill ${c.sent?'ok':'warn'}">${c.sent?'Sampai ke pemilik':'Simpan setempat'}</span></div><div>${esc(c.body)}</div><div class="muted">${dtfmt(c.ts)} · ${esc(c.ctx)}</div></div>`).join(''):'<p class="muted">Belum ada komen. Tekan butang Komen di mana-mana skrin.</p>'}<button class="btn alt" data-act="fbOpen" style="margin-top:8px">Tulis komen</button></div>`}
+function netTable(ms,n){const pm=monthsBack(1)[0],fr=dayFrac();
+  return `<h2 class="sec">Rangkaian cawangan <span class="muted" style="font:500 13px var(--bd)">(${n===1?'bulan ini':n+' bulan terakhir'})</span></h2><div class="card scroll net"><table><thead><tr><th>Cawangan</th><th>Status</th><th class="num">Hasil</th><th class="num">Margin</th><th class="num">Servis</th><th class="num">Purata invois</th><th class="num">Utilisasi</th><th class="num">Sasaran bulan ini</th><th></th></tr></thead><tbody>${S.branches.filter(b=>inS(b.id)).map(b=>{
+   const k=kpi(aggM(monthsBack(n),i=>i===b.id)),mm=aggM([pm],i=>i===b.id)[0],t=S.targets[b.id],u=b.st==='aktif'?k.jobs/Math.max(1,b.bays*26*7*n):null;
+   return `<tr><td><b>${esc(b.name)}</b><div class="muted">${esc(b.city)}, ${esc(b.state)}</div></td><td><span class="pill ${b.st==='aktif'?'ok':'warn'}">${b.st==='aktif'?'Aktif':'Onboarding'}</span></td><td class="num">${k.jobs?rm0(k.rev):'-'}</td><td class="num">${k.jobs?pc(k.gmp):'-'}</td><td class="num">${k.jobs||'-'}</td><td class="num">${k.jobs?rm0(k.avg):'-'}</td><td class="num">${u==null?'-':pc(u)}</td><td class="num">${t?`${pc(mm.rev/t)} <span class="pill ${mm.rev/t>=fr?'ok':'warn'}">${mm.rev/t>=fr?'ikut rentak':'di bawah'}</span>`:'-'}</td><td><button class="btn sm ghost" data-act="goBranch" data-id="${b.id}">Buka</button></td></tr>`}).join('')}</tbody></table></div>`}
+function monthTable(A){const rows=A.slice().reverse();
+  return `<div class="row sp" style="margin:20px 2px 10px"><h2 style="margin:0">Jadual bulanan</h2><button class="btn sm ghost" data-act="csv">Muat turun CSV</button></div><div class="card scroll net"><table><thead><tr><th>Bulan</th><th class="num">Hasil</th><th class="num">Kos langsung</th><th class="num">Margin kasar</th><th class="num">Margin %</th><th class="num">Servis</th><th class="num">Purata invois</th><th class="num">Pelanggan ulang</th><th class="num">Perubahan hasil</th></tr></thead><tbody>${rows.map((a,i)=>{const p=rows[i+1],ch=p&&p.rev?(a.rev-p.rev)/p.rev:null,k=kpi([a]);
+   return `<tr><td><b>${mLabel(a.m)}</b>${i===0?' <span class="pill">setakat hari ini</span>':''}</td><td class="num">${rm0(a.rev)}</td><td class="num">${rm0(a.cost)}</td><td class="num">${rm0(k.gm)}</td><td class="num">${pc(k.gmp,1)}</td><td class="num">${a.jobs}</td><td class="num">${rm0(k.avg)}</td><td class="num">${pc(k.repP)}</td><td class="num">${ch==null||i===0?'-':`<span class="dl ${ch>=0?'up':'dn'}">${ch>0?'+':''}${(ch*100).toFixed(1)}%</span>`}</td></tr>`}).join('')}</tbody></table></div>`}
+function csvMonths(){const A=aggM(monthsBack(12),inS);const L=[['Bulan','Hasil (RM)','Kos langsung (RM)','Margin kasar (RM)','Servis','Sumber']];
+  A.forEach(a=>L.push([a.m,a.rev.toFixed(2),a.cost.toFixed(2),(a.rev-a.cost).toFixed(2),a.jobs,'DEMO']));
+  const blob=new Blob([L.map(r=>r.join(',')).join('\n')],{type:'text/csv'}),u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download='carrepublic-bulanan-demo.csv';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),1000);setMsg('ok','CSV dimuat turun (data demo).')}
+
 /* ---------- WhatsApp & rekrutmen ---------- */
 const TAv=(k,label,val,rows)=>`<label>${label}<textarea id="${esc(k)}" data-ui="${esc(k)}" rows="${rows||3}">${esc(ui.f[k]!=null?ui.f[k]:val)}</textarea></label>`;
 const TA=(k,label,rows,ph)=>`<label>${label}<textarea id="${esc(k)}" data-ui="${esc(k)}" rows="${rows||3}" placeholder="${esc(ph||'')}">${esc(ui.f[k]||'')}</textarea></label>`;
@@ -719,7 +815,7 @@ const A={
  role:e=>{ui.role=e.v;ui.menu=false;window.scrollTo(0,0)},
  ct:e=>{ui.ct=e.v;ui.role='cust';window.scrollTo(0,0)},bt:e=>{ui.bt=e.v;ui.role='branch';window.scrollTo(0,0)},ht:e=>{ui.ht=e.v;ui.role='hq';window.scrollTo(0,0)},
  go:e=>{const [r,s]=e.id.split(':');ui.role=r;if(SUBK[r])ui[SUBK[r]]=s;window.scrollTo(0,0)},
- menu:()=>{ui.menu=!ui.menu},
+ menu:()=>{ui.menu=!ui.menu},per:e=>{ui.per=e.v},csv:csvMonths,
  goBranch:e=>{ui.branch=e.id;ui.role='branch';ui.bt='papan';ui.sel=null;window.scrollTo(0,0)},
  skip:()=>{S.skip+=182;ui.menu=false;setMsg('ok','Masa disimulasi maju 6 bulan (demo). Peringatan dikira semula.');save()},
  reset:()=>{S=seed();ui.f={le:'master@carrepublic.demo',lp:''};ui.slot=null;ui.sel=null;ui.menu=false;store.set(JSON.stringify(S));setMsg('ok','Data demo disetkan semula.')},
