@@ -402,7 +402,7 @@ function seedTasks(){const D=n=>ymd(addDays(new Date(),n)),T=n=>Date.now()-n*360
    {id:'t3',title:'Hantar gambar bay dan papan harga untuk direktori',body:'',to:'ALL',pri:'biasa',cat:'Operasi',due:D(-1),ts:T(80),p:{KMN:{st:'siap',ts:T(30),note:'Gambar dihantar melalui WhatsApp HQ.'}},log:[{ts:T(80),b:null,ev:'Arahan dihantar'},{ts:T(30),b:'KMN',ev:'Ditanda siap: Gambar dihantar melalui WhatsApp HQ.'}]},
    {id:'t4',title:'Semak stok minyak enjin dan penapis',body:'',to:'ALL',pri:'biasa',cat:'Kewangan',due:D(1),ts:T(100),p:{KMN:{st:'siap',ts:T(60)},SHA:{st:'siap',ts:T(50)}},log:[{ts:T(100),b:null,ev:'Arahan dihantar'},{ts:T(60),b:'KMN',ev:'Ditanda siap'},{ts:T(50),b:'SHA',ev:'Ditanda siap'}]}];}
 function seed(){
-  const t=new Date(),D=n=>ymd(addDays(t,n)),hr=t.getHours()+t.getMinutes()/60,OFF=(hr>=10&&hr<16)?0:(t.getTime()-(()=>{const d=new Date(t);d.setHours(13,0,0,0);return d.getTime()})()),T=(h,m)=>{const d=new Date(t);d.setHours(h,m,0,0);return d.getTime()+OFF};
+  const t=new Date(),D=n=>ymd(addDays(t,n)),OFF=t.getTime()-(()=>{const d=new Date(t);d.setHours(9,30,0,0);return d.getTime()})(),T=(h,m)=>{const d=new Date(t);d.setHours(h,m,0,0);return d.getTime()+OFF};
   const veh=(id,own,plate,make,model,year,km,col,rt,ins)=>({id,own,plate,make,model,year,km,ik:10000,im:6,rt:D(rt),ins:D(ins),col});
   const vehicles=[
     veh('v1','me','DEMO 1234','Perodua','Myvi',2019,48200,'#c4cad0',45,20),
