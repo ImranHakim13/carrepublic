@@ -607,6 +607,7 @@ function viewLogin(){return `<div class="lg"><section class="lg-l"><div class="l
 <label>E-mel<input id="le" data-ui="le" autocomplete="username" value="${esc(ui.f.le||'')}"></label>
 <label>Kata laluan<input id="lp" data-ui="lp" type="password" autocomplete="current-password" value="${esc(ui.f.lp||'')}"></label>
 <button class="btn alt full" type="submit">Masuk</button>
+${SB_URL.indexOf('__')<0?`<p style="margin-top:10px"><button type="button" class="btn ghost full" data-act="staffLogin">Log masuk staf (data sebenar)</button></p><p class="muted"><a href="#tempah">Borang tempahan pelanggan</a></p>`:''}
 <p class="muted" style="margin-top:14px">Demo sahaja. Semua nama, plat dan harga ialah contoh. Data tersimpan dalam pelayar anda dan tidak dikongsi.</p></form></section></div>${msgBox()}`}
 
 function ctrls(){return `<button class="btn" data-act="fbOpen">${I('chat')}Beri komen</button><button class="btn" data-act="skip">${I('gear')}Simulasi +6 bulan${S.skip?' ('+Math.round(S.skip/30)+' bln)':''}</button><button class="btn" data-act="reset">${I('wrench')}Set semula data demo</button><button class="btn out" data-act="logout">Log keluar</button>`}
@@ -1123,6 +1124,251 @@ function posList(bid){const l=S.sales.filter(x=>x.bid===bid).sort((a,b)=>b.ts-a.
   <div class="card"><h3 style="margin-top:0">Tutup hari mengikut kaedah bayaran</h3>${Object.keys(by2).length?Object.entries(by2).map(([k,v])=>`<div class="row sp" style="padding:4px 0"><span>${PM[k]}</span><b>${rm(r2(v))}</b></div>`).join(''):'<p class="muted">Belum ada bayaran hari ini.</p>'}<p class="muted sm" style="margin:6px 0 0">Gunakan untuk padankan tunai dalam laci dan pindahan masuk akaun.</p></div>
   <div class="card scroll"><table><thead><tr><th>No.</th><th>Plat</th><th>Servis</th><th>Status</th><th class="num">Jumlah</th><th></th></tr></thead><tbody>${l.map(x=>`<tr><td>${esc(x.rcp||x.inv||'Draf')}</td><td>${esc(x.cust.plate)}</td><td>${esc(PKG[x.pkg]?PKG[x.pkg].n:'')}</td><td><span class="pill ${x.st==='dibayar'?'ok':x.st==='batal'?'bad':x.st==='invois'?'warn':'info'}">${{dibayar:'Dibayar',invois:'Belum bayar',draf:'Draf',batal:'Batal'}[x.st]}</span></td><td class="num">${rm(saleTotal(x))}</td><td><button class="btn sm ghost" data-act="posOpen" data-id="${x.id}">Buka</button></td></tr>`).join('')||'<tr><td colspan="6" class="muted">Belum ada jualan.</td></tr>'}</tbody></table></div>`}
 
+/* ---------- MOD STAF (data sebenar, Supabase) + tempahan awam ---------- */
+const SM=(()=>{
+const ST_KEY='careos-staff',REAL=SB_URL.indexOf('__')<0;
+const st={tok:null,rt:null,exp:0,uid:null,email:null,roles:[],branches:[],branch:null,tab:'tempahan',f:{},msg:null,busy:false,
+  board:[],team:[],walk:[],svcs:[],slots:null,newB:false,newW:false,mode:'in',sel:null,pub:{f:{},slots:null,branches:[],svcs:[],done:null,busy:false,loaded:false},last:0,wq:''};
+const BM={requested:'Baharu (web)',confirmed:'Disahkan',arrived:'Pelanggan tiba',in_inspection:'Pemeriksaan',awaiting_approval:'Tunggu kelulusan',in_service:'Dalam servis',quality_check:'Semakan kualiti',ready_for_collection:'Sedia diambil',completed:'Selesai',cancelled:'Dibatalkan',no_show:'Tidak hadir'};
+const NEXT={requested:['confirmed','cancelled'],confirmed:['arrived','no_show','cancelled'],arrived:['in_inspection','cancelled'],in_inspection:['awaiting_approval','in_service'],awaiting_approval:['in_service','cancelled'],in_service:['quality_check'],quality_check:['ready_for_collection','in_service'],ready_for_collection:['completed']};
+const ACT={confirmed:'Sahkan',arrived:'Tandakan tiba',in_inspection:'Mula periksa',awaiting_approval:'Tunggu kelulusan',in_service:'Mula servis',quality_check:'Semak kualiti',ready_for_collection:'Sedia diambil',completed:'Selesai',cancelled:'Batal',no_show:'Tidak hadir'};
+const PILL={requested:'info',confirmed:'ok',arrived:'ok',in_inspection:'warn',awaiting_approval:'warn',in_service:'warn',quality_check:'warn',ready_for_collection:'ok',completed:'',cancelled:'bad',no_show:'bad'};
+const ROLE={super_admin:'Pemilik',hq_ops:'Operasi HQ',hq_marketing:'Pemasaran HQ',hq_finance:'Kewangan HQ',regional_manager:'Pengurus wilayah',branch_manager:'Pengurus cawangan',service_advisor:'Penasihat servis',technician:'Foreman',cashier:'Juruwang'};
+const HQ=['super_admin','hq_ops','hq_marketing','hq_finance','regional_manager'];
+const hasR=a=>st.roles.some(r=>a.includes(r.role));
+const isFore=()=>st.roles.length>0&&st.roles.every(r=>r.role==='technician');
+const canMgr=()=>hasR(['super_admin','hq_ops','branch_manager','regional_manager']);
+const canTeam=()=>hasR(['super_admin','hq_ops','branch_manager','regional_manager','service_advisor']);
+const canBook=()=>hasR(['super_admin','hq_ops','branch_manager','regional_manager','service_advisor','cashier']);
+const myBranch=()=>st.branches.find(b=>b.id===st.branch);
+const tz=d=>new Date(d).toLocaleString('en-MY',{timeZone:'Asia/Kuala_Lumpur',day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit',hour12:true});
+const tm=d=>new Date(d).toLocaleTimeString('en-MY',{timeZone:'Asia/Kuala_Lumpur',hour:'2-digit',minute:'2-digit',hour12:true});
+const myDay=(o=0)=>{const d=new Date(Date.now()+8*3600e3+o*864e5);return d.toISOString().slice(0,10)};
+const rm=n=>n==null?'Belum ditetapkan':'RM '+Number(n).toFixed(2);
+const tag=(k,t)=>`<span class="pill ${k}">${esc(t)}</span>`;
+function say(k,t){st.msg={k,t};paint(true);clearTimeout(say.t);say.t=setTimeout(()=>{st.msg=null;paint(true)},5000)}
+const pubOn=()=>location.hash==='#tempah';
+const staffOn=()=>!!st.tok||st.mode==='login'||location.hash==='#staf';
+const on=()=>REAL&&(pubOn()||staffOn());
+
+/* ---- rangkaian ---- */
+const store={get(){try{return JSON.parse(localStorage.getItem(ST_KEY)||'null')}catch(e){return null}},set(v){try{v?localStorage.setItem(ST_KEY,JSON.stringify(v)):localStorage.removeItem(ST_KEY)}catch(e){}}};
+async function raw(path,o={}){const h={apikey:SB_KEY,'Content-Type':'application/json'};
+  h.Authorization='Bearer '+((o.auth!==false&&st.tok)||SB_KEY);if(o.prefer)h.Prefer=o.prefer;
+  const r=await fetch(SB_URL+path,{method:o.method||'GET',headers:h,body:o.body?JSON.stringify(o.body):undefined});
+  let j=null;try{j=await r.json()}catch(e){}return {ok:r.ok,status:r.status,j}}
+async function api(path,o={}){let r=await raw(path,o);
+  if(r.status===401&&st.rt&&o.auth!==false&&await refresh())r=await raw(path,o);
+  if(!r.ok){const m=(r.j&&(r.j.message||r.j.msg||r.j.error_description||r.j.hint))||'Ralat '+r.status;const e=new Error(m);e.status=r.status;throw e}
+  return r.j}
+const rpc=(n,a)=>api('/rest/v1/rpc/'+n,{method:'POST',body:a||{}});
+async function refresh(){try{const r=await raw('/auth/v1/token?grant_type=refresh_token',{method:'POST',auth:false,body:{refresh_token:st.rt}});
+  if(!r.ok)return false;setSess(r.j);return true}catch(e){return false}}
+function setSess(j){st.tok=j.access_token;st.rt=j.refresh_token;st.exp=Date.now()+(j.expires_in||3600)*1000;st.uid=j.user&&j.user.id||st.uid;st.email=j.user&&j.user.email||st.email;
+  store.set({tok:st.tok,rt:st.rt,exp:st.exp,uid:st.uid,email:st.email})}
+const errBM=m=>/Invalid login/i.test(m)?'E-mel atau kata laluan salah.':/not confirmed/i.test(m)?'E-mel belum disahkan. Buka e-mel pengesahan dahulu.':/already registered/i.test(m)?'E-mel ini sudah berdaftar. Guna Log masuk.':/least 6|weak|short/i.test(m)?'Kata laluan terlalu lemah (minimum 8 aksara).':m;
+
+/* ---- sesi ---- */
+async function boot(){
+  if(pubOn()){loadPub();return}
+  const s=store.get();if(s&&s.rt){Object.assign(st,{tok:s.tok,rt:s.rt,exp:s.exp,uid:s.uid,email:s.email});
+    if(Date.now()>st.exp-60000&&!(await refresh())){signOutLocal();return}
+    await loadAll()}
+  paint(true)}
+function signOutLocal(){st.tok=st.rt=null;st.roles=[];store.set(null);clearInterval(st.poll)}
+async function loadAll(){
+  try{st.busy=true;
+    st.roles=await api('/rest/v1/staff_roles?select=role,branch_id,active,full_name&user_id=eq.'+st.uid+'&active=eq.true');
+    st.branches=await api('/rest/v1/branches?select=id,code,name,city,open_time,close_time,bays&order=name');
+    st.branches=st.branches.filter(b=>b.code.indexOf('DEMO')!==0);
+    if(!st.roles.length){st.busy=false;return}
+    const mine=st.roles.map(r=>r.branch_id).filter(Boolean);
+    if(!st.branch||!st.branches.find(b=>b.id===st.branch))st.branch=mine[0]||(st.branches[0]&&st.branches[0].id);
+    if(isFore())st.tab='papan';
+    await loadBranch();clearInterval(st.poll);st.poll=setInterval(()=>{if(st.tok&&!document.hidden)loadBranch(true)},10000)
+  }catch(e){say('err',errBM(e.message))}finally{st.busy=false}}
+async function loadBranch(quiet){if(!st.branch)return;
+  try{const from=myDay(-1),to=myDay(14);
+    const [b,sv]=await Promise.all([rpc('staff_board',{p_branch:st.branch,p_from:from,p_to:to}),
+      api('/rest/v1/branch_services?select=service_id,price_myr,price_verified,duration_min,active,services(name,category)&branch_id=eq.'+st.branch+'&order=service_id')]);
+    st.board=b||[];st.svcs=sv||[];
+    if(canTeam()){try{st.team=await rpc('staff_team',{p_branch:st.branch})}catch(e){}}
+    st.last=Date.now();paint(quiet)}catch(e){if(!quiet)say('err',errBM(e.message))}}
+
+/* ---- auth ---- */
+async function signIn(){const e=(st.f.em||'').trim().toLowerCase(),p=st.f.pw||'';if(!e||!p)return say('err','Isi e-mel dan kata laluan.');
+  try{st.busy=true;paint();const r=await raw('/auth/v1/token?grant_type=password',{method:'POST',auth:false,body:{email:e,password:p}});
+    if(!r.ok)throw new Error((r.j&&(r.j.msg||r.j.error_description))||'Gagal log masuk');setSess(r.j);st.f.pw='';await loadAll();
+    if(!st.roles.length)say('err','Akaun ini belum dijemput sebagai staf. Minta pemilik jemput e-mel anda.')}
+  catch(x){say('err',errBM(x.message))}finally{st.busy=false;paint()}}
+async function signUp(){const e=(st.f.em||'').trim().toLowerCase(),p=st.f.pw||'',n=(st.f.nm||'').trim();
+  if(!n||!e)return say('err','Isi nama dan e-mel.');if(p.length<8)return say('err','Kata laluan minimum 8 aksara.');
+  try{st.busy=true;paint();const r=await raw('/auth/v1/signup',{method:'POST',auth:false,body:{email:e,password:p,data:{account_type:'staff',full_name:n}}});
+    if(!r.ok)throw new Error((r.j&&(r.j.msg||r.j.error_description||r.j.message))||'Gagal daftar');
+    st.mode='in';st.f.pw='';say('ok','Akaun dicipta. Semak e-mel anda dan klik pautan pengesahan, kemudian Log masuk. Anda mesti dijemput oleh pemilik dahulu.')}
+  catch(x){say('err',errBM(x.message))}finally{st.busy=false;paint()}}
+async function signOut(){try{await raw('/auth/v1/logout',{method:'POST'})}catch(e){}signOutLocal();st.mode='in';st.board=[];paint()}
+
+/* ---- tindakan data ---- */
+async function doRpc(name,args,okMsg){try{st.busy=true;paint(true);const r=await rpc(name,args);if(okMsg)say('ok',okMsg);await loadBranch(true);return r}
+  catch(e){say('err',errBM(e.message));return null}finally{st.busy=false;paint(true)}}
+const advance=(id,s)=>doRpc('staff_advance_booking',{p_booking:id,p_status:s},'Status dikemas kini: '+BM[s]);
+const assign=(id,u)=>doRpc('staff_assign_pic',{p_booking:id,p_user:u||null},'PIC dikemas kini.');
+async function loadSlots(){const f=st.f;if(!f.nb_svc||!f.nb_date)return;
+  try{st.slots=await rpc('available_slots',{p_branch:st.branch,p_service:f.nb_svc,p_date:f.nb_date})}catch(e){st.slots=[]}paint()}
+async function createBooking(){const f=st.f,w=f.nb_w,src=f.nb_src||'walkin';
+  if(!f.nb_svc||!f.nb_slot)return say('err','Pilih servis dan slot masa.');
+  if(!w&&(!(f.nb_name||'').trim()||!(f.nb_plate||'').trim()))return say('err','Isi nama dan no. plat, atau pilih pelanggan sedia ada.');
+  const r=await doRpc('staff_create_booking',{p_branch:st.branch,p_service:f.nb_svc,p_start:f.nb_slot,p_source:src,p_walkin:w||null,p_name:f.nb_name||null,p_phone:f.nb_phone||null,p_email:f.nb_email||null,p_plate:f.nb_plate||null,p_make:f.nb_make||null,p_model:f.nb_model||null,p_mileage:f.nb_km?+f.nb_km:null,p_notes:f.nb_notes||null,p_pic:f.nb_pic||null},'Tempahan dimasukkan.');
+  if(r){st.newB=false;['nb_svc','nb_slot','nb_w','nb_name','nb_phone','nb_email','nb_plate','nb_make','nb_model','nb_km','nb_notes','nb_pic'].forEach(k=>delete st.f[k]);st.slots=null;paint()}}
+async function searchWalk(){try{st.walk=await rpc('staff_walkins',{p_branch:st.branch,p_q:st.wq||null})||[]}catch(e){say('err',errBM(e.message))}paint(true)}
+async function addWalk(){const f=st.f;if(!(f.w_name||'').trim())return say('err','Nama pelanggan wajib.');
+  const r=await doRpc('staff_add_walkin',{p_branch:st.branch,p_name:f.w_name,p_phone:f.w_phone||null,p_email:f.w_email||null,p_plate:f.w_plate||null,p_make:f.w_make||null,p_model:f.w_model||null,p_year:f.w_year?+f.w_year:null,p_mileage:f.w_km?+f.w_km:null,p_notes:f.w_notes||null},'Pelanggan disimpan.');
+  if(r){st.newW=false;['w_name','w_phone','w_email','w_plate','w_make','w_model','w_year','w_km','w_notes'].forEach(k=>delete st.f[k]);searchWalk()}}
+async function invite(){const f=st.f;if(!(f.iv_email||'').trim()||!(f.iv_name||'').trim())return say('err','Isi nama dan e-mel.');
+  const r=await doRpc('staff_invite',{p_email:f.iv_email.trim(),p_name:f.iv_name.trim(),p_role:f.iv_role||'technician',p_branch:st.branch},'Jemputan dicipta. Minta mereka daftar akaun dengan e-mel ini.');
+  if(r){delete st.f.iv_email;delete st.f.iv_name;paint()}}
+async function savePrice(sid){const v=st.f['pr:'+sid];if(v===undefined||v==='')return say('err','Isi harga.');const n=+v;if(!(n>=0))return say('err','Harga tidak sah.');
+  try{await api('/rest/v1/branch_services?branch_id=eq.'+st.branch+'&service_id=eq.'+sid,{method:'PATCH',prefer:'return=minimal',body:{price_myr:n,price_verified:true}});say('ok','Harga disimpan.');delete st.f['pr:'+sid];await loadBranch(true)}catch(e){say('err',errBM(e.message))}}
+
+/* ---- awam ---- */
+async function loadPub(){const p=st.pub;if(p.loaded)return;
+  try{const [b,s]=await Promise.all([api('/rest/v1/branches?select=id,code,name,city,address,open_time,close_time&origin=eq.actual&order=name',{auth:false}),
+    api('/rest/v1/branch_services?select=branch_id,service_id,price_myr,duration_min,services(name)&active=eq.true',{auth:false})]);
+    p.branches=b;p.svcs=s;p.loaded=true;if(b.length===1)p.f.br=b[0].id}catch(e){p.err='Tidak dapat memuatkan cawangan. Cuba lagi sebentar.'}paint()}
+async function pubSlots(){const f=st.pub.f;if(!f.br||!f.sv||!f.dt)return;
+  try{st.pub.slots=await api('/rest/v1/rpc/available_slots',{method:'POST',auth:false,body:{p_branch:f.br,p_service:f.sv,p_date:f.dt}})}catch(e){st.pub.slots=[]}paint()}
+async function pubSubmit(){const p=st.pub,f=p.f;
+  if(!f.br||!f.sv||!f.slot)return pubErr('Pilih cawangan, servis dan slot masa.');
+  if(!(f.nm||'').trim()||!(f.ph||'').trim()||!(f.pl||'').trim())return pubErr('Nama, no. telefon dan no. plat wajib.');
+  try{p.busy=true;p.err=null;paint();const ref=await api('/rest/v1/rpc/public_request_booking',{method:'POST',auth:false,body:{p_branch:f.br,p_service:f.sv,p_start:f.slot,p_name:f.nm,p_phone:f.ph,p_email:f.em||null,p_plate:f.pl,p_make:f.mk||null,p_model:f.md||null,p_notes:f.nt||null,p_hp:f.hp||null}});
+    p.done={ref,when:f.slot,br:p.branches.find(b=>b.id===f.br),sv:p.svcs.find(s=>s.service_id===f.sv&&s.branch_id===f.br)}}
+  catch(e){p.err=errBM(e.message);p.slots=null;p.f.slot=null}finally{p.busy=false;paint()}}
+function pubErr(t){st.pub.err=t;paint()}
+
+/* ---- paparan ---- */
+const fld=(k,l,o={})=>`<label>${l}<input data-sf="${k}" value="${esc(st.f[k]||'')}" ${o.type?'type="'+o.type+'"':''} ${o.ph?'placeholder="'+o.ph+'"':''} ${o.ac?'autocomplete="'+o.ac+'"':''} ${o.inp?'inputmode="'+o.inp+'"':''}></label>`;
+const msgB=()=>st.msg?`<div class="toast ${st.msg.k}" role="status" style="position:fixed;left:50%;transform:translateX(-50%);bottom:84px;z-index:50;max-width:92vw">${esc(st.msg.t)}</div>`:'';
+function viewLoginS(){const up=st.mode==='up';
+  return `<div class="lg"><section class="lg-l"><div class="logo"><i></i><b>CARREPUBLIC</b><small>CareOS</small></div><h1>Log masuk staf.</h1>
+<p>Untuk pemilik, pengurus cawangan, penasihat servis dan foreman. Anda perlu dijemput dahulu oleh pemilik. Data di sini sebenar, bukan demo.</p></section>
+<section class="lg-r"><form id="sf-login"><h1 style="font-size:26px">${up?'Daftar akaun staf':'Log masuk'}</h1>
+${up?fld('nm','Nama penuh',{ac:'name'}):''}${fld('em','E-mel',{type:'email',ac:'username'})}
+<label>Kata laluan<input data-sf="pw" type="password" autocomplete="${up?'new-password':'current-password'}" value="${esc(st.f.pw||'')}"></label>
+<button class="btn alt full" type="submit" ${st.busy?'disabled':''}>${st.busy?'Sila tunggu...':up?'Daftar':'Masuk'}</button>
+<p style="margin-top:14px"><button type="button" class="btn ghost sm" data-sm="mode" data-v="${up?'in':'up'}">${up?'Sudah ada akaun? Log masuk':'Staf baharu? Daftar'}</button></p>
+<p class="muted"><a href="#" data-sm="demo">Kembali ke demo</a> &nbsp;·&nbsp; <a href="#tempah">Borang tempahan pelanggan</a></p></form></section></div>${msgB()}`}
+function noRole(){return `<div class="main" style="max-width:560px;margin:60px auto;padding:16px"><div class="card"><h2>Akaun belum diaktifkan</h2><p>${esc(st.email||'')} belum dijemput sebagai staf, atau e-mel belum disahkan. Minta pemilik jemput e-mel ini di tab Pasukan, dan pastikan anda sudah klik pautan pengesahan dalam e-mel.</p><div class="row"><button class="btn" data-sm="reload">Semak semula</button><button class="btn ghost" data-sm="out">Log keluar</button></div></div></div>${msgB()}`}
+function tabs(){const t=[['tempahan','Tempahan'],['papan','Papan kerja'],['pelanggan','Pelanggan'],['produk','Produk & harga'],['pasukan','Pasukan']];
+  return t.filter(([k])=>isFore()?k==='papan':k==='pasukan'?canTeam():k==='tempahan'||k==='pelanggan'?true:true)}
+function viewStaff(){
+  if(!st.roles.length)return st.busy?'<div class="main"><p style="padding:40px">Memuatkan...</p></div>':noRole();
+  const br=myBranch(),role=ROLE[st.roles[0].role]||st.roles[0].role,tb=tabs();
+  const bsel=st.branches.length>1&&hasR(HQ)?`<select data-sm-sel="branch" aria-label="Cawangan">${st.branches.map(b=>`<option value="${b.id}" ${b.id===st.branch?'selected':''}>${esc(b.name)}</option>`).join('')}</select>`:`<b>${esc(br?br.name:'')}</b>`;
+  const body=st.tab==='tempahan'?vBook():st.tab==='papan'?vBoard():st.tab==='pelanggan'?vWalk():st.tab==='produk'?vProd():vTeam();
+  return `<div class="shell"><aside class="side"><div class="logo"><i></i><b>CARREPUBLIC</b><small>CareOS</small></div><nav>${tb.map(([k,t])=>`<button class="nb" aria-current="${st.tab===k}" data-sm="tab" data-v="${k}">${t}</button>`).join('')}</nav>
+<div class="sidef"><div class="env">${esc(st.email||'')}<br>${esc(role)}</div><button class="btn out" data-sm="out">Log keluar</button></div></aside>
+<header class="mtop"><div class="row1"><span class="logo2">CARREPUBLIC<small>CareOS</small></span><button class="btn sm" data-sm="out">Keluar</button></div></header>
+<main class="main" id="main"><div class="row sp" style="margin-bottom:10px"><div>${bsel}<div class="muted">${esc(role)} · ${esc(st.email||'')} · kemas kini ${st.last?tm(st.last):'-'}</div></div><button class="btn ghost sm" data-sm="reload">Muat semula</button></div>${body}</main>
+<nav class="bnav">${tb.map(([k,t])=>`<button aria-current="${st.tab===k}" data-sm="tab" data-v="${k}">${t.split(' ')[0]}</button>`).join('')}</nav></div>${msgB()}`}
+
+function picSel(id,cur){const techs=st.team.filter(t=>t.role==='technician'&&t.user_id&&t.active);
+  return `<select data-sm-sel="pic" data-id="${id}" aria-label="PIC foreman"><option value="">Tiada PIC</option>${techs.map(t=>`<option value="${t.user_id}" ${t.user_id===cur?'selected':''}>${esc(t.name||t.email)}</option>`).join('')}</select>`}
+function bCard(b,full){const nx=(NEXT[b.status]||[]);const fore=isFore();
+  return `<div class="card" data-id="${b.id}"><div class="row sp"><b>${tm(b.slot_start)} · ${esc(b.service)}</b>${tag(PILL[b.status],BM[b.status]||b.status)}</div>
+<div>${esc(b.customer||'-')} · <b>${esc(b.plate||'-')}</b> ${esc(b.car||'')}${b.src==='web'?' '+tag('info','web'):''}</div>
+${!fore&&b.phone?`<div class="muted"><a href="tel:${esc(b.phone)}">${esc(b.phone)}</a>${b.email?' · '+esc(b.email):''}</div>`:''}
+${b.notes?`<div class="muted">Nota pelanggan: ${esc(b.notes)}</div>`:''}
+<div class="muted">Rujukan ${esc(b.ref)} · ${tz(b.slot_start)}</div>
+${full&&!fore&&canBook()&&!['completed','cancelled','no_show'].includes(b.status)?`<label>PIC foreman${picSel(b.id,b.pic)}</label>`:`<div class="muted">PIC: ${esc(b.pic_name||'Belum ditugaskan')}</div>`}
+<label>Nota bengkel<textarea data-sf="sn:${b.id}" rows="2" placeholder="Catatan dalaman">${esc(st.f['sn:'+b.id]!==undefined?st.f['sn:'+b.id]:(b.staff_notes||''))}</textarea></label>
+<div class="row">${nx.map((s,i)=>`<button class="btn ${i?(s==='cancelled'||s==='no_show'?'bad':'ghost'):''} sm" data-sm="adv" data-id="${b.id}" data-v="${s}" ${st.busy?'disabled':''}>${ACT[s]}</button>`).join('')}<button class="btn alt sm" data-sm="note" data-id="${b.id}">Simpan nota</button></div></div>`}
+function vBook(){const nw=st.board.filter(b=>b.status==='requested');
+  const rest=st.board.filter(b=>b.status!=='requested'&&b.slot_start>=new Date(Date.now()-864e5).toISOString()&&!['cancelled','no_show'].includes(b.status));
+  const grp={};rest.forEach(b=>{const d=new Date(b.slot_start).toLocaleDateString('en-MY',{timeZone:'Asia/Kuala_Lumpur',weekday:'long',day:'numeric',month:'short'});(grp[d]=grp[d]||[]).push(b)});
+  return `<div class="row sp"><h2>Tempahan</h2>${canBook()?`<button class="btn" data-sm="newB">${st.newB?'Tutup':'+ Tempahan baharu'}</button>`:''}</div>${st.newB?fNew():''}
+${nw.length?`<h3>Baharu dari web (${nw.length})</h3>${nw.map(b=>bCard(b,true)).join('')}`:'<p class="muted">Tiada tempahan web baharu.</p>'}
+${Object.keys(grp).map(d=>`<h3>${d}</h3>${grp[d].map(b=>bCard(b,true)).join('')}`).join('')||'<p class="muted">Tiada tempahan lain.</p>'}`}
+function fNew(){const f=st.f,sv=st.svcs.filter(s=>s.active);
+  return `<div class="card"><h3>Tempahan baharu</h3><label>Servis<select data-sf="nb_svc" data-sm-chg="slots"><option value="">Pilih</option>${sv.map(s=>`<option value="${s.service_id}" ${f.nb_svc===s.service_id?'selected':''}>${esc(s.services.name)} ${s.price_myr!=null?'· RM'+s.price_myr:''}</option>`).join('')}</select></label>
+<label>Tarikh<input type="date" data-sf="nb_date" data-sm-chg="slots" value="${esc(f.nb_date||myDay())}" min="${myDay()}"></label>
+${st.slots===null?'<p class="muted">Pilih servis dan tarikh untuk lihat slot.</p>':st.slots.length?`<div class="row">${st.slots.map(s=>`<button type="button" class="btn sm ${f.nb_slot===s.slot_start?'':'ghost'}" data-sm="slot" data-v="${s.slot_start}">${tm(s.slot_start)}</button>`).join('')}</div>`:'<p class="muted">Tiada slot kosong pada hari itu.</p>'}
+<label>Sumber<select data-sf="nb_src"><option value="walkin">Datang sendiri</option><option value="phone" ${f.nb_src==='phone'?'selected':''}>Telefon</option><option value="whatsapp" ${f.nb_src==='whatsapp'?'selected':''}>WhatsApp</option></select></label>
+<label>Pelanggan sedia ada<select data-sf="nb_w" data-sm-chg="paint"><option value="">Pelanggan baharu</option>${st.walk.map(w=>`<option value="${w.id}" ${f.nb_w===w.id?'selected':''}>${esc(w.name)} ${esc(w.plate||'')}</option>`).join('')}</select></label>
+<button type="button" class="btn ghost sm" data-sm="loadWalk">Muat senarai pelanggan</button>
+${f.nb_w?'':fld('nb_name','Nama')+fld('nb_phone','No. telefon',{inp:'tel'})+fld('nb_email','E-mel',{type:'email'})+fld('nb_plate','No. plat')+fld('nb_make','Buatan (cth Perodua)')+fld('nb_model','Model')+fld('nb_km','Odometer (km)',{inp:'numeric'})}
+<label>PIC foreman${`<select data-sf="nb_pic"><option value="">Tiada</option>${st.team.filter(t=>t.role==='technician'&&t.user_id&&t.active).map(t=>`<option value="${t.user_id}" ${f.nb_pic===t.user_id?'selected':''}>${esc(t.name||t.email)}</option>`).join('')}</select>`}</label>
+<label>Nota<textarea data-sf="nb_notes" rows="2">${esc(f.nb_notes||'')}</textarea></label>
+<button class="btn full" data-sm="createB" ${st.busy?'disabled':''}>Simpan tempahan</button></div>`}
+function vBoard(){const cols=[['arrived','Tiba'],['in_inspection','Pemeriksaan'],['awaiting_approval','Tunggu kelulusan'],['in_service','Dalam servis'],['quality_check','Kualiti'],['ready_for_collection','Sedia diambil']];
+  const act=st.board.filter(b=>cols.some(c=>c[0]===b.status)),today=st.board.filter(b=>b.status==='confirmed'&&b.slot_start.slice(0,10)<=myDay(1));
+  return `<h2>${isFore()?'Kerja saya':'Papan kerja'}</h2>${isFore()?'<p class="muted">Anda hanya nampak kerja yang ditugaskan kepada anda.</p>':''}
+${cols.map(([s,t])=>{const l=act.filter(b=>b.status===s);return l.length?`<h3>${t} (${l.length})</h3>${l.map(b=>bCard(b,false)).join('')}`:''}).join('')||'<p class="muted">Tiada kerja aktif sekarang.</p>'}
+${today.length?`<h3>Akan datang (disahkan)</h3>${today.map(b=>bCard(b,false)).join('')}`:''}`}
+function vWalk(){return `<div class="row sp"><h2>Pelanggan</h2><button class="btn" data-sm="newW">${st.newW?'Tutup':'+ Pelanggan'}</button></div>
+<div class="row"><input style="flex:1" data-sf="wq" placeholder="Cari nama, telefon atau plat" value="${esc(st.wq)}"><button class="btn alt" data-sm="findW">Cari</button></div>
+${st.newW?`<div class="card"><h3>Pelanggan baharu</h3>${fld('w_name','Nama')}${fld('w_phone','No. telefon',{inp:'tel'})}${fld('w_email','E-mel',{type:'email'})}${fld('w_plate','No. plat')}${fld('w_make','Buatan')}${fld('w_model','Model')}${fld('w_year','Tahun',{inp:'numeric'})}${fld('w_km','Odometer (km)',{inp:'numeric'})}<label>Nota<textarea data-sf="w_notes" rows="2">${esc(st.f.w_notes||'')}</textarea></label><button class="btn full" data-sm="addW">Simpan</button></div>`:''}
+${st.walk.length?st.walk.map(w=>`<div class="card"><b>${esc(w.name)}</b> ${w.plate?tag('',w.plate):''}<div class="muted">${esc(w.phone||'-')} ${w.email?'· '+esc(w.email):''}</div><div class="muted">${esc([w.make,w.model,w.year].filter(Boolean).join(' '))} ${w.mileage?'· '+Number(w.mileage).toLocaleString('en-MY')+' km':''}</div>${w.notes?`<div class="muted">${esc(w.notes)}</div>`:''}</div>`).join(''):'<p class="muted">Tekan Cari untuk papar senarai pelanggan cawangan ini.</p>'}`}
+function vProd(){const m=canMgr();
+  return `<h2>Produk & harga</h2><p class="muted">Harga yang dipaparkan kepada pelanggan. Tanda "belum disahkan" bermakna harga contoh sehingga pengurus menyimpannya.</p>
+${st.svcs.map(s=>`<div class="card"><div class="row sp"><b>${esc(s.services.name)}</b>${s.price_verified?tag('ok','Disahkan'):tag('warn','Belum disahkan')}</div>
+<div class="muted">Tempoh ${s.duration_min||'-'} min · ${s.active?'Aktif':'Tidak aktif'}</div><div><b>${rm(s.price_myr)}</b></div>
+${m?`<div class="row"><input style="flex:1" inputmode="decimal" data-sf="pr:${s.service_id}" placeholder="Harga baharu (RM)" value="${esc(st.f['pr:'+s.service_id]||'')}"><button class="btn sm" data-sm="price" data-id="${s.service_id}">Simpan</button></div>`:''}</div>`).join('')||'<p class="muted">Tiada servis.</p>'}
+<p class="muted">Anggaran harga terperinci (bahan + upah) ada dalam modul POS demo. Ia belum disambung ke pangkalan data.</p>`}
+function vTeam(){const inv=canTeam();
+  return `<h2>Pasukan</h2>${st.team.map(t=>`<div class="card"><div class="row sp"><b>${esc(t.name||t.email)}</b>${t.invited?tag('warn','Dijemput'):t.active?tag('ok','Aktif'):tag('bad','Tidak aktif')}</div><div class="muted">${esc(ROLE[t.role]||t.role)} · ${esc(t.email||'')}</div>
+${canMgr()&&t.user_id&&t.user_id!==st.uid?`<button class="btn ghost sm" data-sm="act" data-id="${t.user_id}" data-v="${t.active?'0':'1'}">${t.active?'Nyahaktif':'Aktifkan'}</button>`:''}</div>`).join('')||'<p class="muted">Tiada ahli.</p>'}
+${canMgr()?`<div class="card"><h3>Jemput staf</h3>${fld('iv_name','Nama')}${fld('iv_email','E-mel',{type:'email'})}<label>Peranan<select data-sf="iv_role">${['technician','service_advisor','cashier','branch_manager'].map(r=>`<option value="${r}" ${st.f.iv_role===r?'selected':''}>${ROLE[r]}</option>`).join('')}</select></label><button class="btn full" data-sm="invite">Jemput</button><p class="muted">Staf mesti daftar akaun dengan e-mel yang sama dan sahkan e-mel mereka. Selepas itu mereka terus mendapat akses.</p></div>`:''}`}
+
+/* ---- awam ---- */
+function viewPub(){const p=st.pub,f=p.f;
+  if(p.done){const d=p.done;return `<div class="main" style="max-width:560px;margin:0 auto;padding:20px 16px"><div class="logo"><i></i><b>CARREPUBLIC</b></div><div class="card"><h2>Permintaan diterima</h2><p>Rujukan anda: <b>${esc(d.ref)}</b></p><p>${esc(d.br?d.br.name:'')}<br>${tz(d.when)}</p><p class="muted">Ini permintaan tempahan. Pihak bengkel akan menghubungi anda untuk mengesahkan. Anda belum disahkan sehingga kami hubungi.</p><button class="btn" data-sm="pubAgain">Buat tempahan lain</button></div></div>`}
+  const sv=p.svcs.filter(s=>s.branch_id===f.br),sel=sv.find(s=>s.service_id===f.sv),br=p.branches.find(b=>b.id===f.br);
+  return `<div class="main" style="max-width:560px;margin:0 auto;padding:20px 16px"><div class="logo"><i></i><b>CARREPUBLIC</b><small>Tempah servis</small></div><h1 style="font-size:28px">Tempah servis kereta</h1>
+<p class="muted">Pilih cawangan, servis dan masa. Kami akan hubungi untuk mengesahkan.</p>
+${p.err?`<div class="toast err" style="position:static;margin-bottom:12px">${esc(p.err)}</div>`:''}
+<div class="card"><label>Cawangan<select data-pf="br" data-pchg="1"><option value="">Pilih</option>${p.branches.map(b=>`<option value="${b.id}" ${f.br===b.id?'selected':''}>${esc(b.name)}</option>`).join('')}</select></label>
+${br?`<div class="muted">${esc(br.address||'')} · ${br.open_time.slice(0,5)}-${br.close_time.slice(0,5)}</div>`:''}
+<label>Servis<select data-pf="sv" data-pchg="1"><option value="">Pilih</option>${sv.map(s=>`<option value="${s.service_id}" ${f.sv===s.service_id?'selected':''}>${esc(s.services.name)}${s.price_myr!=null?' · dari RM'+Number(s.price_myr).toFixed(0):''}</option>`).join('')}</select></label>
+${sel&&sel.price_myr!=null?`<div class="muted">Harga rujukan RM${Number(sel.price_myr).toFixed(2)}. Harga akhir disahkan oleh bengkel selepas pemeriksaan.</div>`:''}
+<label>Tarikh<input type="date" data-pf="dt" data-pchg="1" min="${myDay()}" value="${esc(f.dt||'')}"></label>
+${p.slots===null||!f.dt?'':p.slots&&p.slots.length?`<div class="row">${p.slots.map(s=>`<button type="button" class="btn sm ${f.slot===s.slot_start?'':'ghost'}" data-sm="pslot" data-v="${s.slot_start}">${tm(s.slot_start)}</button>`).join('')}</div>`:'<p class="muted">Tiada slot kosong pada hari itu. Cuba tarikh lain.</p>'}</div>
+<div class="card"><label>Nama<input data-pf="nm" autocomplete="name" value="${esc(f.nm||'')}"></label><label>No. telefon<input data-pf="ph" inputmode="tel" autocomplete="tel" value="${esc(f.ph||'')}"></label><label>E-mel (pilihan)<input data-pf="em" type="email" autocomplete="email" value="${esc(f.em||'')}"></label>
+<label>No. plat<input data-pf="pl" value="${esc(f.pl||'')}"></label><label>Buatan<input data-pf="mk" placeholder="cth Perodua" value="${esc(f.mk||'')}"></label><label>Model<input data-pf="md" placeholder="cth Myvi" value="${esc(f.md||'')}"></label>
+<label>Catatan<textarea data-pf="nt" rows="2">${esc(f.nt||'')}</textarea></label>
+<div style="position:absolute;left:-9999px" aria-hidden="true"><label>Laman web<input data-pf="hp" tabindex="-1" autocomplete="off" value=""></label></div>
+<button class="btn alt full" data-sm="pubGo" ${p.busy?'disabled':''}>${p.busy?'Menghantar...':'Hantar permintaan'}</button>
+<p class="muted">Dengan menghantar, anda membenarkan bengkel menghubungi anda tentang tempahan ini sahaja.</p></div><p class="muted"><a href="#staf">Log masuk staf</a></p></div>${msgB()}`}
+
+function view(){return pubOn()?viewPub():(st.tok?viewStaff():viewLoginS())}
+function paint(quiet){const app=document.getElementById('app');if(!app||!on())return;
+  const ae=document.activeElement;if(quiet&&ae&&app.contains(ae)&&/INPUT|TEXTAREA|SELECT/.test(ae.tagName))return;
+  const y=window.scrollY,id=ae&&ae.getAttribute&&ae.getAttribute('data-sf')||ae&&ae.getAttribute&&ae.getAttribute('data-pf');
+  app.innerHTML=view();window.scrollTo(0,y);
+  if(id&&!quiet){const el=app.querySelector('[data-sf="'+id+'"],[data-pf="'+id+'"]');if(el&&el.tagName!=='SELECT'){el.focus({preventScroll:true});try{const l=el.value.length;el.setSelectionRange(l,l)}catch(e){}}}}
+
+/* ---- peristiwa ---- */
+const H={
+ mode:e=>{st.mode=e.v;st.msg=null},tab:e=>{st.tab=e.v;window.scrollTo(0,0)},out:signOut,reload:()=>{loadAll()},
+ demo:()=>{st.mode='in';history.replaceState(null,'',location.pathname);ui.logged=false;render()},
+ adv:e=>advance(e.id,e.v),note:e=>doRpc('staff_set_notes',{p_booking:e.id,p_notes:st.f['sn:'+e.id]||''},'Nota disimpan.'),
+ newB:()=>{st.newB=!st.newB;if(st.newB&&!st.f.nb_date)st.f.nb_date=myDay()},slot:e=>{st.f.nb_slot=e.v},createB:createBooking,loadWalk:searchWalk,
+ newW:()=>{st.newW=!st.newW},findW:()=>{searchWalk()},addW:addWalk,price:e=>savePrice(e.id),invite,
+ act:e=>doRpc('staff_set_active',{p_user:e.id,p_active:e.v==='1'},'Status staf dikemas kini.'),
+ pslot:e=>{st.pub.f.slot=e.v},pubGo:pubSubmit,pubAgain:()=>{st.pub.done=null;st.pub.f={br:st.pub.f.br};st.pub.slots=null}};
+function click(ev){const t=ev.target.closest('[data-sm]');if(!t||!on())return;const f=H[t.dataset.sm];if(!f)return;ev.preventDefault();ev.stopPropagation();
+  const r=f({id:t.dataset.id,v:t.dataset.v});if(!r||!r.then)paint()}
+function change(ev){if(!on())return;const t=ev.target;
+  if(t.dataset.smSel){if(t.dataset.smSel==='branch'){st.branch=t.value;loadBranch()}else if(t.dataset.smSel==='pic')assign(t.dataset.id,t.value);return}
+  if(t.dataset.sf){st.f[t.dataset.sf]=t.value;const c=t.dataset.smChg;if(c==='slots'){st.f.nb_slot=null;loadSlots()}else if(c==='paint')paint();else if(t.dataset.sf==='nb_src')return}
+  if(t.dataset.pf){st.pub.f[t.dataset.pf]=t.value;if(t.dataset.pchg){if(t.dataset.pf==='br')st.pub.f.sv='';st.pub.f.slot=null;st.pub.slots=null;paint();pubSlots()}}}
+function input(ev){if(!on())return;const t=ev.target;if(t.dataset.sf){st.f[t.dataset.sf]=t.value;if(t.dataset.sf==='wq')st.wq=t.value}if(t.dataset.pf)st.pub.f[t.dataset.pf]=t.value}
+function submit(ev){if(ev.target.id==='sf-login'){ev.preventDefault();st.mode==='up'?signUp():signIn()}}
+document.addEventListener('click',click,true);document.addEventListener('change',change,true);document.addEventListener('input',input,true);document.addEventListener('submit',submit,true);
+window.addEventListener('hashchange',()=>{if(pubOn())loadPub();paint()});
+return {on,view,boot,paint,open:()=>{st.mode='in';history.replaceState(null,'','#staf');paint()},st};
+})();
+
 /* ---------- WhatsApp & rekrutmen ---------- */
 const TAv=(k,label,val,rows)=>`<label>${label}<textarea id="${esc(k)}" data-ui="${esc(k)}" rows="${rows||3}">${esc(ui.f[k]!=null?ui.f[k]:val)}</textarea></label>`;
 const TA=(k,label,rows,ph)=>`<label>${label}<textarea id="${esc(k)}" data-ui="${esc(k)}" rows="${rows||3}" placeholder="${esc(ph||'')}">${esc(ui.f[k]||'')}</textarea></label>`;
@@ -1214,6 +1460,7 @@ function render(){
   const y=window.scrollY,ae=document.activeElement,fid=ae&&ae.id,fs=ae&&ae.selectionStart;
   const kan=document.getElementById('kan'),kx=kan?kan.scrollLeft:0;
   cur=ui.msg;ui.msg=null;
+  if(SM.on()){SM.paint();return}
   document.getElementById('app').innerHTML=!ui.logged?viewLogin():shell();
   const k2=document.getElementById('kan');if(k2)k2.scrollLeft=kx;
   window.scrollTo(0,y);
@@ -1246,6 +1493,7 @@ const A={
  dxSec:e=>{ui.f['dxs:'+e.id]=dxOpen(e.id)===e.v?'-':e.v},dxLt:e=>{const k=hk(e.id,'lt'),n=LIGHTS[+e.v],a=ui.f[k]||[];ui.f[k]=a.includes(n)?a.filter(x=>x!==n):a.concat(n)},dxQuote:e=>dxQuote(e.id),
  pt:e=>{ui.pt=e.v},posStart,posOpen:e=>{ui.posId=e.id;ui.pt='jual';ui.f.pm='';window.scrollTo(0,0)},posInv:e=>posInv(e.id),posPay:e=>posPay(e.id),posVoid:e=>{sBy(e.id).st='batal';setMsg('ok','Jualan dibatalkan.');save()},posEditBack:e=>{sBy(e.id).st='draf';save()},
  posDel:e=>{sBy(e.id).lines.splice(+e.v,1);save()},posM:e=>{ui.f.pm=e.v},posTender:e=>{ui.f['pay:amt']=e.v},posPrint:()=>{setTimeout(()=>window.print(),80)},posNewSale:()=>{ui.posId=null},posFromEst,posCatAdd,
+ staffLogin:()=>SM.open(),
  fbOpen:()=>{ui.fb=true;ui.menu=false},fbClose:()=>{ui.fb=false},fbSend
 };
 document.addEventListener('click',ev=>{if(ui.menu&&!ev.target.closest('.pop,.menub')){ui.menu=false;if(!ev.target.closest('[data-act]')){render();return}}
@@ -1274,8 +1522,8 @@ document.addEventListener('change',ev=>{const t=ev.target;
 document.addEventListener('input',ev=>{const t=ev.target;if(t.dataset.ui&&!t.dataset.cb&&t.type!=='date')ui.f[t.dataset.ui]=t.value});
 document.addEventListener('submit',ev=>{if(ev.target.id==='lf'){ev.preventDefault();const e=(ui.f.le||'').trim().toLowerCase(),p=ui.f.lp||'';
   if(e==='master@carrepublic.demo'&&p==='Demo#2026'){ui.logged=true;authSet(true);ui.msg=null;ui.f.lp=''}else setMsg('err','E-mel atau kata laluan salah. Guna akaun master demo.');render()}});
-window.__careos={S:()=>S,ui,A,render};
-render();
+window.__careos={S:()=>S,ui,A,render,SM};
+SM.boot();render();
 })();
 </script>
 </body>
