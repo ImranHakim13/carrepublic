@@ -79,8 +79,35 @@ function seed(){
    consent:{reminder:true,marketing:false,history:false,location:false},
    partners:{insurance:{on:true,name:'',url:'',note:'Slot rakan insurans kenderaan'},roadtax:{on:true,name:'',url:'',note:'Slot rakan pembaharuan cukai jalan'}}};
 }
+const JOB_TPL={
+ 'Penasihat Servis':{shift:'Syif pagi/petang, termasuk Sabtu bergilir',edu:'SPM atau setara; sijil automotif satu kelebihan',exp:1,lic:true,
+  must:['Komunikasi dan layanan pelanggan yang jelas','Boleh terangkan kerja servis dan sebut harga berperincian','Asas kenderaan (minyak enjin, brek, tayar, bateri)','Teliti merekod maklumat pelanggan dan kenderaan'],
+  nice:['Pengalaman di bengkel atau pusat servis','Guna sistem POS atau CRM','Bahasa Inggeris asas'],
+  qs:['Ceritakan satu situasi anda menangani pelanggan yang tidak berpuas hati.','Apa yang anda semak sebelum mencadangkan kerja tambahan kepada pelanggan?','Sedia bekerja pada hujung minggu mengikut giliran?']},
+ 'Juruteknik':{shift:'Syif bengkel, termasuk Sabtu bergilir',edu:'SKM automotif atau setara, atau pengalaman bengkel yang setara',exp:1,lic:true,
+  must:['Servis minyak enjin, penapis, tayar dan brek asas','Guna alat tangan dan alat angkat dengan selamat','Patuh prosedur keselamatan bengkel','Merekod kerja dan semakan dengan jujur dan teliti'],
+  nice:['Servis penghawa dingin','Diagnostik OBD asas','Pengalaman pelbagai jenama kenderaan'],
+  qs:['Terangkan langkah anda menukar minyak enjin dan penapis dengan selamat.','Bagaimana anda melaporkan kerosakan tambahan yang anda jumpa semasa servis?','Pernah ada kecederaan atau kejadian hampir tercedera di bengkel? Apa yang anda belajar?']},
+ 'Juruwang / Pentadbir Cawangan':{shift:'Waktu operasi cawangan',edu:'SPM atau setara',exp:0,lic:false,
+  must:['Teliti dalam urusan wang dan invois','Komunikasi sopan dengan pelanggan','Boleh guna telefon pintar dan aplikasi asas'],
+  nice:['Pengalaman juruwang atau kaunter','Pengalaman POS'],
+  qs:['Apa yang anda lakukan jika baki wang tunai tidak sepadan di akhir hari?','Sedia bekerja pada hujung minggu mengikut giliran?']},
+ 'Pengurus Cawangan':{shift:'Waktu operasi cawangan, termasuk tanggungjawab hujung minggu',edu:'Diploma atau setara, atau pengalaman pengurusan yang setara',exp:3,lic:true,
+  must:['Pengalaman mengurus pasukan kecil','Memahami operasi bengkel atau perniagaan perkhidmatan','Menguruskan aduan pelanggan dan kualiti kerja','Membaca laporan jualan dan kos asas'],
+  nice:['Pengalaman rangkaian atau francais','Pengalaman jualan dan pemasaran tempatan'],
+  qs:['Ceritakan bagaimana anda meningkatkan prestasi pasukan atau cawangan.','Bagaimana anda menyelesaikan aduan pelanggan yang serius?','Apa angka utama yang anda semak setiap hari?']}};
+const WA_DEF={reminder:'Salam {nama}, servis kereta {plat} dianggarkan tiba sekitar {tarikh} atau {km} km. Cawangan CARREPUBLIC berhampiran: {cawangan}. Tempah di {pautan}. Ini peringatan jadual, bukan diagnosis kerosakan.',
+ overdue:'Salam {nama}, servis kereta {plat} sudah melepasi anggaran ({tarikh} atau {km} km). Kami boleh bantu tempah slot di {cawangan}: {pautan}. Ini peringatan jadual, bukan diagnosis kerosakan.'};
+const STOPLINE='\nBalas BERHENTI untuk hentikan peringatan.';
+const STAGES=['baharu','saringan','temu duga','tawaran','diterima','tidak diteruskan'];
+function ext(){
+  if(!S.profile)S.profile={name:'Aisyah (Demo)',phone:'',postcode:'24000'};
+  if(!S.wa)S.wa={before:14,tpl:{reminder:WA_DEF.reminder,overdue:WA_DEF.overdue},log:[]};
+  if(!S.jobs){const t=JOB_TPL['Penasihat Servis'];S.jobs=[{id:'j1',title:'Penasihat Servis',role:'Penasihat Servis',bid:'KMN',count:1,type:'Sepenuh masa',shift:t.shift,edu:t.edu,exp:t.exp,lic:t.lic,must:t.must.slice(),nice:t.nice.slice(),qs:t.qs.slice(),salary:'',ben:'',deadline:'',st:'terbuka',flag:false}];S.apps=[]}
+  S.v=4;
+}
 let S;try{S=JSON.parse(store.get())}catch(e){}
-if(!S||S.v!==3)S=seed();
+if(!S||(S.v!==3&&S.v!==4))S=seed();ext();
 const save=()=>store.set(JSON.stringify(S));
 const nid=p=>p+(++S.seq);
 const now=()=>new Date(Date.now()+S.skip*DAY);
@@ -178,7 +205,7 @@ ${msgBox()}<button class="btn alt" type="submit">Log masuk</button></form>
 function head(){return `<div class="top"><div class="brand">CARREPUBLIC <b>CareOS</b><small>Your Car. Our Care.</small></div>
 <div class="row"><button class="btn ghost" data-act="skip">Simulasi +6 bulan${S.skip?' ('+Math.round(S.skip/30)+' bln)':''}</button><button class="btn ghost" data-act="reset">Set semula demo</button><button class="btn ghost" data-act="logout">Log keluar</button></div></div>
 <div class="demo"><b>Persekitaran DEMO.</b> Semua data ialah contoh dan tersimpan dalam pelayar ini sahaja. Cawangan Kemaman: alamat, waktu dan harga sebenar belum diisi. Tiada rakan insurans atau roadtax sebenar disambungkan.</div>
-<div class="tabs" role="tablist">${[['cust','Pelanggan'],['branch','Cawangan'],['hq','HQ']].map(([k,t])=>`<button class="tab" aria-pressed="${ui.role===k}" data-act="role" data-v="${k}">${t}</button>`).join('')}</div>${msgBox()}`}
+<div class="tabs" role="tablist">${[['cust','Pelanggan'],['branch','Cawangan'],['hq','HQ'],['kerja','Kerjaya (calon)']].map(([k,t])=>`<button class="tab" aria-pressed="${ui.role===k}" data-act="role" data-v="${k}">${t}</button>`).join('')}</div>${msgBox()}`}
 
 function viewCust(){
   const tabs=[['garaj','Garaj'],['tempah','Tempah'],['rakan','Insurans & Roadtax'],['privasi','Privasi']];
@@ -227,7 +254,7 @@ function cRakan(){
   <div class="card" style="margin-top:12px"><h3>Permohonan anda</h3>${S.leads.length?S.leads.slice().reverse().map(l=>`<div class="sm">${l.type==='insurance'?'Insurans':'Cukai jalan'} · ${esc(l.plate)} · ${dtfmt(l.ts)} · <span class="pill info">${esc(l.st)}</span></div>`).join(''):'<span class="muted">Belum ada.</span>'}</div>`}
 
 function cPrivasi(){const c=S.consent;const row=(k,t)=>`<label style="color:var(--fg)"><input type="checkbox" id="c:${k}" data-act="consent" data-id="${k}" ${c[k]?'checked':''}>${t}</label>`;
-  return `<h1>Privasi &amp; persetujuan</h1><div class="card">${row('reminder','Peringatan servis')}${row('marketing','Mesej promosi / pemasaran')}${row('history','Kongsi sejarah servis dengan cawangan yang saya tempah')}${row('location','Guna lokasi untuk cadangan cawangan')}<p class="muted">Menarik balik persetujuan menghentikan mesej berkaitan, tetapi sejarah servis anda kekal.</p></div>`}
+  return `<h1>Privasi &amp; persetujuan</h1><div class="card">${row('reminder','Peringatan servis')}${row('marketing','Mesej promosi / pemasaran')}${row('history','Kongsi sejarah servis dengan cawangan yang saya tempah')}${row('location','Guna lokasi untuk cadangan cawangan')}<h3 style="margin-top:12px">Profil untuk peringatan</h3><div class="grid"><label>Nama<input id="pf:name" data-ui="pf:name" value="${esc(S.profile.name)}"></label><label>No. telefon (untuk WhatsApp)<input id="pf:phone" data-ui="pf:phone" inputmode="tel" placeholder="01X-XXXXXXX" value="${esc(S.profile.phone)}"></label><label>Poskod (untuk cadangan cawangan)<input id="pf:pc" data-ui="pf:pc" inputmode="numeric" value="${esc(S.profile.postcode)}"></label></div><p class="muted">Menarik balik persetujuan menghentikan mesej berkaitan, tetapi sejarah servis anda kekal.</p></div>`}
 
 function viewBranch(){
   const bid=ui.branch,br=by('branches',bid);
@@ -241,7 +268,7 @@ function viewBranch(){
   <div class="card"><h2>Tempahan &amp; kerja sedang berjalan</h2>${act.length?act.map(b=>bCard(b)).join(''):'<p class="muted">Tiada tempahan aktif. Buat tempahan di paparan Pelanggan.</p>'}</div>
   <div class="card"><h2>Servis terkini</h2>${done.length?done.map(r=>`<div class="sm" style="padding:5px 0;border-bottom:1px solid var(--line)">${dfmt(r.date)} · ${esc(by('vehicles',r.vid).plate)} · ${esc(r.sum)} · <b>${rm(r.total)}</b> · ${esc(r.inv)}</div>`).join(''):'<span class="muted">Belum ada.</span>'}</div>
   <div class="card"><h2>Pelanggan akan due servis</h2>${due.length?due.map(r=>`<div class="sm">${esc(by('vehicles',r.vid).plate)} · anggaran ${dfmt(r.date)} / ${r.km} km · <span class="pill ${REM[remStatus(r)][1]}">${REM[remStatus(r)][0]}</span></div>`).join(''):'<span class="muted">Tiada.</span>'}</div>
-  <div class="hint">Cawangan tidak nampak tempahan cawangan lain, maklumat insurans/roadtax pelanggan, atau kos cawangan lain. Sejarah servis cawangan lain hanya kelihatan semasa tempahan aktif dan dengan persetujuan pelanggan.</div>`;return h}
+  ${branchJobs(bid)}<div class="hint">Cawangan tidak nampak tempahan cawangan lain, maklumat insurans/roadtax pelanggan, atau kos cawangan lain. Sejarah servis cawangan lain hanya kelihatan semasa tempahan aktif dan dengan persetujuan pelanggan.</div>`;return h}
 
 function bCard(b){const v=by('vehicles',b.vid),id=b.id;let h=`<div class="card" style="margin-bottom:10px"><div class="row sp"><span><b>${esc(v.plate)}</b> ${esc(v.make)} ${esc(v.model)}<div class="muted">${SV[b.svc].n} · ${dtfmt(b.s)}</div></span><span class="pill ${b.st==='awaiting'?'warn':'info'}">${ST[b.st]}</span></div>`;
   const other=S.consent.history&&b.share?S.records.filter(r=>r.vid===b.vid&&r.bid!==b.bid&&r.src==='verified'):[];
@@ -254,7 +281,7 @@ function bCard(b){const v=by('vehicles',b.vid),id=b.id;let h=`<div class="card" 
   if(b.st==='quality'||b.st==='ready')h+=`<h3 style="margin-top:10px">Selesai &amp; invois</h3><div class="grid">${input('ok:'+id,'Odometer keluar (km)',{mode:'numeric'})}${input('oo:'+id,'Spesifikasi minyak enjin')}${input('os:'+id,'Ringkasan kerja')}${input('oc:'+id,'Kos dalaman RM (margin, tidak dipapar kepada pelanggan)',{mode:'decimal'})}</div><button class="btn alt" data-act="complete" data-id="${id}">Selesai &amp; jana invois</button>`;
   return h+'</div>'}
 
-function viewHQ(){
+function hqSummary(){
   const rs=S.records.filter(r=>r.src==='verified'),rev=rs.reduce((a,r)=>a+r.total,0),withCost=rs.filter(r=>r.cost!=null);
   const flows={};const byV={};rs.slice().sort((a,b)=>a.ts-b.ts).forEach(r=>{const p=byV[r.vid];if(p&&p!==r.bid){const k=p+'→'+r.bid;flows[k]=(flows[k]||0)+1}byV[r.vid]=r.bid});
   const rst={};S.reminders.forEach(r=>{const s=remStatus(r);rst[s]=(rst[s]||0)+1});
@@ -269,10 +296,90 @@ function viewHQ(){
   <div class="grid">${['insurance','roadtax'].map(t=>{const p=S.partners[t];return `<div class="card" style="margin:0"><h3>${t==='insurance'?'Slot insurans':'Slot roadtax'}</h3><label style="color:var(--fg)"><input type="checkbox" id="pon:${t}" data-act="pon" data-id="${t}" ${p.on?'checked':''}>Paparkan kepada pelanggan</label>${input('pn:'+t,'Nama rakan (kosong = slot kosong)',{ph:'cth. nama syarikat rakan'})}<button class="btn ghost" data-act="pname" data-id="${t}">Simpan nama rakan</button></div>`}).join('')}</div>
   <div class="scroll" style="margin-top:10px"><table><thead><tr><th>Jenis</th><th>Plat</th><th>Telefon</th><th>Tarikh tamat</th><th>Rakan</th><th>Status</th></tr></thead><tbody>${S.leads.length?S.leads.slice().reverse().map(l=>`<tr><td>${l.type==='insurance'?'Insurans':'Roadtax'}</td><td>${esc(l.plate)}</td><td>${esc(l.phone)}</td><td>${l.exp?dfmt(l.exp):'-'}</td><td>${esc(l.partner)}</td><td><select data-act="lst" data-id="${l.id}" style="margin:0;width:auto">${['baharu','dihubungi','sebut harga','berjaya','tidak berminat'].map(s=>`<option ${l.st===s?'selected':''}>${s}</option>`).join('')}</select></td></tr>`).join(''):'<tr><td colspan="6" class="muted">Belum ada permohonan.</td></tr>'}</tbody></table></div></div>`}
 
+/* ---------- WhatsApp & rekrutmen ---------- */
+const TAv=(k,label,val,rows)=>`<label>${label}<textarea id="${esc(k)}" data-ui="${esc(k)}" rows="${rows||3}">${esc(ui.f[k]!=null?ui.f[k]:val)}</textarea></label>`;
+const TA=(k,label,rows,ph)=>`<label>${label}<textarea id="${esc(k)}" data-ui="${esc(k)}" rows="${rows||3}" placeholder="${esc(ph||'')}">${esc(ui.f[k]||'')}</textarea></label>`;
+function waPhone(p){let d=String(p||'').replace(/\D/g,'');if(d.startsWith('0'))d='6'+d;return /^601\d{8,9}$/.test(d)?d:''}
+function nearBranch(){const pc=(S.profile.postcode||'').slice(0,2);const m=S.branches.filter(b=>b.postcode.slice(0,2)===pc);return (m.length?m:S.branches).map(b=>b.name).slice(0,2).join(' / ')}
+function waMsg(r){const v=by('vehicles',r.vid),st=remStatus(r);const t=st==='overdue'?S.wa.tpl.overdue:S.wa.tpl.reminder;
+  return t.replace(/\{nama\}/g,S.profile.name||'pelanggan').replace(/\{plat\}/g,v.plate).replace(/\{tarikh\}/g,dfmt(r.date)).replace(/\{km\}/g,r.km).replace(/\{cawangan\}/g,nearBranch()).replace(/\{pautan\}/g,location.href.split('#')[0])+STOPLINE}
+function waQueue(){return S.reminders.filter(r=>r.st!=='completed').map(r=>{const st=remStatus(r),why=[];
+  if(!S.consent.reminder)why.push('Pelanggan tiada persetujuan peringatan');
+  if(st==='booked')why.push('Sudah ditempah (peringatan ditindas)');
+  if(!waPhone(S.profile.phone))why.push('Nombor telefon pelanggan tiada atau tidak sah');
+  const days=Math.round((new Date(r.date+'T00:00:00')-new Date(ymd(now())+'T00:00:00'))/DAY);
+  if(st==='upcoming'&&days>S.wa.before)why.push('Belum masuk tempoh ('+S.wa.before+' hari sebelum anggaran)');
+  const kind=st==='overdue'?'overdue':'reminder';
+  if(S.wa.log.some(l=>l.rid===r.id&&l.kind===kind&&l.ok))why.push('Mesej jenis ini sudah dihantar');
+  return {r,st,why,kind}})}
+function waSend(rid){const x=waQueue().find(q=>q.r.id===rid);if(!x)return;if(x.why.length)return setMsg('err','Tidak boleh dihantar: '+x.why[0]);
+  S.wa.log.push({id:nid('w'),rid,ts:Date.now(),plat:by('vehicles',x.r.vid).plate,kind:x.kind,text:waMsg(x.r),status:'Dihantar (simulasi)',ok:true});setMsg('ok','Mesej direkod sebagai dihantar (simulasi). Tiada mesej sebenar dihantar.');save()}
+function waStop(){S.consent.reminder=false;S.wa.log.push({id:nid('w'),rid:null,ts:Date.now(),plat:'-',kind:'berhenti',text:'Pelanggan membalas BERHENTI',status:'Peringatan dimatikan',ok:false});setMsg('ok','Pelanggan membalas BERHENTI. Persetujuan peringatan dimatikan; sejarah servis kekal.');save()}
+function waSave(){const a=(ui.f['wt:reminder']!=null?ui.f['wt:reminder']:S.wa.tpl.reminder).trim(),b=(ui.f['wt:overdue']!=null?ui.f['wt:overdue']:S.wa.tpl.overdue).trim();
+  if(!a||!b||a.length>600||b.length>600)return setMsg('err','Templat tidak boleh kosong dan maksimum 600 aksara.');
+  S.wa.tpl={reminder:a,overdue:b};ui.f['wt:reminder']=ui.f['wt:overdue']=null;setMsg('ok','Templat disimpan. Arahan BERHENTI ditambah secara automatik.');save()}
+function hqWa(){ui.f.wb=String(S.wa.before);const q=waQueue(),ok=q.filter(x=>!x.why.length);
+  return `<h1>WhatsApp peringatan</h1><p class="muted">Hanya untuk pelanggan yang memberi persetujuan, ditindas selepas tempahan, dan sentiasa ada arahan BERHENTI. <b>Mod demo:</b> tiada mesej dihantar automatik. Penghantaran automatik memerlukan WhatsApp Business Platform rasmi dan templat yang diluluskan Meta. "Buka WhatsApp" membolehkan staf menghantar secara manual.</p>
+  <div class="kpis"><div class="kpi"><small>Layak dihantar sekarang</small><b>${ok.length}</b></div><div class="kpi"><small>Ditindas atau belum masa</small><b>${q.length-ok.length}</b></div><div class="kpi"><small>Mesej dalam log</small><b>${S.wa.log.length}</b></div></div>
+  <div class="card"><h2>Baris gilir peringatan</h2>${q.length?q.map(x=>{const v=by('vehicles',x.r.vid),txt=waMsg(x.r),R=REM[x.st];return `<div style="border-bottom:1px solid var(--line);padding:10px 0"><div class="row sp"><b>${esc(v.plate)} · ${esc(S.profile.name)}</b><span class="pill ${R?R[1]:''}">${R?R[0]:x.st}</span></div>${x.why.length?`<div class="sm" style="color:var(--warn)">Tidak dihantar: ${x.why.map(esc).join('; ')}</div>`:`<div class="sm" style="background:var(--chip);border-radius:10px;padding:8px;white-space:pre-wrap;margin-top:6px">${esc(txt)}</div><div class="row" style="margin-top:8px"><button class="btn" data-act="waSend" data-id="${x.r.id}">Hantar (simulasi)</button><a class="btn alt" style="text-decoration:none;display:inline-block" target="_blank" rel="noopener" href="https://wa.me/${waPhone(S.profile.phone)}?text=${encodeURIComponent(txt)}">Buka WhatsApp</a></div>`}</div>`}).join(''):'<p class="muted">Tiada peringatan. Siapkan satu servis, kemudian guna "Simulasi +6 bulan".</p>'}
+  <button class="btn ghost" data-act="waStop" style="margin-top:10px">Simulasi: pelanggan balas BERHENTI</button></div>
+  <div class="card"><h2>Tetapan</h2>${sel('wb','Hantar peringatan sebelum anggaran servis',[['7','7 hari'],['14','14 hari'],['30','30 hari']].map(([v,t])=>[v,t]))}
+  <p class="muted">Pemboleh ubah: {nama} {plat} {tarikh} {km} {cawangan} {pautan}. Nada mesti sopan dan tidak mendesak; peringatan ialah jadual, bukan diagnosis.</p>${TAv('wt:reminder','Templat peringatan',S.wa.tpl.reminder,4)}${TAv('wt:overdue','Templat tertunggak',S.wa.tpl.overdue,4)}<button class="btn" data-act="waSave">Simpan templat</button></div>
+  <div class="card"><h2>Log mesej</h2><div class="scroll"><table><thead><tr><th>Masa</th><th>Plat</th><th>Jenis</th><th>Status</th></tr></thead><tbody>${S.wa.log.length?S.wa.log.slice().reverse().map(l=>`<tr><td>${dtfmt(l.ts)}</td><td>${esc(l.plat)}</td><td>${esc(l.kind)}</td><td>${esc(l.status)}</td></tr>`).join(''):'<tr><td colspan="4" class="muted">Belum ada.</td></tr>'}</tbody></table></div></div>`}
+
+const BIAS=/\b(lelaki|perempuan|wanita|bangsa|kaum|berumur|umur|agama|bumiputera)\b/i;
+function jobFill(){const t=JOB_TPL[ui.f['j:role']||'Penasihat Servis'];if(!t)return;const f=ui.f;f['j:title']=ui.f['j:role']||'Penasihat Servis';f['j:shift']=t.shift;f['j:edu']=t.edu;f['j:exp']=String(t.exp);f['j:lic']=t.lic;f['j:must']=t.must.join('\n');f['j:nice']=t.nice.join('\n');f['j:qs']=t.qs.join('\n');setMsg('ok','Templat dimuat. Semak dan ubah mengikut keperluan sebenar cawangan.')}
+function jobSave(st){const f=ui.f,lines=k=>(f[k]||'').split('\n').map(x=>x.trim()).filter(Boolean);
+  const title=(f['j:title']||'').trim();if(!title)return setMsg('err','Isi tajuk jawatan.');
+  const must=lines('j:must');if(!must.length)return setMsg('err','Isi sekurang-kurangnya satu syarat wajib.');
+  const exp=+(f['j:exp']||0),cnt=+(f['j:count']||1);if(!(exp>=0)||!(cnt>=1))return setMsg('err','Pengalaman dan bilangan kekosongan tidak sah.');
+  const txt=[title,f['j:edu'],f['j:must'],f['j:nice'],f['j:shift']].join(' ');const flag=BIAS.test(txt);
+  S.jobs.push({id:nid('j'),title,role:f['j:role']||'',bid:f['j:bid']||'KMN',count:cnt,type:f['j:type']||'Sepenuh masa',shift:(f['j:shift']||'').trim(),edu:(f['j:edu']||'').trim(),exp,lic:!!f['j:lic'],must,nice:lines('j:nice'),qs:lines('j:qs'),salary:(f['j:salary']||'').trim(),ben:(f['j:ben']||'').trim(),deadline:f['j:deadline']||'',st,flag});
+  setMsg('ok',(st==='terbuka'?'Jawatan diterbitkan kepada calon.':'Draf disimpan.')+(flag?' Ditanda "Perlu semakan HR": ada perkataan berkaitan jantina, umur, kaum atau agama. Elak syarat diskriminatif kecuali keperluan pekerjaan yang sah.':''));save()}
+function scoreOf(job,a){const must=job.must,met=must.filter((_,i)=>a.must[i]).length,mr=must.length?met/must.length:1,er=job.exp>0?Math.min(a.exp/job.exp,1):1;return {total:Math.round(100*(0.7*mr+0.3*er)),met,tot:must.length,er,licFlag:job.lic&&!a.lic}}
+function applyJob(jid){const f=ui.f,job=by('jobs',jid),k=x=>f['a:'+jid+':'+x];
+  if(!(k('n')||'').trim())return setMsg('err','Isi nama penuh.');
+  if(!waPhone(k('p')))return setMsg('err','Masukkan nombor telefon Malaysia yang sah.');
+  const exp=+(k('x')||0);if(!(exp>=0))return setMsg('err','Pengalaman tidak sah.');
+  if(!k('c'))return setMsg('err','Anda perlu bersetuju dengan notis privasi untuk meneruskan.');
+  S.apps.push({id:nid('a'),jid,name:k('n').trim(),phone:k('p'),email:(k('e')||'').trim(),exp,lic:!!k('l'),must:job.must.map((_,i)=>!!k('m:'+i)),ans:job.qs.map((_,i)=>(k('q:'+i)||'').trim()),st:'baharu',ts:Date.now()});
+  ui.apply=null;setMsg('ok','Permohonan dihantar. Terima kasih. (Demo: data disimpan dalam pelayar ini sahaja.)');save()}
+function jobCardPublic(j){const br=by('branches',j.bid);const op=ui.apply===j.id;
+  return `<div class="card"><div class="row sp"><h2 style="margin:0">${esc(j.title)}</h2><span class="pill info">${j.count} kekosongan</span></div><div class="muted">${esc(br?br.name:'')} · ${esc(j.type)}${j.shift?' · '+esc(j.shift):''}${j.deadline?' · tutup '+dfmt(j.deadline):''}</div>
+  <div class="grid" style="margin-top:8px"><div><h3>Syarat wajib</h3><ul class="sm">${j.must.map(m=>`<li>${esc(m)}</li>`).join('')}${j.edu?`<li>Pendidikan: ${esc(j.edu)}</li>`:''}<li>Pengalaman: ${j.exp?j.exp+' tahun':'tidak diwajibkan'}</li>${j.lic?'<li>Lesen memandu sah</li>':''}</ul></div><div><h3>Kelebihan</h3><ul class="sm">${j.nice.length?j.nice.map(m=>`<li>${esc(m)}</li>`).join(''):'<li>-</li>'}</ul><div class="sm">Gaji: <b>${j.salary?esc(j.salary):'Dibincang'}</b></div>${j.ben?`<div class="sm">Faedah: ${esc(j.ben)}</div>`:''}</div></div>
+  ${op?`<div style="margin-top:10px"><h3>Borang permohonan</h3><div class="grid">${input('a:'+j.id+':n','Nama penuh')}${input('a:'+j.id+':p','No. telefon',{mode:'tel'})}${input('a:'+j.id+':e','E-mel (pilihan)')}${input('a:'+j.id+':x','Tahun pengalaman berkaitan',{mode:'decimal'})}</div>
+  <p class="sm"><b>Tanda syarat yang anda penuhi (jujur; akan disemak semasa temu duga):</b></p>${j.must.map((m,i)=>`<label style="color:var(--fg)"><input type="checkbox" id="a:${j.id}:m:${i}" data-ui="a:${j.id}:m:${i}" data-cb="1" ${ui.f['a:'+j.id+':m:'+i]?'checked':''}>${esc(m)}</label>`).join('')}
+  ${j.lic?`<label style="color:var(--fg)"><input type="checkbox" id="a:${j.id}:l" data-ui="a:${j.id}:l" data-cb="1" ${ui.f['a:'+j.id+':l']?'checked':''}>Saya mempunyai lesen memandu sah</label>`:''}
+  ${j.qs.map((q,i)=>TA('a:'+j.id+':q:'+i,esc(q),2)).join('')}
+  <label style="color:var(--fg)"><input type="checkbox" id="a:${j.id}:c" data-ui="a:${j.id}:c" data-cb="1" ${ui.f['a:'+j.id+':c']?'checked':''}>Saya bersetuju data saya digunakan untuk proses pengambilan ini sahaja dan disimpan selama proses berjalan (PDPA).</label>
+  <div class="row"><button class="btn alt" data-act="apply" data-id="${j.id}">Hantar permohonan</button><button class="btn ghost" data-act="applyClose">Batal</button></div></div>`:`<button class="btn alt" style="margin-top:10px" data-act="applyOpen" data-id="${j.id}">Mohon jawatan ini</button>`}</div>`}
+function viewKerja(){const open=S.jobs.filter(j=>j.st==='terbuka');
+  return `<h1>Kerjaya CARREPUBLIC</h1><p class="muted">Paparan calon. Jawatan yang diterbitkan HQ tampil di sini. Maklumat anda hanya digunakan untuk pengambilan ini.</p>${open.length?open.map(jobCardPublic).join(''):'<div class="card muted">Tiada jawatan dibuka sekarang.</div>'}`}
+function jobForm(){const f=ui.f;if(!f['j:role'])f['j:role']='Penasihat Servis';
+  return `<div class="card"><h2>Buka jawatan baharu</h2><div class="row" style="align-items:end">${sel('j:role','Templat jawatan',Object.keys(JOB_TPL).map(k=>[k,k]))}<button class="btn ghost" data-act="jobFill" style="margin-bottom:8px">Muat templat</button></div>
+  <div class="grid">${input('j:title','Tajuk jawatan')}${sel('j:bid','Cawangan',S.branches.map(b=>[b.id,b.name]))}${input('j:count','Bilangan kekosongan',{mode:'numeric',ph:'1'})}${sel('j:type','Jenis',[['Sepenuh masa','Sepenuh masa'],['Kontrak','Kontrak'],['Separuh masa','Separuh masa'],['Praktikal','Praktikal']])}${input('j:shift','Waktu / syif')}${input('j:edu','Pendidikan')}${input('j:exp','Pengalaman minimum (tahun)',{mode:'decimal'})}${input('j:salary','Gaji / elaun (isi sendiri, kosong = dibincang)')}${input('j:ben','Faedah (pilihan)')}${input('j:deadline','Tarikh tutup',{type:'date'})}</div>
+  <label style="color:var(--fg)"><input type="checkbox" id="j:lic" data-ui="j:lic" data-cb="1" ${f['j:lic']?'checked':''}>Lesen memandu sah diwajibkan</label>
+  ${TA('j:must','Syarat wajib (satu setiap baris). Ini digunakan untuk skor padanan.',4)}${TA('j:nice','Kelebihan (satu setiap baris)',3)}${TA('j:qs','Soalan saringan (satu setiap baris)',3)}
+  <p class="muted">Templat ialah cadangan permulaan, bukan nasihat undang-undang. Elak syarat jantina, umur, kaum atau agama kecuali keperluan pekerjaan yang sah; semak dengan HR.</p>
+  <div class="row"><button class="btn" data-act="jobDraft">Simpan draf</button><button class="btn alt" data-act="jobPub">Terbitkan</button></div></div>`}
+function hqRec(){const jobs=S.jobs;
+  return `<h1>Rekrutmen staf</h1>${jobForm()}
+  <div class="card"><h2>Kekosongan</h2>${jobs.length?jobs.map(j=>{const ap=S.apps.filter(a=>a.jid===j.id);return `<div style="border-bottom:1px solid var(--line);padding:10px 0"><div class="row sp"><span><b>${esc(j.title)}</b> · ${esc(by('branches',j.bid)?by('branches',j.bid).name:'')} <span class="pill ${j.st==='terbuka'?'ok':j.st==='draf'?'warn':''}">${esc(j.st)}</span>${j.flag?' <span class="pill bad">Perlu semakan HR</span>':''}</span><span class="row">${j.st!=='terbuka'?`<button class="btn ghost" data-act="jobSt" data-id="${j.id}" data-v="terbuka">Terbitkan</button>`:`<button class="btn ghost" data-act="jobSt" data-id="${j.id}" data-v="ditutup">Tutup</button>`}<button class="btn bad" data-act="jobDel" data-id="${j.id}">Padam</button></span></div>
+  <div class="muted">${j.count} kekosongan · ${ap.length} calon · syarat wajib: ${j.must.length} · pengalaman minimum ${j.exp} tahun</div></div>`}).join(''):'<p class="muted">Belum ada jawatan.</p>'}</div>
+  <div class="card"><h2>Calon (disusun ikut skor padanan)</h2><p class="muted">Skor = 70% syarat wajib yang calon tanda + 30% pengalaman berbanding minimum. Ia alat bantu saringan berdasarkan pengakuan calon, bukan keputusan. Semak setiap calon secara manusia.</p>
+  ${S.apps.length?S.apps.map(a=>({a,j:by('jobs',a.jid)})).filter(x=>x.j).map(x=>({...x,s:scoreOf(x.j,x.a)})).sort((p,q)=>q.s.total-p.s.total).map(({a,j,s})=>`<div style="border-bottom:1px solid var(--line);padding:10px 0"><div class="row sp"><span><b>${esc(a.name)}</b> · ${esc(j.title)}</span><span class="pill ${s.total>=70?'ok':s.total>=40?'warn':'bad'}">Skor ${s.total}/100</span></div>
+  <div class="sm">Syarat wajib ${s.met}/${s.tot} · pengalaman ${a.exp} tahun (min ${j.exp})${s.licFlag?' · <span class="pill bad">Tiada lesen (wajib)</span>':''}</div>
+  <div class="sm">Tel: <a href="https://wa.me/${waPhone(a.phone)}" target="_blank" rel="noopener">${esc(a.phone)}</a>${a.email?' · '+esc(a.email):''}</div>
+  <details><summary>Jawapan saringan</summary>${j.qs.map((q,i)=>`<div class="sm"><b>${esc(q)}</b><br>${esc(a.ans[i]||'(tiada jawapan)')}</div>`).join('')}</details>
+  <label>Peringkat<select data-act="stg" data-id="${a.id}">${STAGES.map(t=>`<option ${a.st===t?'selected':''}>${t}</option>`).join('')}</select></label></div>`).join(''):'<p class="muted">Belum ada calon. Tukar ke paparan Kerjaya (calon) dan hantar satu permohonan untuk mencuba.</p>'}</div>`}
+function branchJobs(bid){const js=S.jobs.filter(j=>j.bid===bid&&j.st==='terbuka');return `<div class="card"><h2>Kekosongan staf cawangan ini</h2>${js.length?js.map(j=>`<div class="sm">${esc(j.title)} · ${j.count} kekosongan · ${S.apps.filter(a=>a.jid===j.id).length} calon</div>`).join(''):'<span class="muted">Tiada. HQ membuka jawatan di tab Rekrutmen.</span>'}</div>`}
+function viewHQ(){const t=ui.ht||'ringkas';
+  return `<div class="tabs">${[['ringkas','Ringkasan'],['wa','WhatsApp peringatan'],['rekrut','Rekrutmen staf']].map(([k,n])=>`<button class="tab sub" aria-pressed="${t===k}" data-act="ht" data-v="${k}">${n}</button>`).join('')}</div>`+(t==='wa'?hqWa():t==='rekrut'?hqRec():hqSummary())}
+
 function render(){
   const y=window.scrollY,fid=document.activeElement&&document.activeElement.id,fs=document.activeElement&&document.activeElement.selectionStart;
   const app=document.getElementById('app');
-  app.innerHTML=!ui.logged?viewLogin():head()+(ui.role==='cust'?viewCust():ui.role==='branch'?viewBranch():viewHQ());
+  app.innerHTML=!ui.logged?viewLogin():head()+(ui.role==='cust'?viewCust():ui.role==='branch'?viewBranch():ui.role==='kerja'?viewKerja():viewHQ());
   window.scrollTo(0,y);
   if(fid){const el=document.getElementById(fid);if(el){el.focus();try{if(fs!=null)el.setSelectionRange(fs,fs)}catch(e){}}}
 }
@@ -280,14 +387,14 @@ function render(){
 const A={
  role:e=>{ui.role=e.v;ui.msg=null},ct:e=>{ui.ct=e.v;ui.msg=null},
  skip:()=>{S.skip+=182;setMsg('ok','Masa disimulasi maju 6 bulan (demo). Peringatan dikira semula.');save()},
- reset:()=>{S=seed();ui.f={};ui.slot=null;ui.msg=null;store.set(JSON.stringify(S));setMsg('ok','Demo disetkan semula.')},
+ reset:()=>{S=seed();ext();ui.f={};ui.slot=null;ui.msg=null;store.set(JSON.stringify(S));setMsg('ok','Demo disetkan semula.')},
  logout:()=>{ui.logged=false;ui.msg=null},
  approve:e=>decide(e.id,true),reject:e=>decide(e.id,false),
  remBook:e=>{ui.f.vid=e.id;ui.f.src='reminder';ui.ct='tempah';ui.msg=null},
  updKm:e=>updKm(e.id),addVeh:addVehicle,addExt,cancel:e=>cancel(e.id),
  slot:e=>{ui.slot=+e.v},book,
  stage:e=>stage(e.id,e.v),insp:e=>saveInsp(e.id),quote:e=>sendQuote(e.id),complete:e=>complete(e.id),
- lead:e=>submitLead(e.id),
+ lead:e=>submitLead(e.id),ht:e=>{ui.ht=e.v;ui.msg=null},waSend:e=>waSend(e.id),waStop,waSave,jobFill,jobDraft:()=>jobSave('draf'),jobPub:()=>jobSave('terbuka'),jobSt:e=>{by('jobs',e.id).st=e.v;save()},jobDel:e=>{S.jobs=S.jobs.filter(j=>j.id!==e.id);S.apps=S.apps.filter(a=>a.jid!==e.id);save()},apply:e=>applyJob(e.id),applyOpen:e=>{ui.apply=e.id},applyClose:()=>{ui.apply=null},
  pname:e=>{S.partners[e.id].name=(ui.f['pn:'+e.id]||'').trim();setMsg('ok','Nama rakan disimpan.');save()}
 };
 document.addEventListener('click',ev=>{const t=ev.target.closest('[data-act]');if(!t||t.tagName==='SELECT'||t.type==='checkbox')return;const f=A[t.dataset.act];if(!f)return;f({id:t.dataset.id,v:t.dataset.v});render()});
@@ -296,11 +403,14 @@ document.addEventListener('change',ev=>{const t=ev.target;
   if(t.dataset.act==='pon'){S.partners[t.dataset.id].on=t.checked;save();render();return}
   if(t.dataset.act==='lst'){by('leads',t.dataset.id).st=t.value;save();render();return}
   if(t.dataset.act==='bsel'){ui.branch=t.value;render();return}
+  if(t.dataset.act==='stg'){by('apps',t.dataset.id).st=t.value;save();render();return}
   if(t.dataset.ui){const k=t.dataset.ui;ui.f[k]=t.dataset.cb?t.checked:t.value;
     if(k.startsWith('rt:')){by('vehicles',k.slice(3)).rt=t.value;save()}
+    if(k==='pf:name'){S.profile.name=t.value;save()}if(k==='pf:phone'){S.profile.phone=t.value;save()}if(k==='pf:pc'){S.profile.postcode=t.value;save()}
+    if(k==='wb'){S.wa.before=+t.value;save()}
     if(k.startsWith('in:')&&k.split(':').length===2){by('vehicles',k.slice(3)).ins=t.value;save()}
     if(['vid','bid','svc','date'].includes(k)){ui.slot=null}
-    if(t.tagName==='INPUT'&&!t.dataset.cb&&t.type!=='date')return;
+    if((t.tagName==='INPUT'||t.tagName==='TEXTAREA')&&!t.dataset.cb&&t.type!=='date')return;
     render()}});
 document.addEventListener('input',ev=>{const t=ev.target;if(t.dataset.ui&&!t.dataset.cb&&t.type!=='date')ui.f[t.dataset.ui]=t.value});
 document.addEventListener('submit',ev=>{if(ev.target.id==='lf'){ev.preventDefault();const e=(ui.f.le||'').trim().toLowerCase(),p=ui.f.lp||'';
