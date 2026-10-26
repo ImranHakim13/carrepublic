@@ -235,6 +235,22 @@ ol.tl li.ext::before{background:#aab5b3}
 .hc{border-top:5px solid var(--line)}.hc.ok{border-top-color:#0d8a73}.hc.warn{border-top-color:#f0b400}.hc.bad{border-top-color:#d6342c}
 .hm{display:grid;gap:6px;margin-top:10px}.hm>div{display:flex;align-items:center;gap:8px;font-size:13.5px}.hm span{flex:1}.hm b{font-weight:700}
 .dot{width:10px;height:10px;border-radius:50%;background:#0d8a73;flex:none}.dot.warn{background:#f0b400}.dot.bad{background:#d6342c}
+
+.dxf{margin-top:12px;border-top:2px solid var(--line);padding-top:12px}.dxh{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}.dxf label{display:block}.dxf textarea,.dxf select,.dxf input{width:100%}
+.lbl{font:600 13px var(--bd);margin:10px 0 6px}.chips2{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}.ch2{border:1px solid var(--line);background:#fff;border-radius:99px;padding:6px 11px;font:600 12.5px var(--bd);cursor:pointer;color:var(--ink)}.ch2.on{background:var(--red-bg);border-color:#e8908a;color:var(--red)}
+.dxsec{border:1px solid var(--line);border-radius:14px;margin-top:8px;background:#fff;overflow:hidden}.dxsec.open{border-color:var(--ink)}
+.dxhd{display:flex;justify-content:space-between;align-items:center;width:100%;border:0;background:none;padding:12px 14px;font:600 15px var(--bd);cursor:pointer;color:var(--ink)}.dxhd span{display:flex;align-items:center;gap:4px;font-size:13px;color:var(--mut)}.dxhd em{font-style:normal;background:var(--chip);border-radius:99px;padding:1px 8px;margin-left:4px}
+.dxbd{padding:0 12px 12px;display:grid;gap:8px}.dxrow{border:1px solid var(--line);border-radius:12px;padding:9px;display:grid;gap:7px}.dxrow.fl.perhatian{background:#fffaf0;border-color:#f0c24a}.dxrow.fl.kritikal{background:#fff5f4;border-color:#e8908a}
+.dxn{font:600 14px var(--bd)}.dxs3{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.dxs3 button{border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:9px 4px;font:700 13px var(--bd);cursor:pointer;color:var(--mut)}
+.dxs3 .ok.on{background:var(--teal-bg);border-color:#0d8a73;color:#0a6a58}.dxs3 .perhatian.on{background:var(--amb-bg);border-color:#f0b400;color:var(--amb)}.dxs3 .kritikal.on{background:var(--red-bg);border-color:#d6342c;color:var(--red)}
+.dxx{display:grid;gap:6px;grid-template-columns:repeat(auto-fit,minmax(120px,1fr))}.dxx input:first-child:not(:last-child){grid-column:1/-1}
+.dxsum{margin-top:12px;padding:12px;border-radius:14px;background:var(--chip)}
+.dxr{display:grid;gap:8px;margin-top:8px}.dxv2{border-radius:12px;padding:10px 12px;display:grid;gap:2px}.dxv2.ok{background:var(--teal-bg);color:#0a6a58}.dxv2.warn{background:var(--amb-bg);color:var(--amb)}.dxv2.bad{background:var(--red-bg);color:var(--red)}.dxv2 .sm{color:var(--ink);opacity:.75}
+.dxc{display:flex;flex-wrap:wrap;gap:6px}.dxq{background:var(--chip);border-radius:12px;padding:10px 12px;font-size:14px}.dxr h4{margin:6px 0 0}
+.dxa{list-style:none;margin:0;padding:0;display:grid;gap:8px}.dxa li{border-left:4px solid #f0b400;background:#fff;border-radius:10px;padding:8px 10px;border:1px solid var(--line);border-left-width:4px}.dxa li.kritikal{border-left-color:#d6342c}.dxa li.fx{opacity:.65;border-left-color:#0d8a73}
+.dxd{margin-top:8px}.dxd>summary{cursor:pointer;font-weight:700}.dxs4{margin-top:8px}
+.dxs{margin-top:10px;background:var(--red-bg);color:var(--red);border-radius:12px;padding:8px 11px;display:grid;font-size:13px}.dxs span{color:var(--ink);opacity:.8}
+.dxtodo{border:1.5px solid #e8908a}
 </style>
 </head>
 <body>
@@ -276,6 +292,33 @@ const WA_DEF={reminder:'Salam {nama}, servis kereta {plat} dianggarkan tiba seki
  overdue:'Salam {nama}, servis kereta {plat} sudah melepasi anggaran ({tarikh} atau {km} km). Kami boleh bantu tempah slot di {cawangan}: {pautan}. Ini peringatan jadual, bukan diagnosis kerosakan.'};
 const STOPLINE='\nBalas BERHENTI untuk hentikan peringatan.';
 const STAGES=['baharu','saringan','temu duga','tawaran','diterima','tidak diteruskan'];
+/* ---------- laporan diagnosis foreman: katalog ---------- */
+const DX=[
+ {id:'eng',n:'Enjin dan cecair',items:[['oil','Paras minyak enjin'],['oilq','Keadaan minyak enjin (warna, kotor)'],['cool','Paras air penyejuk'],['brkf','Minyak brek (paras, warna)'],['psf','Minyak stereng kuasa'],['wash','Air pembasuh cermin'],['belt','Tali sawat dan hos enjin'],['leak','Kebocoran cecair']]},
+ {id:'brk',n:'Brek',items:[['padf','Pad brek depan','mm'],['padr','Pad atau kasut brek belakang','mm'],['disc','Cakera atau dram brek'],['line','Paip dan hos brek'],['hand','Brek tangan']]},
+ {id:'tyr',n:'Tayar dan roda',items:[['tp','Tekanan tayar','psi'],['td','Kedalaman bunga tayar (terendah)','mm'],['tw','Haus tidak sekata atau dinding rosak'],['rim','Rim dan nat roda'],['spare','Tayar spare atau kit pam']]},
+ {id:'bat',n:'Bateri dan elektrik',items:[['bv','Voltan bateri','V'],['bt','Terminal dan karat'],['alt','Pengecasan alternator']]},
+ {id:'sus',n:'Suspensi dan stereng',items:[['shk','Shock absorber (bocor, lemah)'],['ball','Ball joint dan tie rod'],['bush','Bush dan mounting'],['str','Getaran atau ketat stereng'],['align','Penjajaran roda']]},
+ {id:'ac',n:'Penghawa dingin',items:[['accool','Prestasi penyejukan (suhu keluar)','°C'],['acc','Kompresor dan kipas'],['cabin','Penapis kabin']]},
+ {id:'trn',n:'Transmisi dan pacuan',items:[['gear','Minyak gear atau transmisi'],['shift','Pertukaran gear atau klac'],['cv','Boot CV dan aci pemacu']]},
+ {id:'bdy',n:'Eksos dan badan bawah',items:[['exh','Eksos (bocor, bising)'],['rust','Karat dan badan bawah'],['mount','Engine mount']]},
+ {id:'lgt',n:'Lampu dan keselamatan',items:[['lhd','Lampu depan'],['lrr','Lampu belakang dan brek'],['sig','Lampu isyarat'],['wip','Pengelap cermin'],['horn','Hon']]}];
+const DXI=DX.flatMap(s=>s.items.map(([k,n,u])=>({k,n,u,sec:s.id,sn:s.n})));
+const RES={ok:['OK','ok'],perhatian:['Pantau','warn'],kritikal:['Segera','bad']};
+const ACTS={ganti:'Ganti',baiki:'Baiki',laras:'Laras atau tambah',pantau:'Pantau sahaja'};
+const FM={KMN:['Foreman Amin (Demo)','Foreman Zul (Demo)'],SHA:['Foreman Rizal (Demo)'],KTE:['Belum dilantik'],JBU:['Belum dilantik']};
+const LIGHTS=['Enjin (check engine)','ABS','Beg udara','Bateri','Suhu enjin','Tekanan minyak','TPMS tayar'];
+const FUEL=['','Hampir kosong','¼','½','¾','Penuh'];
+const VERD={ok:['Selamat dipandu','ok'],pantau:['Selamat dipandu, perlu dipantau','warn'],tidak:['Tidak disyorkan dipandu sebelum dibaiki','bad']};
+const WHEN={kritikal:'Sebelum dipandu jauh atau dalam seminggu',perhatian:'Dalam 1 hingga 3 bulan atau servis seterusnya'};
+function dxCount(x){const c={ok:0,pantau:0,kritikal:0,skip:0,flag:[]};(x.items||[]).forEach(i=>{if(i.res==='ok')c.ok++;else if(i.res==='perhatian'){c.pantau++;c.flag.push(i)}else if(i.res==='kritikal'){c.kritikal++;c.flag.push(i)}else c.skip++});
+  c.flag.sort((a,b)=>(a.res==='kritikal'?0:1)-(b.res==='kritikal'?0:1));return c}
+const dxAuto=c=>c.kritikal?'tidak':c.pantau?'pantau':'ok';
+function dxMake(o){const fl=o.flags||{};return {km:o.km,done:true,ts:Date.now(),fm:o.fm||FM.KMN[0],fuel:o.fuel||'½',complaint:o.complaint||'',lights:o.lights||[],obd:o.obd||'',verdict:o.verdict||'',sum:o.sum||'',
+  items:DXI.map(i=>{const f=fl[i.k];return {k:i.k,item:i.n,sec:i.sn,res:f?f[0]:'ok',note:f?f[1]:'',act:f?f[2]||'':'',est:f?f[3]||0:0,val:f?f[4]||'':''}})}}
+function dxSnap(x,handled){const c=dxCount(x),it=c.flag.map(i=>Object.assign({},i,{fixed:(handled||[]).includes(i.k)}));
+  return {fm:x.fm,km:x.km,fuel:x.fuel,verdict:x.verdict||dxAuto(c),sum:x.sum,ok:c.ok,pantau:c.pantau,kritikal:c.kritikal,skip:c.skip,items:it,defer:it.filter(i=>!i.fixed)}}
+
 /* ---------- data contoh (semua DEMO; nama dan plat rekaan) ---------- */
 const SB_URL='https://yzlwshrywctlcwfbpddp.supabase.co',SB_KEY='sb_publishable_yA1MJyxUca8tUbjnQVN3Eg_2Is0jjYG';
 function genHist(){const out=[],t=new Date(),dim=new Date(t.getFullYear(),t.getMonth()+1,0).getDate(),frac=t.getDate()/dim;
@@ -307,14 +350,14 @@ function seed(){
     veh('v8','Salmah (Demo)','DEMO 4545','Perodua','Bezza',2020,36100,'#7f95a6',95,95),
     veh('v9','Zainab (Demo)','DEMO 6060','Perodua','Alza',2016,51500,'#b9c0c5',25,5)];
   vehicles[0].ik=5000;
-  const insp=(km,res,notes)=>({km,done:true,items:CHECK.map((c,i)=>({item:c,res:(res&&res[i])||'ok',note:(notes&&notes[i])||''}))});
+  const insp=(km,o)=>dxMake(Object.assign({km},o||{}));
   const bk=(id,vid,svc,h,m,st,x)=>{const s=T(h,m);return Object.assign({id,vid,bid:'KMN',svc,s,e:s+SV[svc].d*60000,st,src:'direct',insp:null,share:false},x||{})};
   const bookings=[
-    bk('b1','v3','oil',9,0,'service',{insp:insp(61000)}),
-    bk('b4','v6','ac',9,30,'quality',{insp:insp(87500,['ok','ok','ok','ok','perhatian'],['','','','','Gas A/C rendah'])}),
-    bk('b2','v4','brake',10,0,'inspection',{insp:insp(51200,['ok','perhatian','ok','ok','ok','ok'],['','Tapak tayar depan kiri nipis'])}),
-    bk('b3','v5','tyre',11,0,'awaiting',{insp:insp(28800),prev:'inspection'}),
-    bk('b6','v1','oil',11,30,'awaiting',{insp:insp(48200,['ok','ok','ok','ok','ok','ok'],['','','','','','']),prev:'inspection',share:true}),
+    bk('b1','v3','oil',9,0,'service',{insp:insp(61000,{flags:{wash:['perhatian','Air pembasuh hampir habis','laras',10]},complaint:'Servis berkala.',sum:'Keadaan umum baik. Tambah air pembasuh semasa servis.'})}),
+    bk('b4','v6','ac',9,30,'quality',{insp:insp(87500,{complaint:'A/C tidak sejuk.',obd:'Tiada kod.',flags:{accool:['perhatian','Suhu keluar 14°C, gas rendah','laras',180,'14'],cabin:['perhatian','Penapis kabin kotor','ganti',45]},sum:'Gas A/C rendah. Penapis kabin patut diganti.'})}),
+    bk('b2','v4','brake',10,0,'inspection',{insp:insp(51200,{fm:FM.KMN[1],complaint:'Bunyi geseran bila brek.',lights:['ABS'],obd:'C1234 sensor kelajuan roda (sejarah).',flags:{padf:['kritikal','Pad depan kiri 2 mm, bunyi logam','ganti',220,'2'],td:['perhatian','Tapak tayar depan kiri nipis','ganti',280,'2.1'],brkf:['perhatian','Minyak brek gelap, tarikh tukar lepas','laras',40]},verdict:'tidak',sum:'Pad brek depan hampir habis. Jangan dipandu jauh sebelum diganti.'})}),
+    bk('b3','v5','tyre',11,0,'awaiting',{insp:insp(28800,{complaint:'Tayar kelihatan haus.',flags:{td:['kritikal','Bunga 1.2 mm, di bawah had 1.6 mm','ganti',600,'1.2'],tp:['perhatian','Tekanan rendah 26 psi','laras',0,'26']},verdict:'tidak',sum:'Tayar sudah melepasi had undang-undang. Disyorkan ganti set penuh.'}),prev:'inspection'}),
+    bk('b6','v1','oil',11,30,'awaiting',{insp:insp(48200,{flags:{belt:['perhatian','Tali sawat retak halus','pantau',0],shk:['perhatian','Shock depan kiri berpeluh','ganti',480]},sum:'Tiada isu keselamatan. Pantau tali sawat dan shock pada servis seterusnya.'}),prev:'inspection',share:true}),
     bk('b5','v7','oil',14,0,'confirmed',{src:'reminder'})];
   const q=(id,bid,items,st)=>({id,bid,items,total:items.reduce((a,x)=>a+x.q*x.p,0),st,add:false});
   const quotes=[
@@ -336,6 +379,10 @@ function seed(){
     rec(8,'v8','KMN',0,36100,'Servis minyak enjin & penapis',oil(120),70,'5W-30 semisintetik'),
     rec(10,'v4','KMN',-6,50900,'Servis minyak enjin & penapis',oil(120),72,'5W-30 semisintetik'),
     rec(11,'v7','KMN',-9,101900,'Pemeriksaan tayar & tekanan',[{d:'Pemeriksaan & pusing tayar',q:1,p:60}],26)];
+  const rdx=(id,o,h)=>{const r=records.find(x=>x.id===id);r.dx=dxSnap(dxMake(o),h||[])};
+  rdx('r2',{km:43500,fm:FM.KMN[0],flags:{belt:['perhatian','Tali sawat retak halus','pantau',0],shk:['perhatian','Shock depan kiri berpeluh','ganti',480]},sum:'Tiada isu keselamatan. Pantau tali sawat dan ganti shock bila sesuai.'});
+  rdx('r7',{km:28700,fm:FM.KMN[1],flags:{padr:['perhatian','Kasut belakang tinggal 40%','pantau',0,'40']},sum:'Brek depan baik. Kasut belakang masih ada hayat.'});
+  rdx('r5',{km:87100,fm:FM.KMN[0],flags:{},sum:'Semua baik.'});
   records.push({id:'r9',vid:'v1',bid:null,bk:null,src:'customer',date:D(-400),km:30000,oil:'',sum:'Servis di bengkel lama (resit pelanggan)',total:null,cost:null,inv:'',items:[],ts:new Date(D(-400)+'T10:00:00').getTime()});
   const bs=(k,i)=>'Anggaran berdasarkan selang '+k+' km atau 6 bulan (tetapan kenderaan). Ini peringatan jadual, bukan diagnosis mekanikal.';
   const reminders=[
@@ -411,7 +458,7 @@ function saveInsp(id){const b=by('bookings',id),f=ui.f;const km=+f['ikm:'+id];
   const v=by('vehicles',b.vid);if(km&&km>=v.km)v.km=km;setMsg('ok','Pemeriksaan disimpan.');save()}
 function sendQuote(id){const b=by('bookings',id),f=ui.f;
   if(!(b.st==='inspection'&&b.insp&&b.insp.done)&&b.st!=='service')return setMsg('err','Lengkapkan pemeriksaan dahulu.');
-  const items=[0,1,2,3].map(i=>({d:(f['qd:'+id+':'+i]||'').trim(),q:+(f['qq:'+id+':'+i]||1),p:+(f['qp:'+id+':'+i]||0)})).filter(x=>x.d);
+  const items=[0,1,2,3].map(i=>({d:(f['qd:'+id+':'+i]||'').trim(),q:+(f['qq:'+id+':'+i]||1),p:+(f['qp:'+id+':'+i]||0),dk:f['qk:'+id+':'+i]||''})).filter(x=>x.d);
   if(!items.length)return setMsg('err','Sebut harga tiada item.');
   if(items.some(x=>!(x.q>0)||!(x.p>=0)))return setMsg('err','Kuantiti atau harga tidak sah.');
   S.quotes.push({id:nid('q'),bid:id,items,total:items.reduce((a,x)=>a+x.q*x.p,0),st:'sent',add:b.st==='service'});
@@ -425,7 +472,7 @@ function complete(id){const b=by('bookings',id),f=ui.f,v=by('vehicles',b.vid),br
   if(km<v.km)return setMsg('err','Odometer tidak boleh lebih rendah daripada rekod terakhir ('+v.km+' km).');
   if(!sum)return setMsg('err','Ringkasan kerja wajib diisi.');
   const items=qs.flatMap(q=>q.items),total=items.reduce((a,x)=>a+x.q*x.p,0),d=ymd(now());
-  const rec={id:nid('r'),vid:b.vid,bid:b.bid,bk:id,src:'verified',date:d,km,oil:f['oo:'+id]||'',sum,total,cost:f['oc:'+id]?+f['oc:'+id]:null,inv:'INV-'+br.id+'-'+d.replace(/-/g,'').slice(2)+'-'+(S.seq+1),items,ts:now().getTime()};
+  const rec={id:nid('r'),vid:b.vid,bid:b.bid,bk:id,src:'verified',date:d,km,oil:f['oo:'+id]||'',sum,total,cost:f['oc:'+id]?+f['oc:'+id]:null,inv:'INV-'+br.id+'-'+d.replace(/-/g,'').slice(2)+'-'+(S.seq+1),items,ts:now().getTime()};if(b.insp&&b.insp.fm)rec.dx=dxSnap(b.insp,qs.flatMap(q=>q.items).map(i=>i.dk).filter(Boolean));
   S.records.push(rec);v.km=km;b.st='completed';
   S.reminders.forEach(r=>{if(r.vid===b.vid&&r.st!=='completed')r.st='completed'});
   const due=new Date(now());due.setMonth(due.getMonth()+v.im);
@@ -533,11 +580,11 @@ function vCard(v){const r=S.reminders.find(x=>x.vid===v.id&&x.st!=='completed');
   const e1=expiry(v.rt),e2=expiry(v.ins);
   const ch=(l,e)=>`<span class="xchip ${e==null?'':e<0?'bad':e<=60?'warn':'ok'}">${l}: ${e==null?'belum diisi':e<0?'tamat':e+' hari'}</span>`;
   return `<article class="vcard"><div class="row sp">${plate(v.plate)}<span class="vm">${esc(v.make)} ${esc(v.model)}${v.year?' · '+v.year:''}</span></div><div class="carw" style="color:${esc(v.col||'#9aa5ad')}">${carSvg()}</div>
-  <div class="vstats"><div><small>Odometer</small><b>${v.km.toLocaleString('ms-MY')} km</b></div><div class="rg">${ring(pct,over)}<div><small>Servis seterusnya</small><b>${sub}</b></div></div></div><div class="row" style="gap:6px">${ch('Cukai jalan',e1)}${ch('Insurans',e2)}</div></article>`}
+  <div class="vstats"><div><small>Odometer</small><b>${v.km.toLocaleString('ms-MY')} km</b></div><div class="rg">${ring(pct,over)}<div><small>Servis seterusnya</small><b>${sub}</b></div></div></div><div class="row" style="gap:6px">${ch('Cukai jalan',e1)}${ch('Insurans',e2)}</div>${(()=>{const p=pendingDx(v);return p?`<div class="dxs"><b>${p.dx.defer.length} tindakan disyorkan foreman</b><span>${esc(p.dx.defer[0].item)}${p.dx.defer.length>1?' dan lain-lain':''}</span></div>`:''})()}</article>`}
 function quoteCard(q){const b=by('bookings',q.bid),v=by('vehicles',b.vid);
   return `<div class="card action"><h2>Sebut harga menunggu anda</h2><p class="muted">${plate(v.plate,'sm')} ${esc(by('branches',b.bid).name)}${q.add?' · <b>Kerja tambahan</b>':''}</p>
   <div class="scroll"><table><tbody>${q.items.map(i=>`<tr><td>${esc(i.d)}</td><td class="num">${i.q} × ${rm(i.p)}</td></tr>`).join('')}</tbody></table></div>
-  <div class="row sp" style="margin:10px 0"><b>Jumlah ${rm(q.total)}</b></div><div class="row"><button class="btn" data-act="approve" data-id="${q.id}">Luluskan</button><button class="btn ghost" data-act="reject" data-id="${q.id}">Tolak</button></div><p class="muted" style="margin-top:8px">Tiada kerja tambahan dibuat tanpa kelulusan anda.</p></div>`}
+  ${b.insp&&b.insp.fm?`<details class="dxd"><summary>Kenapa kerja ini? Lihat laporan foreman</summary>${dxReport(b.insp)}</details>`:''}<div class="row sp" style="margin:10px 0"><b>Jumlah ${rm(q.total)}</b></div><div class="row"><button class="btn" data-act="approve" data-id="${q.id}">Luluskan</button><button class="btn ghost" data-act="reject" data-id="${q.id}">Tolak</button></div><p class="muted" style="margin-top:8px">Tiada kerja tambahan dibuat tanpa kelulusan anda.</p></div>`}
 function bookCard(b){const v=by('vehicles',b.vid);
   return `<div class="card"><div class="row sp"><span>${plate(v.plate,'sm')} <b>${SV[b.svc].n}</b></span><span class="pill ${b.st==='awaiting'?'warn':b.st==='confirmed'?'info':'ok'}">${ST[b.st]}</span></div><div class="muted">${esc(by('branches',b.bid).name)} · ${dtfmt(b.s)}</div>${tracker(b)}<div class="say">${SAY[b.st]||''}</div>${b.st==='confirmed'?`<button class="btn ghost sm" style="margin-top:10px" data-act="cancel" data-id="${b.id}">Batal tempahan</button>`:''}</div>`}
 
@@ -551,7 +598,7 @@ function cUtama(){const ids=mine().map(v=>v.id);
   const rems=S.reminders.filter(r=>r.st!=='completed'&&ids.includes(r.vid));
   let h=`<div class="greet"><div><small>Selamat datang,</small><h1 style="margin:0">${esc((S.profile.name||'Pelanggan').split(' ')[0])}</h1></div><span class="av" aria-hidden="true">${esc((S.profile.name||'A')[0])}</span></div>`;
   h+=qs.map(quoteCard).join('');
-  h+=`<div class="vscroll">${mine().map(vCard).join('')}</div>`;
+  h+=`<div class="vscroll">${mine().map(vCard).join('')}</div>`+dxTodo();
   if(bks.length)h+=`<h2 class="sec">Servis anda</h2>`+bks.map(bookCard).join('');
   h+=`<div class="qa"><button data-act="ct" data-v="tempah">${I('cal')}Tempah servis</button><button data-act="ct" data-v="pasport">${I('book')}Pasport servis</button><button data-act="ct" data-v="rakan">${I('shield')}Insurans dan roadtax</button><button data-act="ct" data-v="saya">${I('user')}Profil dan privasi</button></div>`;
   if(rems.length)h+=`<div class="card"><h2>Peringatan servis</h2>${rems.map(r=>{const v=by('vehicles',r.vid),s=remStatus(r),[tt,c]=REM[s];return `<div style="margin-bottom:12px"><div class="row sp"><span>${plate(v.plate,'sm')} <span class="pill ${c}">${tt}</span></span>${s!=='booked'?`<button class="btn alt sm" data-act="remBook" data-id="${r.vid}">Tempah</button>`:''}</div><div class="sm">Anggaran ${dfmt(r.date)} atau ${r.km.toLocaleString('ms-MY')} km</div><div class="muted">${esc(r.basis)}</div></div>`}).join('')}${S.consent.reminder?'':'<p class="muted">Peringatan mesej dimatikan. Status masih kelihatan di sini.</p>'}</div>`;
@@ -573,7 +620,7 @@ function cTempah(){const f=ui.f,mv=mine();if(!f.vid||!mv.find(v=>v.id===f.vid))f
   <h2 class="sec">Tempahan saya</h2>${mb.length?mb.map(b=>{const v=by('vehicles',b.vid);return `<div class="card"><div class="row sp"><b>${SV[b.svc].n}</b><span class="pill ${b.st==='completed'?'ok':b.st==='cancelled'||b.st==='noshow'?'bad':'info'}">${ST[b.st]}</span></div><div class="muted">${esc(v.plate)} · ${esc(by('branches',b.bid).name)} · ${dtfmt(b.s)}</div>${b.st==='confirmed'?`<button class="btn ghost sm" style="margin-top:8px" data-act="cancel" data-id="${b.id}">Batal</button>`:''}</div>`}).join(''):'<p class="muted">Tiada tempahan lagi.</p>'}`}
 function cPasport(){
   return `<h1>Pasport servis</h1><p class="muted">Satu sejarah untuk kenderaan anda, di mana-mana cawangan CARREPUBLIC.</p>${mine().map(v=>{const rs=S.records.filter(r=>r.vid===v.id).sort((a,b)=>b.ts-a.ts),nb=new Set(rs.filter(r=>r.bid).map(r=>r.bid)).size;
-    return `<div class="card"><div class="row sp">${plate(v.plate)}<span class="muted">${esc(v.make)} ${esc(v.model)}</span></div><p class="muted" style="margin-top:6px">${rs.filter(r=>r.src==='verified').length} servis disahkan · ${nb} cawangan</p>${rs.length?`<ol class="tl">${rs.map(r=>`<li class="${r.src==='verified'?'':'ext'}"><div class="row"><b>${dfmt(r.date)}</b>${r.src==='verified'?'<span class="pill ok">Disahkan CARREPUBLIC</span>':'<span class="pill">Dokumen pelanggan</span>'}</div><div>${esc(r.sum)}</div><div class="muted">${r.bid?esc(by('branches',r.bid).name):'Luar rangkaian'} · ${r.km?r.km.toLocaleString('ms-MY')+' km':'km tiada'}${r.oil?' · '+esc(r.oil):''}${r.total!=null?' · '+rm(r.total):''}${r.inv?' · '+esc(r.inv):''}</div>${r.items.length?`<ul class="sm" style="margin:4px 0 0;padding-left:18px">${r.items.map(i=>`<li>${esc(i.d)}: ${rm(i.q*i.p)}</li>`).join('')}</ul>`:''}</li>`).join('')}</ol>`:'<p class="muted">Belum ada rekod.</p>'}</div>`}).join('')}
+    return `<div class="card"><div class="row sp">${plate(v.plate)}<span class="muted">${esc(v.make)} ${esc(v.model)}</span></div><p class="muted" style="margin-top:6px">${rs.filter(r=>r.src==='verified').length} servis disahkan · ${nb} cawangan</p>${rs.length?`<ol class="tl">${rs.map(r=>`<li class="${r.src==='verified'?'':'ext'}"><div class="row"><b>${dfmt(r.date)}</b>${r.src==='verified'?'<span class="pill ok">Disahkan CARREPUBLIC</span>':'<span class="pill">Dokumen pelanggan</span>'}</div><div>${esc(r.sum)}</div><div class="muted">${r.bid?esc(by('branches',r.bid).name):'Luar rangkaian'} · ${r.km?r.km.toLocaleString('ms-MY')+' km':'km tiada'}${r.oil?' · '+esc(r.oil):''}${r.total!=null?' · '+rm(r.total):''}${r.inv?' · '+esc(r.inv):''}</div>${r.dx?`<details class="dxd"><summary>Laporan diagnosis · ${r.dx.kritikal?r.dx.kritikal+' segera, ':''}${r.dx.pantau} pantau</summary>${dxSnapView(r.dx)}</details>`:''}${r.items.length?`<ul class="sm" style="margin:4px 0 0;padding-left:18px">${r.items.map(i=>`<li>${esc(i.d)}: ${rm(i.q*i.p)}</li>`).join('')}</ul>`:''}</li>`).join('')}</ol>`:'<p class="muted">Belum ada rekod.</p>'}</div>`}).join('')}
   <details class="card"><summary>Tambah rekod servis luar</summary><div class="grid">${sel('ev','Kenderaan',vOpts())}${input('ed','Tarikh',{type:'date'})}${input('ek','Odometer',{mode:'numeric'})}${input('es','Ringkasan')}</div><button class="btn" data-act="addExt">Simpan rekod</button><p class="muted" style="margin-top:6px">Rekod ini dilabel sebagai dokumen pelanggan, bukan disahkan.</p></details>`}
 function cRakan(){
   const pt=(type,title,desc)=>{const p=S.partners[type];if(!p.on)return '';return `<div class="partner"><div class="logoslot">${p.name?esc(p.name):'Ruang logo rakan'}</div><div class="row sp"><h2 style="margin:0">${title}</h2><span class="pill warn">${p.name?'Rakan':'Slot kosong'}</span></div>
@@ -602,7 +649,7 @@ function viewBranch(){if(ui.branch==='ALL')ui.branch='KMN';const bid=ui.branch,b
   <div class="kpis"><div class="kpi"><small>Kerja aktif</small><b>${act.length}</b></div><div class="kpi ${act.some(b=>b.st==='awaiting')?'hot':''}"><small>Tunggu kelulusan</small><b>${act.filter(b=>b.st==='awaiting').length}</b></div><div class="kpi"><small>Jualan hari ini</small><b>${rm(done.filter(r=>r.date===today).reduce((a,r)=>a+r.total,0))}</b></div><div class="kpi"><small>Bay</small><b>${br.bays}</b></div></div>`;
   h=tkBanner(bid)+h;h+=t==='arahan'?tkBranchView(bid):t==='papan'?bBoard(bid,act):t==='jadual'?bJadual(bid):t==='due'?bDue(bid):t==='jualan'?bJualan(bid,done):branchJobs(bid);
   return h+`<div class="hint" style="margin-top:12px">Cawangan tidak nampak tempahan cawangan lain, maklumat insurans atau roadtax pelanggan, atau kos cawangan lain. Sejarah cawangan lain hanya kelihatan semasa tempahan aktif dan dengan persetujuan pelanggan.</div>`}
-function kcard(b){const v=by('vehicles',b.vid);return `<button class="kc ${b.st==='awaiting'?'wait':''}" aria-pressed="${ui.sel===b.id}" data-act="sel" data-id="${b.id}"><div class="row sp">${plate(v.plate,'sm')}<span class="sm" style="color:var(--mut)">${hm(b.s)}</span></div><div style="font-weight:700;margin-top:6px">${esc(v.make)} ${esc(v.model)}</div><div class="t">${SV[b.svc].n}<br>${esc(ownerName(v))}</div></button>`}
+function kcard(b){const v=by('vehicles',b.vid);return `<button class="kc ${b.st==='awaiting'?'wait':''}" aria-pressed="${ui.sel===b.id}" data-act="sel" data-id="${b.id}"><div class="row sp">${plate(v.plate,'sm')}<span class="sm" style="color:var(--mut)">${b.insp&&b.insp.fm&&dxCount(b.insp).kritikal?'<i class="dot bad" title="Penemuan segera"></i> ':''}${hm(b.s)}</span></div><div style="font-weight:700;margin-top:6px">${esc(v.make)} ${esc(v.model)}</div><div class="t">${SV[b.svc].n}<br>${esc(ownerName(v))}</div></button>`}
 function bBoard(bid,act){const list=act.slice().sort((a,b)=>a.s-b.s);
   const cols=COLS.map(([ks,n])=>{const l=list.filter(b=>ks.split(',').includes(b.st));return `<section class="col" aria-label="${n}"><h3><span>${n}</span><span class="cnt">${l.length}</span></h3>${l.map(kcard).join('')||'<p class="muted" style="padding:2px 6px">Kosong</p>'}</section>`}).join('');
   const b=ui.sel&&by('bookings',ui.sel);
@@ -625,9 +672,9 @@ function bCard(b){const v=by('vehicles',b.vid),id=b.id;let h=`<div class="card">
   const other=S.consent.history&&b.share?S.records.filter(r=>r.vid===b.vid&&r.bid!==b.bid&&r.src==='verified'):[];
   if(other.length)h+=`<div class="hint" style="margin:8px 0"><b>Sejarah dikongsi pelanggan (cawangan lain):</b> ${other.map(r=>dfmt(r.date)+' · '+esc(by('branches',r.bid).name)+' · '+r.km+' km').join('; ')}</div>`;
   if(b.st==='confirmed')h+=`<div class="row" style="margin-top:8px"><button class="btn" data-act="stage" data-id="${id}" data-v="arrived">Pelanggan tiba</button><button class="btn ghost" data-act="stage" data-id="${id}" data-v="noshow">Tidak hadir</button></div>`;
-  if(b.st==='arrived'||(b.st==='inspection'&&!(b.insp&&b.insp.done)))h+=`<h3 style="margin-top:12px">Senarai semak pemeriksaan <span class="muted">(isi hanya yang benar-benar diperiksa)</span></h3>${CHECK.map((c,i)=>`<div class="row" style="margin-bottom:6px"><span class="sm" style="width:170px">${c}</span><select id="ir:${id}:${i}" data-ui="ir:${id}:${i}" style="width:auto;margin:0"><option value="tidak">Tidak diperiksa</option><option value="ok" ${ui.f['ir:'+id+':'+i]==='ok'?'selected':''}>OK</option><option value="perhatian" ${ui.f['ir:'+id+':'+i]==='perhatian'?'selected':''}>Perlu perhatian</option></select><input id="in:${id}:${i}" data-ui="in:${id}:${i}" placeholder="Catatan" style="flex:1;margin:0" value="${esc(ui.f['in:'+id+':'+i]||'')}"></div>`).join('')}<div class="row">${input('ikm:'+id,'Odometer masuk (km)',{mode:'numeric'})}<button class="btn" data-act="insp" data-id="${id}">Lengkapkan pemeriksaan</button></div>`;
-  if(b.insp&&b.insp.done)h+=`<details style="margin-top:8px"><summary>Keputusan pemeriksaan (${b.insp.km?b.insp.km.toLocaleString('ms-MY')+' km':'km tiada'})</summary>${b.insp.items.map(x=>`<div class="sm row sp" style="padding:3px 0"><span>${esc(x.item)}${x.note?' · '+esc(x.note):''}</span><span class="pill ${x.res==='ok'?'ok':x.res==='perhatian'?'warn':''}">${x.res==='ok'?'OK':x.res==='perhatian'?'Perlu perhatian':'Tidak diperiksa'}</span></div>`).join('')}</details>`;
-  if((b.st==='inspection'&&b.insp&&b.insp.done)||b.st==='service')h+=`<h3 style="margin-top:12px">${b.st==='service'?'Kerja tambahan (perlu kelulusan pelanggan)':'Sebut harga berperincian'}</h3>${[0,1,2,3].map(i=>`<div class="row" style="margin-bottom:6px"><input id="qd:${id}:${i}" data-ui="qd:${id}:${i}" placeholder="Keterangan" style="flex:2 1 160px;margin:0" value="${esc(ui.f['qd:'+id+':'+i]||'')}"><input id="qq:${id}:${i}" data-ui="qq:${id}:${i}" placeholder="Qty" inputmode="decimal" style="flex:0 0 70px;margin:0" value="${esc(ui.f['qq:'+id+':'+i]||'')}"><input id="qp:${id}:${i}" data-ui="qp:${id}:${i}" placeholder="RM seunit" inputmode="decimal" style="flex:0 0 110px;margin:0" value="${esc(ui.f['qp:'+id+':'+i]||'')}"></div>`).join('')}<div class="row"><button class="btn" data-act="quote" data-id="${id}">Hantar sebut harga</button>${b.st==='service'?`<button class="btn ghost" data-act="stage" data-id="${id}" data-v="quality">Kerja siap, ke semakan kualiti</button>`:''}</div>`;
+  if(b.st==='arrived'||(b.st==='inspection'&&!(b.insp&&b.insp.done)))h+=dxForm(b);
+  if(b.insp&&b.insp.done&&b.insp.fm)h+=`<details class="dxd" ${b.st==='inspection'?'open':''}><summary>Laporan diagnosis foreman</summary>${dxReport(b.insp)}</details>`;
+  if((b.st==='inspection'&&b.insp&&b.insp.done)||b.st==='service')h+=`<h3 style="margin-top:12px">${b.st==='service'?'Kerja tambahan (perlu kelulusan pelanggan)':'Sebut harga berperincian'}</h3>${b.insp&&b.insp.fm&&dxCount(b.insp).flag.length?`<button class="btn ghost sm" data-act="dxQuote" data-id="${id}" style="margin-bottom:8px">Isi daripada laporan foreman</button>`:''}${[0,1,2,3].map(i=>`<div class="row" style="margin-bottom:6px"><input id="qd:${id}:${i}" data-ui="qd:${id}:${i}" placeholder="Keterangan" style="flex:2 1 160px;margin:0" value="${esc(ui.f['qd:'+id+':'+i]||'')}"><input id="qq:${id}:${i}" data-ui="qq:${id}:${i}" placeholder="Qty" inputmode="decimal" style="flex:0 0 70px;margin:0" value="${esc(ui.f['qq:'+id+':'+i]||'')}"><input id="qp:${id}:${i}" data-ui="qp:${id}:${i}" placeholder="RM seunit" inputmode="decimal" style="flex:0 0 110px;margin:0" value="${esc(ui.f['qp:'+id+':'+i]||'')}"></div>`).join('')}<div class="row"><button class="btn" data-act="quote" data-id="${id}">Hantar sebut harga</button>${b.st==='service'?`<button class="btn ghost" data-act="stage" data-id="${id}" data-v="quality">Kerja siap, ke semakan kualiti</button>`:''}</div>`;
   if(b.st==='awaiting')h+=`<div class="say" style="background:var(--amb-bg);color:var(--amb)">Menunggu pelanggan meluluskan sebut harga. Tiada kerja bermula tanpa kelulusan. Buka app Pelanggan untuk meluluskan.</div>`;
   if(b.st==='quality')h+=`<div style="margin-top:8px"><button class="btn" data-act="stage" data-id="${id}" data-v="ready">Lulus semakan kualiti, sedia diambil</button></div>`;
   if(b.st==='quality'||b.st==='ready')h+=`<h3 style="margin-top:12px">Selesai dan invois</h3><div class="grid">${input('ok:'+id,'Odometer keluar (km)',{mode:'numeric'})}${input('oo:'+id,'Spesifikasi minyak enjin')}${input('os:'+id,'Ringkasan kerja')}${input('oc:'+id,'Kos dalaman RM (tidak dipapar kepada pelanggan)',{mode:'decimal'})}</div><button class="btn alt" data-act="complete" data-id="${id}">Selesai dan jana invois</button>`;
@@ -706,6 +753,7 @@ function viewMaster(){
   const tl=S.tasks.reduce((a,t)=>a+tgtOf(t).filter(b=>inS(b)&&tkLate(t,b)).length,0),tu=S.tasks.reduce((a,t)=>a+tgtOf(t).filter(b=>inS(b)&&tkSt(t,b)==='baru').length,0);
   if(tl)alerts.unshift([`${tl} tugasan cawangan lewat daripada arahan CEO`,'arahan:','Pantau arahan']);
   if(tu)alerts.push([`${tu} arahan belum dibaca oleh ketua cawangan`,'arahan:','Pantau arahan']);
+  const dxn=S.bookings.filter(b=>activeB(b)&&inS(b.bid)&&b.insp&&b.insp.fm&&dxCount(b.insp).kritikal).length;if(dxn)alerts.unshift([`${dxn} kenderaan ada penemuan keselamatan segera daripada foreman`,'branch:papan','Buka papan']);
   const stp=(role,sub,t,d)=>`<li><div><b>${t}</b><span class="muted">${d}</span></div><button class="btn sm ghost" data-act="go" data-id="${role}:${sub}">Buka</button></li>`;
   return `<div class="hero-m"><h1>Pusat Kawalan CEO</h1><p>Operasi, kewangan dan jualan seluruh rangkaian di satu skrin. Pilih cawangan atau lihat semua, dan tukar tempoh untuk bandingkan dengan tempoh sebelumnya.</p><div class="strip" style="margin:12px 0 0"><span class="pill warn">Data demo</span><span class="pill info">${S.branches.filter(b=>b.st==='aktif').length} cawangan aktif · ${S.branches.length} dalam rangkaian</span></div></div>
   <div class="row sp" style="margin-bottom:6px">${scopeBar(true)}<div class="seg" role="group" aria-label="Tempoh">${per.map(([k,t])=>`<button aria-pressed="${String(n)===k}" data-act="per" data-v="${k}">${t}</button>`).join('')}</div></div>
@@ -750,7 +798,7 @@ function liveOps(){
   const cnt=k=>jobs.filter(b=>b.st===k).length,tot=jobs.length||1;
   const card=b=>{const v=by('vehicles',b.vid),i=TRKI[b.st],wait=b.st==='awaiting',start=b.s<=now().getTime();
     const el=Math.max(0,Math.round((now().getTime()-b.s)/60000)),dur=el>=60?Math.floor(el/60)+'j '+(el%60)+'m':el+' minit';
-    return `<button class="job ${wait?'wait':''}" data-act="goJob" data-id="${b.id}" aria-label="Buka kerja ${esc(v.plate)}"><div class="row sp">${plate(v.plate,'sm')}<span class="pill ${wait?'warn':b.st==='ready'?'ok':'info'}">${esc(ST[b.st])}</span></div>
+    return `<button class="job ${wait?'wait':''}" data-act="goJob" data-id="${b.id}" aria-label="Buka kerja ${esc(v.plate)}"><div class="row sp">${plate(v.plate,'sm')}<span class="pill ${wait?'warn':b.st==='ready'?'ok':'info'}">${esc(ST[b.st])}</span></div>${b.insp&&b.insp.fm&&dxCount(b.insp).kritikal?`<div class="alert" style="background:var(--red-bg);color:var(--red);margin:6px 0 0">Foreman: ${dxCount(b.insp).kritikal} penemuan segera</div>`:''}
     <div class="jt">${esc(v.make)} ${esc(v.model)}</div><div class="jm">${esc(SV[b.svc].n)}</div><div class="jm">${esc(ownerName(v))}${ui.branch==='ALL'?' · '+esc(SHORT(b.bid)):''}</div>
     <div class="stg" aria-hidden="true">${TRK.map((n,k)=>`<i class="${k<i?'d':k===i?'n':''}"></i>`).join('')}</div>
     <div class="row sp sm"><span><b>Langkah ${i+1}/6:</b> ${TRK[i]}</span><span class="muted">${b.st==='confirmed'?'Dijangka '+hm(b.s):start?dur+' dalam bengkel':'Mula '+hm(b.s)}</span></div>
@@ -845,6 +893,62 @@ function healthPanel(){const rows=healthRows(),L=['Sihat','Perlu perhatian','Kri
   <div class="hgrid">${rows.map(r=>`<div class="card hc ${C[r.w]}"><div class="row sp"><div><b style="font:800 17px var(--hd)">${esc(SHORT(r.br.id))}</b><div class="muted sm">Ketua: ${esc(HOD[r.br.id])}</div></div><span class="pill ${C[r.w]}">${L[r.w]}</span></div>
    <div class="hm">${r.m.map(([n,v,g])=>`<div><i class="dot ${C[g]}"></i><span>${n}</span><b>${v}</b></div>`).join('')}</div>
    <div class="row" style="gap:8px;margin-top:10px"><button class="btn sm ghost" data-act="goBranch" data-id="${r.br.id}">Buka cawangan</button><button class="btn sm alt" data-act="tkTo" data-id="${r.br.id}">Beri arahan</button></div></div>`).join('')||'<div class="card"><p class="muted">Tiada cawangan aktif dalam pilihan ini.</p></div>'}</div>`}
+
+/* ---------- laporan diagnosis foreman: borang & paparan ---------- */
+const dxK=(id,k)=>'dx:'+id+':'+k;
+const hk=(id,k)=>'dh:'+id+':'+k;
+const dxOpen=id=>ui.f['dxs:'+id]||'eng';
+function dxForm(b){const id=b.id,f=ui.f,lt=f[hk(id,'lt')]||[];
+  const total=DXI.length,done=DXI.filter(i=>f[dxK(id,i.k)]).length,fl=DXI.filter(i=>['perhatian','kritikal'].includes(f[dxK(id,i.k)])),cr=fl.filter(i=>f[dxK(id,i.k)]==='kritikal').length;
+  const fms=FM[b.bid]||FM.KMN;
+  let h=`<div class="dxf"><div class="row sp"><h3 style="margin:0">Laporan diagnosis foreman</h3><span class="pill info">${done}/${total} diperiksa</span></div>
+  <div class="prog sm2" style="margin:8px 0"><i style="width:${(done/total*100).toFixed(0)}%"></i></div>
+  <div class="dxh"><label>Foreman<select id="${hk(id,'fm')}" data-ui="${hk(id,'fm')}">${fms.map(n=>`<option ${f[hk(id,'fm')]===n?'selected':''}>${esc(n)}</option>`).join('')}</select></label>
+  ${input('ikm:'+id,'Odometer masuk (km)',{mode:'numeric'})}
+  <label>Tahap minyak<select id="${hk(id,'fu')}" data-ui="${hk(id,'fu')}">${FUEL.map(n=>`<option value="${n}" ${f[hk(id,'fu')]===n?'selected':''}>${n||'Pilih'}</option>`).join('')}</select></label></div>
+  <label>Aduan pelanggan<textarea id="${hk(id,'cmp')}" data-ui="${hk(id,'cmp')}" rows="2" maxlength="300" placeholder="Apa yang pelanggan rasa tidak kena">${esc(f[hk(id,'cmp')]||'')}</textarea></label>
+  <div class="lbl">Lampu amaran papan pemuka yang menyala</div><div class="chips2">${LIGHTS.map((n,i)=>`<button class="ch2 ${lt.includes(n)?'on':''}" aria-pressed="${lt.includes(n)}" data-act="dxLt" data-id="${id}" data-v="${i}">${n}</button>`).join('')}</div>
+  ${input(hk(id,'obd'),'Kod imbasan OBD (jika ada)',{ph:'Contoh: P0301 misfire silinder 1'})}`;
+  h+=DX.map(s=>{const its=DXI.filter(i=>i.sec===s.id),dn=its.filter(i=>f[dxK(id,i.k)]).length,bad=its.filter(i=>f[dxK(id,i.k)]==='kritikal').length,wn=its.filter(i=>f[dxK(id,i.k)]==='perhatian').length,op=dxOpen(id)===s.id;
+    return `<section class="dxsec ${op?'open':''}"><button class="dxhd" data-act="dxSec" data-id="${id}" data-v="${s.id}" aria-expanded="${op}"><b>${s.n}</b><span>${bad?`<i class="dot bad"></i>${bad} `:''}${wn?`<i class="dot warn"></i>${wn} `:''}<em>${dn}/${its.length}</em></span></button>
+    ${op?`<div class="dxbd">${its.map(i=>dxRow(id,i)).join('')}<button class="btn ghost sm" data-act="dxAll" data-id="${id}" data-v="${s.id}">Tandakan baki OK</button></div>`:''}</section>`}).join('');
+  h+=`<div class="dxsum"><h3 style="margin:0 0 6px">Kesimpulan</h3><div class="muted sm">${cr?`<b style="color:var(--red)">${cr} item segera</b>, `:''}${fl.length-cr} item perlu dipantau, ${fl.length?'':'tiada penemuan.'}</div>
+  <label>Selamat dipandu?<select id="${hk(id,'vd')}" data-ui="${hk(id,'vd')}"><option value="">Auto ikut penemuan</option>${Object.entries(VERD).map(([k,v])=>`<option value="${k}" ${f[hk(id,'vd')]===k?'selected':''}>${v[0]}</option>`).join('')}</select></label>
+  <label>Ringkasan untuk pelanggan<textarea id="${hk(id,'sm')}" data-ui="${hk(id,'sm')}" rows="3" maxlength="400" placeholder="Terangkan dalam bahasa mudah apa yang dijumpai dan apa langkah seterusnya.">${esc(f[hk(id,'sm')]||'')}</textarea></label>
+  <button class="btn alt full" data-act="insp" data-id="${id}">Hantar laporan diagnosis</button><p class="muted sm" style="margin-top:6px">Laporan masuk dalam log servis pelanggan. Item yang tidak diluluskan menjadi tindakan disyorkan dalam app mereka.</p></div></div>`;
+  return h}
+function dxRow(id,i){const f=ui.f,cur=f[dxK(id,i.k)]||'',fl=cur==='perhatian'||cur==='kritikal';
+  return `<div class="dxrow ${fl?'fl '+cur:''}"><div class="dxn">${esc(i.n)}</div><div class="dxs3" role="group" aria-label="${esc(i.n)}">${Object.keys(RES).map(r=>`<button class="${r} ${cur===r?'on':''}" aria-pressed="${cur===r}" data-act="dxSet" data-id="${id}" data-v="${i.k}:${r}">${RES[r][0]}</button>`).join('')}</div>
+  ${i.u&&cur?`<div class="dxx"><input id="dv:${id}:${i.k}" data-ui="dv:${id}:${i.k}" inputmode="decimal" placeholder="Bacaan (${i.u})" value="${esc(f['dv:'+id+':'+i.k]||'')}"></div>`:''}
+  ${fl?`<div class="dxx"><input id="dn:${id}:${i.k}" data-ui="dn:${id}:${i.k}" placeholder="Apa yang dijumpai (wajib)" value="${esc(f['dn:'+id+':'+i.k]||'')}"><select id="da:${id}:${i.k}" data-ui="da:${id}:${i.k}" aria-label="Tindakan disyorkan">${Object.entries(ACTS).map(([k,t])=>`<option value="${k}" ${(f['da:'+id+':'+i.k]||(cur==='kritikal'?'ganti':'pantau'))===k?'selected':''}>${t}</option>`).join('')}</select><input id="de:${id}:${i.k}" data-ui="de:${id}:${i.k}" inputmode="decimal" placeholder="Anggaran RM" value="${esc(f['de:'+id+':'+i.k]||'')}"></div>`:''}</div>`}
+function saveInsp(id){const b=by('bookings',id),f=ui.f,v=by('vehicles',b.vid);
+  if(!['arrived','inspection'].includes(b.st))return setMsg('err','Pemeriksaan hanya selepas kenderaan tiba.');
+  const km=+f['ikm:'+id];if(!km)return setMsg('err','Isi odometer masuk.');if(km<v.km)return setMsg('err','Odometer lebih rendah daripada rekod terakhir ('+v.km.toLocaleString('ms-MY')+' km). Semak semula.');
+  const items=DXI.map(i=>{const res=f[dxK(id,i.k)]||'tidak',fl=res==='perhatian'||res==='kritikal';
+    return {k:i.k,item:i.n,sec:i.sn,res,note:fl?(f['dn:'+id+':'+i.k]||'').trim():'',act:fl?(f['da:'+id+':'+i.k]||(res==='kritikal'?'ganti':'pantau')):'',est:fl?+(f['de:'+id+':'+i.k]||0)||0:0,val:(f['dv:'+id+':'+i.k]||'').trim()}});
+  const n=items.filter(i=>i.res!=='tidak').length;if(n<Math.ceil(DXI.length/2))return setMsg('err','Periksa sekurang-kurangnya separuh item ('+n+'/'+DXI.length+' setakat ini).');
+  const miss=items.find(i=>(i.res==='perhatian'||i.res==='kritikal')&&!i.note);if(miss)return setMsg('err','Tulis apa yang dijumpai bagi: '+miss.item+'.');
+  const x={km,done:true,ts:Date.now(),fm:f[hk(id,'fm')]||(FM[b.bid]||FM.KMN)[0],fuel:f[hk(id,'fu')]||'',complaint:(f[hk(id,'cmp')]||'').trim(),lights:f[hk(id,'lt')]||[],obd:(f[hk(id,'obd')]||'').trim(),items,sum:(f[hk(id,'sm')]||'').trim()};
+  x.verdict=f[hk(id,'vd')]||dxAuto(dxCount(x));b.insp=x;b.st='inspection';
+  if(km>=v.km)v.km=km;setMsg('ok','Laporan diagnosis dihantar dan masuk dalam log servis pelanggan.');save()}
+function dxQuote(id){const b=by('bookings',id),f=ui.f,c=dxCount(b.insp),l=c.flag.filter(i=>['ganti','baiki','laras'].includes(i.act)&&i.est>0).slice(0,4);
+  if(!l.length)return setMsg('err','Tiada penemuan dengan anggaran harga untuk disalin.');
+  [0,1,2,3].forEach(i=>{const x=l[i];f['qd:'+id+':'+i]=x?x.item+' ('+ACTS[x.act]+')':'';f['qq:'+id+':'+i]=x?'1':'';f['qp:'+id+':'+i]=x?String(x.est):'';f['qk:'+id+':'+i]=x?x.k:''});
+  setMsg('ok','Sebut harga diisi daripada laporan foreman. Semak harga sebelum hantar.')}
+/* laporan (staf dan pelanggan) */
+function dxChips(c){return `<div class="dxc"><span class="pill ok">${c.ok} OK</span><span class="pill warn">${c.pantau} pantau</span><span class="pill bad">${c.kritikal} segera</span>${c.skip?`<span class="pill">${c.skip} tidak diperiksa</span>`:''}</div>`}
+function dxActions(list,fixedLabel){const tot=list.filter(i=>!i.fixed).reduce((a,i)=>a+(i.est||0),0);
+  return `<ol class="dxa">${list.map(i=>`<li class="${i.res}${i.fixed?' fx':''}"><div class="row sp"><b>${esc(i.item||i.n)}</b><span class="pill ${i.fixed?'ok':RES[i.res][1]}">${i.fixed?(fixedLabel||'Dibuat'):RES[i.res][0]}</span></div><div class="sm">${esc(i.note)}${i.val?` (${esc(i.val)})`:''}</div><div class="muted sm">${i.fixed?'Sudah ditangani dalam servis ini.':`Cadangan: <b>${ACTS[i.act]||'Pantau sahaja'}</b>${i.est?' · anggaran '+rm(i.est):''} · ${WHEN[i.res]}`}</div></li>`).join('')}</ol>${tot?`<p class="sm" style="margin:6px 0 0">Anggaran jumlah belum dibuat: <b>${rm(tot)}</b> (anggaran, harga akhir dalam sebut harga)</p>`:''}`}
+function dxReport(x){const c=dxCount(x),vd=VERD[x.verdict||dxAuto(c)];
+  return `<div class="dxr"><div class="dxv2 ${vd[1]}"><b>${vd[0]}</b><span class="sm">Diperiksa oleh ${esc(x.fm)} · ${x.km?x.km.toLocaleString('ms-MY')+' km':'km tiada'}${x.fuel?' · minyak '+esc(x.fuel):''}</span></div>${dxChips(c)}
+  ${x.complaint?`<div class="sm"><b>Aduan pelanggan:</b> ${esc(x.complaint)}</div>`:''}${x.lights&&x.lights.length?`<div class="sm"><b>Lampu amaran:</b> ${x.lights.map(esc).join(', ')}</div>`:''}${x.obd?`<div class="sm"><b>Imbasan OBD:</b> ${esc(x.obd)}</div>`:''}
+  ${x.sum?`<div class="dxq">${esc(x.sum)}</div>`:''}
+  <h4>${c.flag.length?'Tindakan seterusnya':'Tiada penemuan'}</h4>${c.flag.length?dxActions(c.flag):'<p class="muted sm">Semua item yang diperiksa dalam keadaan baik.</p>'}
+  <details class="dxall"><summary>Semua keputusan pemeriksaan</summary>${DX.map(s=>{const its=x.items.filter(i=>i.sec===s.n);return its.length?`<div class="dxs4"><b>${s.n}</b>${its.map(i=>`<div class="row sp sm" style="padding:2px 0"><span>${esc(i.item)}${i.val?' · '+esc(i.val)+(DXI.find(d=>d.k===i.k).u||''):''}</span><span class="pill ${i.res==='ok'?'ok':i.res==='perhatian'?'warn':i.res==='kritikal'?'bad':''}">${i.res==='ok'?'OK':i.res==='perhatian'?'Pantau':i.res==='kritikal'?'Segera':'Tiada'}</span></div>`).join('')}</div>`:''}).join('')}</details></div>`}
+function dxSnapView(d){return `<div class="dxr"><div class="dxv2 ${VERD[d.verdict][1]}"><b>${VERD[d.verdict][0]}</b><span class="sm">Diperiksa oleh ${esc(d.fm)}</span></div><div class="dxc"><span class="pill ok">${d.ok} OK</span><span class="pill warn">${d.pantau} pantau</span><span class="pill bad">${d.kritikal} segera</span></div>${d.sum?`<div class="dxq">${esc(d.sum)}</div>`:''}${d.items.length?dxActions(d.items):''}</div>`}
+const pendingDx=v=>{const r=S.records.filter(x=>x.vid===v.id&&x.dx).sort((a,b)=>b.ts-a.ts)[0];return r&&r.dx.defer.length?r:null};
+function dxTodo(){const l=mine().map(v=>({v,r:pendingDx(v)})).filter(x=>x.r);if(!l.length)return '';
+  return `<div class="card dxtodo"><h2>Tindakan disyorkan foreman</h2>${l.map(({v,r})=>{const cr=r.dx.defer.filter(i=>i.res==='kritikal').length;return `<div style="margin-bottom:12px"><div class="row sp"><span>${plate(v.plate,'sm')} <span class="pill ${cr?'bad':'warn'}">${r.dx.defer.length} perkara${cr?' · '+cr+' segera':''}</span></span><button class="btn alt sm" data-act="remBook" data-id="${v.id}">Tempah</button></div>${dxActions(r.dx.defer)}<div class="muted sm">Daripada laporan ${dfmt(r.date)} oleh ${esc(r.dx.fm)}.</div></div>`}).join('')}</div>`}
 
 /* ---------- WhatsApp & rekrutmen ---------- */
 const TAv=(k,label,val,rows)=>`<label>${label}<textarea id="${esc(k)}" data-ui="${esc(k)}" rows="${rows||3}">${esc(ui.f[k]!=null?ui.f[k]:val)}</textarea></label>`;
@@ -964,6 +1068,9 @@ const A={
  apply:e=>applyJob(e.id),applyOpen:e=>{ui.apply=e.id},applyClose:()=>{ui.apply=null},
  pname:e=>{S.partners[e.id].name=(ui.f['pn:'+e.id]||'').trim();setMsg('ok','Nama rakan disimpan.');save()},
  tkSend,tkAck:e=>tkAck(e.id),tkDone:e=>tkDone(e.id),tkNudge:e=>tkNudge(e.id,e.v),tkDel:e=>tkDel(e.id),tkTo:e=>{ui.f['tk:to']=e.id;ui.role='arahan';window.scrollTo(0,0)},
+ dxSet:e=>{const [k,r]=e.v.split(':'),key=dxK(e.id,k);ui.f[key]=ui.f[key]===r?'':r},
+ dxAll:e=>{DXI.filter(i=>i.sec===e.v&&!ui.f[dxK(e.id,i.k)]).forEach(i=>ui.f[dxK(e.id,i.k)]='ok')},
+ dxSec:e=>{ui.f['dxs:'+e.id]=dxOpen(e.id)===e.v?'-':e.v},dxLt:e=>{const k=hk(e.id,'lt'),n=LIGHTS[+e.v],a=ui.f[k]||[];ui.f[k]=a.includes(n)?a.filter(x=>x!==n):a.concat(n)},dxQuote:e=>dxQuote(e.id),
  fbOpen:()=>{ui.fb=true;ui.menu=false},fbClose:()=>{ui.fb=false},fbSend
 };
 document.addEventListener('click',ev=>{if(ui.menu&&!ev.target.closest('.pop,.menub')){ui.menu=false;if(!ev.target.closest('[data-act]')){render();return}}
