@@ -206,6 +206,16 @@ ol.tl li.ext::before{background:#aab5b3}
 .prog{position:relative;height:14px;border-radius:99px;background:var(--chip);margin:10px 0 6px}.prog i{position:absolute;left:0;top:0;bottom:0;border-radius:99px;background:var(--teal)}.prog u{position:absolute;top:-4px;bottom:-4px;width:3px;background:var(--ink);border-radius:2px}
 .split{display:flex;height:12px;border-radius:99px;overflow:hidden;background:var(--chip);flex:1}.split i{display:block;height:100%}
 .mixrow{display:grid;grid-template-columns:minmax(90px,1.1fr) 2fr 44px;gap:10px;align-items:center;padding:5px 0;font-size:13px}.mixrow b{text-align:right}
+.livedot{width:11px;height:11px;border-radius:50%;background:#e5484d;box-shadow:0 0 0 0 rgba(229,72,77,.5);animation:live 1.8s infinite}
+@keyframes live{70%{box-shadow:0 0 0 9px rgba(229,72,77,0)}100%{box-shadow:0 0 0 0 rgba(229,72,77,0)}}
+@media(prefers-reduced-motion:reduce){.livedot{animation:none}}
+.funnel{display:flex;height:16px;border-radius:99px;overflow:hidden;background:var(--chip);gap:2px}.funnel i{display:block;height:100%}
+.jobs{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(280px,1fr))}
+.job{display:block;width:100%;text-align:left;background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px;cursor:pointer;font:inherit;color:inherit}
+.job:hover{border-color:var(--ink)}.job.wait{background:#fffbe6;border:2px solid var(--lane)}
+.job .jt{font:800 17px var(--hd);margin-top:8px}.job .jm{font-size:13px;color:var(--mut)}
+.stg{display:flex;gap:4px;margin:12px 0 8px}.stg i{flex:1;height:8px;border-radius:99px;background:#d9e0de}.stg i.d{background:var(--teal)}.stg i.n{background:var(--lane);box-shadow:0 0 0 2px rgba(255,210,31,.35)}
+.job .alert{margin-top:8px;background:var(--amb-bg);color:var(--amb);border-radius:10px;padding:7px 10px;font-size:12.5px;font-weight:600}
 .cm{border-bottom:1px solid var(--line);padding:8px 0}
 </style>
 </head>
@@ -686,7 +696,7 @@ function viewMaster(){
    <h3 style="margin-top:12px">Pelanggan baharu lawan ulang</h3><div class="split" role="img" aria-label="Pelanggan baharu dan ulang"><i style="width:${(100-cur.repP*100).toFixed(1)}%;background:var(--tar)"></i><i style="width:${(cur.repP*100).toFixed(1)}%;background:var(--lane)"></i></div><div class="legend"><span><i style="background:var(--tar)"></i>Baharu ${pc(1-cur.repP)}</span><span><i style="background:var(--lane)"></i>Ulang ${pc(cur.repP)}</span></div></div>
   <div class="card"><h2>Servis mengikut kategori</h2>${Object.entries(cur.svc).map(([k,v])=>`<div class="mixrow"><span>${SV[k].n.replace(' & penapis','').replace(' (visual)','')}</span><div class="split"><i style="width:${(v/svcT*100).toFixed(1)}%;background:var(--tar)"></i></div><b>${pc(v/svcT)}</b></div>`).join('')}<p class="muted">Kategori servis hanya dikira daripada data latar demo.</p></div>
   <div class="card"><h2>Perlu tindakan</h2>${alerts.length?`<div class="todo">${alerts.map(([t,g,b])=>`<button data-act="go" data-id="${g}"><span>${esc(t)}</span><span class="pill info">${b}</span></button>`).join('')}</div>`:'<p class="muted">Tiada perkara mendesak.</p>'}</div></div>
-  <h2 class="sec">Operasi langsung: ${esc(scopeName())}</h2><div class="pipe">${PIPE.map(([k,t])=>{const l=S.bookings.filter(b=>inS(b.bid)&&b.st===k);return `<div><b>${l.length}</b><small>${t}</small></div>`}).join('')}</div>
+  ${liveOps()}
   ${netTable(ms,n)}
   ${monthTable(A12)}
   <details class="card" style="margin-top:12px"><summary>Definisi KPI dan sumber data</summary><ul class="sm"><li><b>Hasil</b>: jumlah invois servis selesai dalam tempoh.</li><li><b>Margin kasar</b>: hasil tolak kos langsung. Tidak termasuk gaji tetap, sewa dan pemasaran.</li><li><b>Pelanggan ulang</b>: pelanggan yang pernah dilayan sebelum ini.</li><li><b>Utilisasi bay</b>: servis selesai dibahagi kapasiti anggaran (bay × 26 hari × 7 servis sehari).</li><li><b>Tidak hadir</b>: tempahan yang tidak hadir dibahagi jumlah tempahan.</li><li><b>Sumber</b>: <span class="pill warn">demo</span> latar 15 bulan yang dijana untuk menunjukkan susun atur, ditambah rekod yang anda jana dalam demo ini. Tiada angka di sini daripada operasi sebenar. Sasaran ialah contoh.</li></ul></details>
@@ -702,6 +712,23 @@ function viewMaster(){
   ${stp('hq','rakan','HQ: rakan insurans dan roadtax','Pelanggan memohon sebut harga rakan selepas memberi persetujuan.')}
   ${stp('hq','rekrut','HQ: rekrutmen staf','Buka jawatan dengan syarat wajib, lihat calon bersama skor padanan.')}</ol>
   <h2 class="sec">Komen anda</h2><div class="card">${S.fb.length?S.fb.slice().reverse().map(c=>`<div class="cm"><div class="row sp"><b>${esc(c.name||'Tanpa nama')}</b><span class="pill ${c.sent?'ok':'warn'}">${c.sent?'Sampai ke pemilik':'Simpan setempat'}</span></div><div>${esc(c.body)}</div><div class="muted">${dtfmt(c.ts)} · ${esc(c.ctx)}</div></div>`).join(''):'<p class="muted">Belum ada komen. Tekan butang Komen di mana-mana skrin.</p>'}<button class="btn alt" data-act="fbOpen" style="margin-top:8px">Tulis komen</button></div>`}
+const STG=[['confirmed','Akan tiba','#c9d3d1'],['arrived','Tiba','#97a9a6'],['inspection','Pemeriksaan','#1d5fb8'],['awaiting','Tunggu kelulusan','#ffd21f'],['service','Diservis','#0d8a73'],['quality','Semakan kualiti','#17212b'],['ready','Sedia diambil','#0a6a58']];
+const SHORT=id=>by('branches',id).name.replace('[Contoh] Cawangan ','').replace('CARREPUBLIC ','');
+function liveOps(){
+  const jobs=S.bookings.filter(b=>activeB(b)&&inS(b.bid)),order={awaiting:0,ready:1,quality:2,service:3,inspection:4,arrived:5,confirmed:6};
+  jobs.sort((a,b)=>(order[a.st]-order[b.st])||(a.s-b.s));
+  const cnt=k=>jobs.filter(b=>b.st===k).length,tot=jobs.length||1;
+  const card=b=>{const v=by('vehicles',b.vid),i=TRKI[b.st],wait=b.st==='awaiting',start=b.s<=now().getTime();
+    const el=Math.max(0,Math.round((now().getTime()-b.s)/60000)),dur=el>=60?Math.floor(el/60)+'j '+(el%60)+'m':el+' minit';
+    return `<button class="job ${wait?'wait':''}" data-act="goJob" data-id="${b.id}" aria-label="Buka kerja ${esc(v.plate)}"><div class="row sp">${plate(v.plate,'sm')}<span class="pill ${wait?'warn':b.st==='ready'?'ok':'info'}">${esc(ST[b.st])}</span></div>
+    <div class="jt">${esc(v.make)} ${esc(v.model)}</div><div class="jm">${esc(SV[b.svc].n)}</div><div class="jm">${esc(ownerName(v))}${ui.branch==='ALL'?' · '+esc(SHORT(b.bid)):''}</div>
+    <div class="stg" aria-hidden="true">${TRK.map((n,k)=>`<i class="${k<i?'d':k===i?'n':''}"></i>`).join('')}</div>
+    <div class="row sp sm"><span><b>Langkah ${i+1}/6:</b> ${TRK[i]}</span><span class="muted">${b.st==='confirmed'?'Dijangka '+hm(b.s):start?dur+' dalam bengkel':'Mula '+hm(b.s)}</span></div>
+    ${wait?'<div class="alert">Menunggu pelanggan meluluskan sebut harga. Kerja belum boleh bermula.</div>':`<div class="muted" style="margin-top:6px">Anggaran siap ${hm(b.e)}</div>`}</button>`};
+  return `<div class="row sp" style="margin:22px 2px 6px"><h2 style="margin:0;display:flex;align-items:center;gap:10px"><span class="livedot" aria-hidden="true"></span>Bengkel sekarang</h2><span class="muted">${esc(scopeName())} · ${jobs.length} kereta</span></div>
+  <p class="muted" style="margin:0 2px 10px">Satu kad untuk setiap kereta yang sedang dikendalikan. Kad kuning perlu tindakan. Tekan kad untuk buka butiran kerja.</p>
+  ${jobs.length?`<div class="funnel" role="img" aria-label="Taburan kerja ikut peringkat">${STG.map(([k,n,c])=>cnt(k)?`<i style="flex:${cnt(k)};background:${c}" title="${n}: ${cnt(k)}"></i>`:'').join('')}</div><div class="legend" style="margin:8px 2px 14px">${STG.map(([k,n,c])=>`<span><i style="background:${c}"></i>${n} <b style="color:var(--ink)">${cnt(k)}</b></span>`).join('')}</div>
+  <div class="jobs">${jobs.map(card).join('')}</div>`:'<div class="card"><p class="muted" style="margin:0">Tiada kereta dalam bengkel sekarang. Cuba tempah servis di app Pelanggan, kemudian tandakan tiba di papan kerja.</p></div>'}`}
 function netTable(ms,n){const pm=monthsBack(1)[0],fr=dayFrac();
   return `<h2 class="sec">Rangkaian cawangan <span class="muted" style="font:500 13px var(--bd)">(${n===1?'bulan ini':n+' bulan terakhir'})</span></h2><div class="card scroll net"><table><thead><tr><th>Cawangan</th><th>Status</th><th class="num">Hasil</th><th class="num">Margin</th><th class="num">Servis</th><th class="num">Purata invois</th><th class="num">Utilisasi</th><th class="num">Sasaran bulan ini</th><th></th></tr></thead><tbody>${S.branches.filter(b=>inS(b.id)).map(b=>{
    const k=kpi(aggM(monthsBack(n),i=>i===b.id)),mm=aggM([pm],i=>i===b.id)[0],t=S.targets[b.id],u=b.st==='aktif'?k.jobs/Math.max(1,b.bays*26*7*n):null;
@@ -815,7 +842,7 @@ const A={
  role:e=>{ui.role=e.v;ui.menu=false;window.scrollTo(0,0)},
  ct:e=>{ui.ct=e.v;ui.role='cust';window.scrollTo(0,0)},bt:e=>{ui.bt=e.v;ui.role='branch';window.scrollTo(0,0)},ht:e=>{ui.ht=e.v;ui.role='hq';window.scrollTo(0,0)},
  go:e=>{const [r,s]=e.id.split(':');ui.role=r;if(SUBK[r])ui[SUBK[r]]=s;window.scrollTo(0,0)},
- menu:()=>{ui.menu=!ui.menu},per:e=>{ui.per=e.v},csv:csvMonths,
+ menu:()=>{ui.menu=!ui.menu},goJob:e=>{const b=by('bookings',e.id);ui.branch=b.bid;ui.role='branch';ui.bt='papan';ui.sel=b.id;window.scrollTo(0,0)},per:e=>{ui.per=e.v},csv:csvMonths,
  goBranch:e=>{ui.branch=e.id;ui.role='branch';ui.bt='papan';ui.sel=null;window.scrollTo(0,0)},
  skip:()=>{S.skip+=182;ui.menu=false;setMsg('ok','Masa disimulasi maju 6 bulan (demo). Peringatan dikira semula.');save()},
  reset:()=>{S=seed();ui.f={le:'master@carrepublic.demo',lp:''};ui.slot=null;ui.sel=null;ui.menu=false;store.set(JSON.stringify(S));setMsg('ok','Data demo disetkan semula.')},
