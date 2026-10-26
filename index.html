@@ -30,11 +30,11 @@ p{margin:0 0 8px}
 .mtop{position:sticky;top:0;z-index:30;background:var(--tar);color:#fff;padding:10px 12px 8px}
 .mtop .row1{display:flex;justify-content:space-between;align-items:center}
 .logo2{font:800 17px var(--hd);letter-spacing:.02em}.logo2 small{font:500 11px var(--bd);color:#9db0bf;margin-left:6px;letter-spacing:0}
-.menub{border:1px solid #35485a;background:none;color:#dce6ee;border-radius:99px;padding:6px 12px;font:600 13px var(--bd)}
+.menub{width:42px;height:42px;display:grid;place-items:center;border:1px solid #35485a;background:var(--tar2);color:#fff;border-radius:12px;cursor:pointer;padding:0}.menub svg{width:22px;height:22px}.menub[aria-expanded=true]{background:var(--lane);color:#111;border-color:var(--lane)}
 .chips{display:flex;gap:6px;overflow-x:auto;padding:9px 0 2px;scrollbar-width:none}.chips::-webkit-scrollbar{display:none}
 .chip-r{flex:none;border:0;border-radius:99px;padding:7px 13px;font:600 13px var(--bd);background:var(--tar2);color:#d3dde5;cursor:pointer}
 .chip-r[aria-pressed=true]{background:var(--lane);color:#111}
-.pop{margin-top:8px;background:var(--tar2);border-radius:14px;padding:10px;display:grid;gap:6px}
+.pop{position:absolute;right:12px;top:54px;width:min(280px,calc(100vw - 24px));background:var(--tar);border:1px solid #35485a;border-radius:16px;padding:8px;display:grid;gap:4px;box-shadow:0 18px 40px rgba(5,12,20,.45)}
 .bnav{position:fixed;left:0;right:0;bottom:0;z-index:30;background:#fff;border-top:1px solid var(--line);display:flex;gap:2px;padding:6px 6px max(6px,env(safe-area-inset-bottom))}
 .bnav button{flex:1;border:0;background:none;display:flex;flex-direction:column;align-items:center;gap:2px;font:600 11px var(--bd);color:var(--mut);padding:6px 2px;border-radius:12px;cursor:pointer}
 .bnav button[aria-current=true]{color:var(--ink);background:var(--chip)}
@@ -444,7 +444,7 @@ function ctrls(){return `<button class="btn" data-act="fbOpen">${I('chat')}Beri 
 function shell(){
   const n=NAV.find(x=>x.id===ui.role);
   const side=`<aside class="side"><div class="logo"><i></i><b>CARREPUBLIC</b><small>CareOS</small></div><nav aria-label="Peranan">${NAV.map(x=>`<button class="nb" aria-current="${ui.role===x.id}" data-act="role" data-v="${x.id}">${I(x.ic)}${x.t}</button>${ui.role===x.id&&x.subs.length?`<div class="subs">${x.subs.map(([k,t])=>`<button class="sb" aria-current="${ui[x.k]===k}" data-act="${x.k}" data-v="${k}">${t}</button>`).join('')}</div>`:''}`).join('')}</nav><div class="sidef">${ctrls()}<div class="env">Persekitaran demo. Data contoh disimpan dalam pelayar ini.</div></div></aside>`;
-  const mtop=`<header class="mtop"><div class="row1"><span class="logo2">CARREPUBLIC<small>CareOS</small></span><button class="menub" data-act="menu" aria-expanded="${!!ui.menu}">${ui.menu?'Tutup':'Menu'}</button></div><div class="chips">${NAV.map(x=>`<button class="chip-r" aria-pressed="${ui.role===x.id}" data-act="role" data-v="${x.id}">${x.t.replace(/ \(.*\)/,'')}</button>`).join('')}</div>${ui.menu?`<div class="pop">${ctrls()}</div>`:''}</header>`;
+  const mtop=`<header class="mtop"><div class="row1"><span class="logo2">CARREPUBLIC<small>CareOS</small></span><button class="menub" data-act="menu" aria-label="Menu" aria-expanded="${!!ui.menu}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">${ui.menu?'<path d="M6 6l12 12M18 6L6 18"/>':'<path d="M4 7h16M4 12h16M4 17h16"/>'}</svg></button></div><div class="chips">${NAV.map(x=>`<button class="chip-r" aria-pressed="${ui.role===x.id}" data-act="role" data-v="${x.id}">${x.t.replace(/ \(.*\)/,'')}</button>`).join('')}</div>${ui.menu?`<div class="pop">${ctrls()}</div>`:''}</header>`;
   const bnav=n.subs.length?`<nav class="bnav" aria-label="Menu">${n.subs.map(([k,t,ic])=>`<button aria-current="${ui[n.k]===k}" data-act="${n.k}" data-v="${k}">${I(ic)}${t}</button>`).join('')}</nav>`:'';
   const body=ui.role==='master'?viewMaster():ui.role==='cust'?viewCust():ui.role==='branch'?viewBranch():ui.role==='kerja'?viewKerja():viewHQ();
   return `<div class="shell">${side}${mtop}<main class="main" id="main">${body}</main>${bnav}</div><button class="fab" data-act="fbOpen">${I('chat')}<span>Komen</span></button>${ui.fb?fbModal():''}${msgBox()}`}
@@ -722,7 +722,8 @@ const A={
  pname:e=>{S.partners[e.id].name=(ui.f['pn:'+e.id]||'').trim();setMsg('ok','Nama rakan disimpan.');save()},
  fbOpen:()=>{ui.fb=true;ui.menu=false},fbClose:()=>{ui.fb=false},fbSend
 };
-document.addEventListener('click',ev=>{const t=ev.target.closest('[data-act]');if(!t||t.tagName==='SELECT'||t.type==='checkbox')return;
+document.addEventListener('click',ev=>{if(ui.menu&&!ev.target.closest('.pop,.menub')){ui.menu=false;if(!ev.target.closest('[data-act]')){render();return}}
+  const t=ev.target.closest('[data-act]');if(!t||t.tagName==='SELECT'||t.type==='checkbox')return;
   if(t.classList.contains('modal')&&ev.target!==t)return;
   const f=A[t.dataset.act];if(!f)return;f({id:t.dataset.id,v:t.dataset.v});render()});
 document.addEventListener('keydown',ev=>{if(ev.key==='Escape'&&ui.fb){ui.fb=false;render()}});
