@@ -1,60 +1,208 @@
 <!doctype html>
-<html lang="ms"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light}body{margin:0}[hidden]{display:none!important}</style>
+<html lang="ms">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>CARREPUBLIC CareOS</title>
-<meta name="claude:viewport-fit-sides" content="cover">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+<meta name="theme-color" content="#17212b">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&display=swap">
 <style>
-/* Concept: satu aplikasi tiga paparan (Pelanggan, Cawangan, HQ) dengan satu login master; kad padat, teks besar, BM utama. */
-:root{--bg:#f6f4ef;--card:#ffffff;--fg:#14202c;--muted:#5d6b78;--line:#e2ddd2;--brand:#0b2a4a;--brand-fg:#ffffff;--accent:#f2b01e;--accent-fg:#0b2a4a;--ok:#116b43;--ok-bg:#dff3e8;--warn:#7a4b00;--warn-bg:#fdecc2;--bad:#9b1c1c;--bad-bg:#fbe0e0;--info:#0b4a7a;--info-bg:#dcecf9;--chip:#ece8de;--font:'Plus Jakarta Sans',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e161e;--card:#15212c;--fg:#eaeff4;--muted:#9aa9b6;--line:#26364a;--brand:#f2b01e;--brand-fg:#0b2a4a;--accent:#f2b01e;--accent-fg:#0b2a4a;--ok:#7fd8a8;--ok-bg:#12372a;--warn:#f6cf7a;--warn-bg:#3b2c0b;--bad:#f5a3a3;--bad-bg:#3d1717;--info:#9ccdf2;--info-bg:#102b42;--chip:#1e2d3b;color-scheme:dark}}
-:root[data-theme="dark"]{--bg:#0e161e;--card:#15212c;--fg:#eaeff4;--muted:#9aa9b6;--line:#26364a;--brand:#f2b01e;--brand-fg:#0b2a4a;--accent:#f2b01e;--accent-fg:#0b2a4a;--ok:#7fd8a8;--ok-bg:#12372a;--warn:#f6cf7a;--warn-bg:#3b2c0b;--bad:#f5a3a3;--bad-bg:#3d1717;--info:#9ccdf2;--info-bg:#102b42;--chip:#1e2d3b;color-scheme:dark}
+/* Konsep: bengkel moden. Tarmac gelap + garisan lorong kuning; plat nombor hitam sebagai motif; papan kerja bengkel dan app telefon pelanggan. */
+:root{--ink:#111a22;--tar:#17212b;--tar2:#243342;--paper:#eef1f0;--card:#fff;--line:#dce2e1;--mut:#5a6771;--lane:#ffd21f;--teal:#0d8a73;--teal-bg:#d8f1e9;--amb:#85500a;--amb-bg:#ffeec4;--red:#b3261e;--red-bg:#fde1df;--blue:#1d5fb8;--blue-bg:#dfeafb;--chip:#e5eae9;--hd:'Bricolage Grotesque',system-ui,sans-serif;--bd:'Figtree',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif}
 *{box-sizing:border-box}
-body{background:var(--bg);color:var(--fg);font-family:var(--font);font-size:16px;line-height:1.45;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 40px}
-.wrap{max-width:960px;margin:0 auto}
-.top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;padding:14px 0 8px}
-.brand{font-weight:800;font-size:19px;letter-spacing:.02em}.brand b{color:var(--accent)}
-.brand small{display:block;font-weight:500;font-size:11px;color:var(--muted);letter-spacing:0}
-.demo{background:var(--warn-bg);color:var(--warn);border-radius:10px;padding:8px 12px;font-size:13px;margin:6px 0 12px}
-.tabs{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 14px}
-.tab{border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:999px;padding:9px 15px;font:600 14px var(--font);cursor:pointer}
-.tab[aria-pressed="true"]{background:var(--brand);color:var(--brand-fg);border-color:var(--brand)}
-.tab.sub[aria-pressed="true"]{background:var(--chip);color:var(--fg);border-color:var(--fg)}
-h1{font-size:24px;margin:6px 0 12px;text-wrap:balance}h2{font-size:18px;margin:0 0 10px}h3{font-size:15px;margin:0 0 6px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px;min-width:0}
-.grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
-.grid>*{min-width:0}
-.kpis{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));margin-bottom:12px}
-.kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px}
-.kpi small{color:var(--muted);display:block;font-size:12px}.kpi b{font-size:21px;font-variant-numeric:tabular-nums}
-.btn{border:0;border-radius:10px;padding:11px 16px;font:700 14px var(--font);cursor:pointer;background:var(--brand);color:var(--brand-fg)}
-.btn.alt{background:var(--accent);color:var(--accent-fg)}.btn.ghost{background:transparent;color:var(--fg);border:1px solid var(--line)}.btn.bad{background:var(--bad-bg);color:var(--bad)}
-.btn:disabled{opacity:.5;cursor:not-allowed}
-.btn:focus-visible,.tab:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
-label{display:block;font-size:13px;color:var(--muted);margin-bottom:8px}
-input,select,textarea{width:100%;margin-top:4px;padding:11px 12px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--fg);font:500 16px var(--font)}
-input[type=checkbox]{width:20px;height:20px;margin:0 8px 0 0;vertical-align:middle}
-.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
-.row.sp{justify-content:space-between}
-.pill{display:inline-block;border-radius:999px;padding:3px 10px;font-size:12px;font-weight:700;background:var(--chip);color:var(--fg)}
-.pill.ok{background:var(--ok-bg);color:var(--ok)}.pill.warn{background:var(--warn-bg);color:var(--warn)}.pill.bad{background:var(--bad-bg);color:var(--bad)}.pill.info{background:var(--info-bg);color:var(--info)}
-.muted{color:var(--muted);font-size:13px}.sm{font-size:13px}
-.msg{border-radius:10px;padding:10px 12px;margin:8px 0;font-size:14px}.msg.ok{background:var(--ok-bg);color:var(--ok)}.msg.err{background:var(--bad-bg);color:var(--bad)}
-.slots{display:flex;flex-wrap:wrap;gap:8px}.slot{border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:10px;padding:9px 13px;font:700 14px var(--font);cursor:pointer}.slot[aria-pressed="true"]{background:var(--brand);color:var(--brand-fg)}
-table{width:100%;border-collapse:collapse;font-size:14px}th,td{text-align:left;padding:7px 6px;border-bottom:1px solid var(--line);vertical-align:top}.num{text-align:right;font-variant-numeric:tabular-nums}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 15px/1.5 var(--bd)}
+button,input,select,textarea{font-family:inherit}
+h1,h2,h3{font-family:var(--hd);letter-spacing:-.01em;margin:0}
+h1{font-size:27px;line-height:1.12;font-weight:800;text-wrap:balance;margin-bottom:6px}
+h2{font-size:18px;font-weight:800;margin-bottom:10px}h3{font-size:15px;font-weight:600;margin-bottom:6px}
+h2.sec{margin:20px 2px 10px}
+p{margin:0 0 8px}
+.muted{color:var(--mut);font-size:13px}.sm{font-size:13px}
+.ic{width:20px;height:20px;flex:none}
+:focus-visible{outline:3px solid var(--lane);outline-offset:2px;box-shadow:0 0 0 5px var(--tar)}
+/* shell */
+.shell{min-height:100vh}
+.side{display:none}
+.main{padding:14px 16px 100px;min-width:0;max-width:1140px;margin:0 auto}
+.mtop{position:sticky;top:0;z-index:30;background:var(--tar);color:#fff;padding:10px 12px 8px}
+.mtop .row1{display:flex;justify-content:space-between;align-items:center}
+.logo2{font:800 17px var(--hd);letter-spacing:.02em}.logo2 small{font:500 11px var(--bd);color:#9db0bf;margin-left:6px;letter-spacing:0}
+.menub{border:1px solid #35485a;background:none;color:#dce6ee;border-radius:99px;padding:6px 12px;font:600 13px var(--bd)}
+.chips{display:flex;gap:6px;overflow-x:auto;padding:9px 0 2px;scrollbar-width:none}.chips::-webkit-scrollbar{display:none}
+.chip-r{flex:none;border:0;border-radius:99px;padding:7px 13px;font:600 13px var(--bd);background:var(--tar2);color:#d3dde5;cursor:pointer}
+.chip-r[aria-pressed=true]{background:var(--lane);color:#111}
+.pop{margin-top:8px;background:var(--tar2);border-radius:14px;padding:10px;display:grid;gap:6px}
+.bnav{position:fixed;left:0;right:0;bottom:0;z-index:30;background:#fff;border-top:1px solid var(--line);display:flex;gap:2px;padding:6px 6px max(6px,env(safe-area-inset-bottom))}
+.bnav button{flex:1;border:0;background:none;display:flex;flex-direction:column;align-items:center;gap:2px;font:600 11px var(--bd);color:var(--mut);padding:6px 2px;border-radius:12px;cursor:pointer}
+.bnav button[aria-current=true]{color:var(--ink);background:var(--chip)}
+@media(min-width:960px){
+ .shell{display:grid;grid-template-columns:260px 1fr}
+ .side{display:flex;flex-direction:column;position:sticky;top:0;height:100vh;background:var(--tar);color:#d3dde5;padding:20px 14px;overflow:auto}
+ .mtop,.bnav{display:none}
+ .main{padding:28px 34px 60px;width:100%}
+}
+.logo{padding:2px 8px 18px;display:flex;align-items:baseline;gap:8px}.logo b{font:800 20px var(--hd);color:#fff;letter-spacing:.02em}.logo small{font-size:12px;color:#8da1b1}
+.logo i{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--lane);margin-right:2px}
+.nb,.sb{display:flex;align-items:center;gap:10px;width:100%;text-align:left;border:0;background:none;color:#c5d1da;font:600 14px var(--bd);padding:10px 12px;border-radius:12px;cursor:pointer}
+.nb:hover,.sb:hover{background:var(--tar2)}
+.nb[aria-current=true]{background:var(--tar2);color:#fff;box-shadow:inset 3px 0 0 var(--lane)}
+.subs{margin:2px 0 8px 22px;border-left:1px solid #34475a;padding-left:8px}
+.sb{font-weight:500;padding:7px 10px;font-size:13.5px}.sb[aria-current=true]{color:var(--lane);font-weight:700}
+.sidef{margin-top:auto;display:grid;gap:6px;padding-top:16px}
+.sidef .btn,.pop .btn{background:var(--tar2);color:#e3ecf2;font-weight:600;justify-content:flex-start}
+.sidef .btn.out,.pop .btn.out{background:none;border:1px solid #35485a}
+.env{font-size:11.5px;color:#8da1b1;padding:6px 8px 0}
+.strip{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:0 0 14px}
+/* controls */
+.btn{display:inline-flex;align-items:center;gap:8px;border:0;border-radius:12px;padding:11px 16px;font:700 14px var(--bd);cursor:pointer;background:var(--ink);color:#fff;text-decoration:none;line-height:1.2}
+.btn.alt{background:var(--lane);color:#111}.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}.btn.bad{background:var(--red-bg);color:var(--red)}.btn.sm{padding:8px 12px;font-size:13px}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.full{width:100%;justify-content:center}
+label{display:block;font-size:13px;color:var(--mut);margin-bottom:10px;font-weight:500}
+input,select,textarea{width:100%;margin-top:4px;padding:11px 12px;border-radius:12px;border:1px solid #cfd8d6;background:#fff;color:var(--ink);font:500 16px var(--bd)}
+input[type=checkbox]{width:20px;height:20px;margin:0 8px 0 0;vertical-align:middle;accent-color:var(--ink)}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.row.sp{justify-content:space-between}
+.pill{display:inline-block;border-radius:99px;padding:2px 10px;font-size:12px;font-weight:700;background:var(--chip);color:var(--ink);white-space:nowrap}
+.pill.ok{background:var(--teal-bg);color:#0a6a58}.pill.warn{background:var(--amb-bg);color:var(--amb)}.pill.bad{background:var(--red-bg);color:var(--red)}.pill.info{background:var(--blue-bg);color:var(--blue)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:12px;min-width:0}
+.card.flat{border:0;background:transparent;padding:0}
+.grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}.grid>*{min-width:0}
+.kpis{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));margin-bottom:14px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px 14px}
+.kpi small{display:block;color:var(--mut);font-size:12.5px}.kpi b{display:block;white-space:nowrap;font:800 24px/1.2 var(--hd);font-variant-numeric:tabular-nums}
+.kpi.hot{background:var(--lane);border-color:var(--lane)}.kpi.hot small{color:#4d3f00}
+table{width:100%;border-collapse:collapse;font-size:14px}th,td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--line);vertical-align:top}th{font-size:12px;color:var(--mut);font-weight:600}.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
 .scroll{overflow-x:auto}
-ol.tl{border-left:2px solid var(--line);margin:8px 0 0;padding:0 0 0 14px;list-style:none}ol.tl li{margin-bottom:12px}
-.partner{border:2px dashed var(--line);border-radius:14px;padding:14px;background:var(--card)}
-.login{max-width:430px;margin:8vh auto 0}
-details>summary{cursor:pointer;font-weight:700;padding:4px 0}
-.hint{background:var(--info-bg);color:var(--info);border-radius:10px;padding:10px 12px;font-size:13px}
-.bar{height:8px;border-radius:99px;background:var(--chip);overflow:hidden}.bar i{display:block;height:100%;background:var(--brand)}
+details>summary{cursor:pointer;font-weight:700;padding:6px 0}
+.hint{background:var(--blue-bg);color:#154a92;border-radius:12px;padding:10px 12px;font-size:13px}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:84px;z-index:60;max-width:min(92vw,520px);padding:12px 16px;border-radius:14px;font-weight:600;font-size:14px;box-shadow:0 10px 30px rgba(10,20,30,.25);animation:toast 6.5s forwards;pointer-events:none}
+.toast.ok{background:var(--tar);color:#fff}.toast.err{background:var(--red);color:#fff}
+@keyframes toast{0%{opacity:0;transform:translate(-50%,10px)}6%,88%{opacity:1;transform:translate(-50%,0)}100%{opacity:0}}
+@media(min-width:960px){.toast{bottom:28px}}
+.fab span{display:none}.fab{position:fixed;right:14px;bottom:84px;z-index:40;border:0;border-radius:99px;background:var(--lane);color:#111;font:700 14px var(--bd);padding:11px 16px;display:flex;gap:8px;align-items:center;box-shadow:0 8px 22px rgba(10,20,30,.28);cursor:pointer}
+@media(min-width:960px){.fab{bottom:24px;right:28px}.fab span{display:inline}}
+.modal{position:fixed;inset:0;z-index:70;background:rgba(10,20,30,.55);display:flex;align-items:flex-end;justify-content:center}
+.modal>div{background:#fff;width:min(560px,100%);border-radius:22px 22px 0 0;padding:20px 18px max(20px,env(safe-area-inset-bottom))}
+@media(min-width:700px){.modal{align-items:center}.modal>div{border-radius:22px}}
+/* login */
+.lg{min-height:100vh;display:grid;grid-template-columns:1fr}
+.lg-l{background:var(--tar);color:#fff;padding:28px 22px 34px;position:relative;overflow:hidden}
+.lg-l::after{content:'';position:absolute;left:0;right:0;bottom:22px;height:4px;background:repeating-linear-gradient(90deg,var(--lane) 0 34px,transparent 34px 68px);opacity:.9;animation:road 3s linear infinite}
+@keyframes road{to{background-position:68px 0}}
+.lg-l .logo{padding:0 0 28px}
+.lg-l h1{font-size:34px;max-width:15ch;color:#fff}
+.lg-l p{color:#b9c8d3;max-width:44ch}
+.lg-l ul{list-style:none;padding:0;margin:20px 0 40px;display:grid;gap:10px;color:#dbe6ee;font-size:14.5px}
+.lg-l li{display:flex;gap:10px;align-items:flex-start}.lg-l li::before{content:'';flex:none;margin-top:8px;width:8px;height:8px;border-radius:50%;background:var(--lane)}
+.lg-r{padding:26px 20px 40px;display:flex;align-items:center;justify-content:center}
+.lg-r form{width:min(400px,100%)}
+@media(min-width:900px){.lg{grid-template-columns:1.1fr 1fr}.lg-l{padding:56px 56px}.lg-l h1{font-size:50px}}
+@media(prefers-reduced-motion:reduce){.lg-l::after{animation:none}.toast{animation-duration:.01s;animation-delay:6s}}
+/* plat & kenderaan */
+.plate{display:inline-block;background:#0a0a0a;color:#fff;font:800 16px/1 var(--hd);letter-spacing:.12em;padding:5px 11px 4px;border-radius:6px;outline:1.5px solid rgba(255,255,255,.75);outline-offset:-3px;white-space:nowrap}
+.plate.sm{font-size:13px;padding:4px 8px 3px}
+.vscroll{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;margin:0;padding:2px 0 10px;scrollbar-width:none}.vscroll::-webkit-scrollbar{display:none}
+.vcard{flex:0 0 100%;scroll-snap-align:center;background:var(--tar);color:#fff;border-radius:24px;padding:16px 16px 20px;position:relative;overflow:hidden}
+.vcard::after{content:'';position:absolute;left:0;right:0;bottom:0;height:5px;background:repeating-linear-gradient(90deg,var(--lane) 0 22px,transparent 22px 44px)}
+.vcard .vm{font-size:13px;color:#b9c8d3}
+.carw{margin:6px 0 4px}.carw svg{width:100%;max-height:112px}
+.vstats{display:grid;grid-template-columns:1fr 1.25fr;gap:10px;align-items:center;margin-bottom:10px}
+.vstats small{display:block;color:#9db0bf;font-size:11.5px}.vstats b{font:700 15px var(--hd);display:block}
+.rg{display:flex;gap:10px;align-items:center}
+.ring{width:56px;height:56px;flex:none}.ring .rb{fill:none;stroke:#2d3e4e;stroke-width:6}.ring .rf{fill:none;stroke:var(--lane);stroke-width:6;stroke-linecap:round}.ring.over .rf{stroke:#ff7b72}.ring text{fill:#fff;font:700 13px var(--hd)}
+.xchip{display:inline-block;border-radius:99px;font-size:12px;font-weight:600;padding:3px 10px;background:#2d3e4e;color:#dce6ee}
+.xchip.ok{background:#14473d;color:#aeeedd}.xchip.warn{background:#4d3c0c;color:#ffe08a}.xchip.bad{background:#59201c;color:#ffc2bd}
+.greet{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}.greet small{color:var(--mut)}
+.av{width:42px;height:42px;border-radius:50%;background:var(--tar);color:var(--lane);display:grid;place-items:center;font:800 18px var(--hd)}
+.qa{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}
+.qa button{border:1px solid var(--line);background:#fff;border-radius:16px;padding:14px 12px;display:flex;flex-direction:column;gap:8px;align-items:flex-start;font:700 14px var(--bd);color:var(--ink);cursor:pointer;text-align:left}
+.qa .ic{width:24px;height:24px}
+.phone{width:100%;max-width:420px;margin:0 auto}
+@media(min-width:960px){.phone{border:10px solid #0a1016;border-radius:46px;box-shadow:0 34px 60px -24px rgba(10,20,30,.4);padding:22px 14px 24px;min-height:780px;background:var(--paper)}.phone::before{content:'';display:block;width:96px;height:22px;background:#0a1016;border-radius:0 0 14px 14px;margin:-22px auto 14px}.phone h1{font-size:24px}}
+.phonewrap{display:grid;gap:20px;grid-template-columns:minmax(0,1fr)}.phone{min-width:0}
+@media(min-width:1100px){.phonewrap{grid-template-columns:minmax(0,1fr) 420px;align-items:start}.phone{margin:0}}
+.sidecol{display:none}@media(min-width:1100px){.sidecol{display:block}}
+.sidecol .card{background:var(--tar);color:#dbe6ee;border:0}.sidecol h3{color:#fff}.sidecol .muted{color:#9db0bf}
+.mob-only{display:block}@media(min-width:1100px){.mob-only{display:none}}
+/* tracker */
+.trk{list-style:none;display:flex;margin:16px 0 6px;padding:0}
+.trk li{flex:1;text-align:center;position:relative;font-size:10.5px;color:var(--mut);line-height:1.2}
+.trk li i{display:block;width:14px;height:14px;border-radius:50%;background:#cdd6d4;margin:0 auto 6px;position:relative;z-index:1}
+.trk li::before{content:'';position:absolute;top:6px;left:-50%;width:100%;height:2px;background:#cdd6d4}
+.trk li:first-child::before{display:none}
+.trk li.done i,.trk li.done::before,.trk li.now::before{background:var(--teal)}
+.trk li.now i{background:var(--lane);box-shadow:0 0 0 4px rgba(255,210,31,.4);animation:pulse 1.9s ease-out infinite}
+.trk li.now{color:var(--ink);font-weight:700}
+@keyframes pulse{50%{box-shadow:0 0 0 9px rgba(255,210,31,0)}}
+@media(prefers-reduced-motion:reduce){.trk li.now i{animation:none}}
+.say{background:var(--chip);border-radius:12px;padding:9px 12px;font-size:13.5px;margin-top:6px}
+.action{border:2px solid var(--lane);background:#fffbe6}
+/* tempah */
+.step{display:flex;gap:10px;align-items:center;margin:16px 0 8px;font:800 15px var(--hd)}
+.step span{width:24px;height:24px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;font-size:12px}
+.svcs{display:grid;gap:8px}
+.svc{border:2px solid var(--line);background:#fff;border-radius:14px;padding:11px 13px;text-align:left;cursor:pointer;display:flex;justify-content:space-between;gap:10px;font:inherit;color:inherit}
+.svc b{font-weight:700}.svc small{color:var(--mut);display:block}
+.svc[aria-pressed=true]{border-color:var(--ink);background:#f7f9f8}
+.days,.slots{display:flex;flex-wrap:wrap;gap:8px}
+.day,.slot{border:1px solid #cfd8d6;background:#fff;color:var(--ink);border-radius:12px;padding:9px 13px;font:700 14px var(--bd);cursor:pointer;min-width:62px}
+.day small{display:block;font-weight:500;color:var(--mut);font-size:11px}
+.day[aria-pressed=true],.slot[aria-pressed=true]{background:var(--ink);color:#fff;border-color:var(--ink)}.day[aria-pressed=true] small{color:#c8d3da}
+/* pasport */
+ol.tl{border-left:2px solid var(--line);margin:8px 0 0 6px;padding:0 0 0 16px;list-style:none}
+ol.tl li{margin-bottom:14px;position:relative}ol.tl li::before{content:'';position:absolute;left:-23px;top:6px;width:10px;height:10px;border-radius:50%;background:var(--teal)}
+ol.tl li.ext::before{background:#aab5b3}
+/* partner */
+.partner{border:2px dashed #b8c3c1;border-radius:18px;padding:16px;background:#fff}
+.logoslot{width:100%;height:54px;border-radius:12px;background:repeating-linear-gradient(135deg,#f0f3f2 0 10px,#e8edec 10px 20px);display:grid;place-items:center;font-size:12px;color:var(--mut);margin-bottom:10px}
+/* kanban */
+.kan{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(220px,1fr);gap:10px;overflow-x:auto;padding-bottom:10px;scroll-snap-type:x proximity}
+.col{background:#e3e9e7;border-radius:16px;padding:8px;min-height:150px;scroll-snap-align:start}
+.col>h3{display:flex;justify-content:space-between;align-items:center;font-size:13px;padding:4px 6px 8px;margin:0}
+.cnt{background:var(--ink);color:#fff;border-radius:99px;font-size:12px;padding:1px 8px}
+.kc{display:block;width:100%;text-align:left;background:#fff;border:2px solid transparent;border-radius:14px;padding:10px 11px;margin-bottom:8px;cursor:pointer;font:inherit;color:inherit}
+.kc[aria-pressed=true]{border-color:var(--ink)}
+.kc .t{font-size:12.5px;color:var(--mut);margin-top:6px}
+.kc.wait{box-shadow:inset 4px 0 0 var(--lane)}
+.detail{margin-top:6px}
+/* jadual bay */
+.bay{display:grid;grid-template-columns:54px 1fr;gap:8px;align-items:center;margin-bottom:8px}
+.bay>b{font:700 13px var(--hd)}
+.lane{position:relative;height:56px;border-radius:12px;background:repeating-linear-gradient(90deg,#e3e9e7 0 1px,transparent 1px calc(100%/9)),#f4f6f5;border:1px solid var(--line)}
+.blk{position:absolute;top:5px;bottom:5px;border-radius:9px;background:var(--tar);color:#fff;font-size:10.5px;padding:5px 6px;overflow:hidden;line-height:1.25;white-space:nowrap;text-overflow:clip}
+.blk.s-service,.blk.s-quality,.blk.s-ready{background:var(--teal)}.blk.s-awaiting{background:var(--lane);color:#111}.blk.s-confirmed{background:#fff;color:var(--ink);border:2px dashed #9aa8a6}
+.hours{display:grid;grid-template-columns:repeat(9,1fr);margin-left:62px;font-size:11px;color:var(--mut);margin-bottom:4px}
+/* charts */
+.bars{display:flex;gap:6px;align-items:flex-end;height:130px;padding-top:6px}
+.bars .b{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:4px;height:100%;min-width:0}
+.bars i{display:block;width:100%;max-width:34px;background:var(--tar);border-radius:6px 6px 2px 2px;min-height:3px}
+.bars .b.t i{background:var(--lane)}
+.bars span{font-size:10.5px;color:var(--mut);white-space:nowrap}
+.bars em{font:700 11px var(--bd);font-style:normal}
+.pipe{display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr));gap:8px}
+.pipe div{background:#fff;border:1px solid var(--line);border-radius:14px;padding:10px 12px}
+.pipe b{display:block;font:800 26px var(--hd)}.pipe small{color:var(--mut);font-size:12px}
+.hero-m{background:var(--tar);color:#fff;border-radius:24px;padding:24px 22px;margin-bottom:14px;position:relative;overflow:hidden}
+.hero-m h1{color:#fff;font-size:30px;max-width:20ch}.hero-m p{color:#b9c8d3;max-width:60ch}
+.hero-m::after{content:'';position:absolute;left:0;right:0;bottom:0;height:5px;background:repeating-linear-gradient(90deg,var(--lane) 0 26px,transparent 26px 52px)}
+.roles{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));margin-bottom:12px}
+.roles .card{margin:0;display:flex;flex-direction:column;gap:6px}.roles .card p{flex:1}
+.flow{counter-reset:s;list-style:none;padding:0;margin:0;display:grid;gap:8px}
+.flow li{display:flex;gap:12px;align-items:center;justify-content:space-between;border:1px solid var(--line);border-radius:14px;padding:10px 12px;background:#fff}
+.flow li div{flex:1}.flow li b{display:block}
+.todo{display:grid;gap:8px}.todo button{display:flex;justify-content:space-between;gap:10px;align-items:center;text-align:left;border:1px solid var(--line);background:#fff;border-radius:14px;padding:11px 13px;font:600 14px var(--bd);cursor:pointer;color:var(--ink)}
+.cm{border-bottom:1px solid var(--line);padding:8px 0}
 </style>
-</head><body>
-<div class="wrap"><div id="app"></div></div>
+</head>
+<body>
+<div id="app"></div>
 <script>
 (()=>{
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const KEY='careos-demo-v3',MEM={};
+const KEY='careos-demo-v5',MEM={};
 const store={get(){try{return localStorage.getItem(KEY)}catch(e){return MEM[KEY]||null}},set(v){try{localStorage.setItem(KEY,v)}catch(e){MEM[KEY]=v}}};
 const DAY=864e5;
 const pad=n=>String(n).padStart(2,'0');
@@ -63,22 +211,10 @@ const addDays=(d,n)=>new Date(d.getTime()+n*DAY);
 const SV={oil:{n:'Servis minyak enjin & penapis',d:60},ac:{n:'Servis penghawa dingin',d:90},brake:{n:'Pemeriksaan brek (visual)',d:45},tyre:{n:'Pemeriksaan tayar & tekanan',d:30}};
 const ST={confirmed:'Disahkan',arrived:'Tiba',inspection:'Pemeriksaan',awaiting:'Menunggu kelulusan pelanggan',service:'Sedang diservis',quality:'Semakan kualiti',ready:'Sedia diambil',completed:'Selesai',cancelled:'Dibatalkan',noshow:'Tidak hadir'};
 const CHECK=['Paras minyak enjin','Tekanan & rupa tayar','Brek (pemeriksaan visual)','Bateri','Penghawa dingin','Lampu & isyarat'];
-const rm=n=>n==null?'Hubungi cawangan':'RM '+Number(n).toFixed(2);
+const rm=n=>n==null?'Hubungi cawangan':'RM '+Number(n).toLocaleString('en-MY',{minimumFractionDigits:2,maximumFractionDigits:2});
 const dfmt=s=>new Date(s.length<=10?s+'T00:00:00':s).toLocaleDateString('ms-MY',{dateStyle:'medium'});
 const dtfmt=t=>new Date(t).toLocaleString('ms-MY',{dateStyle:'medium',timeStyle:'short'});
 
-function seed(){
-  const t=new Date();
-  return {v:3,seq:100,skip:0,
-   branches:[
-    {id:'KMN',name:'CARREPUBLIC Kemaman',city:'Kemaman',state:'Terengganu',postcode:'24000',bays:2,open:'09:00',close:'18:00',closed:[0],note:'Alamat, waktu operasi dan harga sebenar belum diisi. Nilai di sini ialah contoh.'},
-    {id:'SHA',name:'[Contoh] Cawangan Shah Alam',city:'Shah Alam',state:'Selangor',postcode:'40000',bays:1,open:'09:00',close:'18:00',closed:[0],note:'Cawangan contoh untuk menunjukkan perjalanan merentas negeri.'}],
-   prices:{KMN:{oil:120,ac:null,brake:null,tyre:null},SHA:{oil:130,ac:null,brake:null,tyre:null}},
-   vehicles:[{id:'v1',plate:'DEMO 1234',make:'Perodua',model:'Myvi',year:2019,km:48000,ik:10000,im:6,rt:ymd(addDays(t,45)),ins:ymd(addDays(t,20))}],
-   bookings:[],records:[],reminders:[],quotes:[],leads:[],
-   consent:{reminder:true,marketing:false,history:false,location:false},
-   partners:{insurance:{on:true,name:'',url:'',note:'Slot rakan insurans kenderaan'},roadtax:{on:true,name:'',url:'',note:'Slot rakan pembaharuan cukai jalan'}}};
-}
 const JOB_TPL={
  'Penasihat Servis':{shift:'Syif pagi/petang, termasuk Sabtu bergilir',edu:'SPM atau setara; sijil automotif satu kelebihan',exp:1,lic:true,
   must:['Komunikasi dan layanan pelanggan yang jelas','Boleh terangkan kerja servis dan sebut harga berperincian','Asas kenderaan (minyak enjin, brek, tayar, bateri)','Teliti merekod maklumat pelanggan dan kenderaan'],
@@ -100,19 +236,86 @@ const WA_DEF={reminder:'Salam {nama}, servis kereta {plat} dianggarkan tiba seki
  overdue:'Salam {nama}, servis kereta {plat} sudah melepasi anggaran ({tarikh} atau {km} km). Kami boleh bantu tempah slot di {cawangan}: {pautan}. Ini peringatan jadual, bukan diagnosis kerosakan.'};
 const STOPLINE='\nBalas BERHENTI untuk hentikan peringatan.';
 const STAGES=['baharu','saringan','temu duga','tawaran','diterima','tidak diteruskan'];
-function ext(){
-  if(!S.profile)S.profile={name:'Aisyah (Demo)',phone:'',postcode:'24000'};
-  if(!S.wa)S.wa={before:14,tpl:{reminder:WA_DEF.reminder,overdue:WA_DEF.overdue},log:[]};
-  if(!S.jobs){const t=JOB_TPL['Penasihat Servis'];S.jobs=[{id:'j1',title:'Penasihat Servis',role:'Penasihat Servis',bid:'KMN',count:1,type:'Sepenuh masa',shift:t.shift,edu:t.edu,exp:t.exp,lic:t.lic,must:t.must.slice(),nice:t.nice.slice(),qs:t.qs.slice(),salary:'',ben:'',deadline:'',st:'terbuka',flag:false}];S.apps=[]}
-  S.v=4;
+/* ---------- data contoh (semua DEMO; nama dan plat rekaan) ---------- */
+const SB_URL='https://yzlwshrywctlcwfbpddp.supabase.co',SB_KEY='sb_publishable_yA1MJyxUca8tUbjnQVN3Eg_2Is0jjYG';
+function seed(){
+  const t=new Date(),D=n=>ymd(addDays(t,n)),T=(h,m)=>{const d=new Date(t);d.setHours(h,m,0,0);return d.getTime()};
+  const veh=(id,own,plate,make,model,year,km,col,rt,ins)=>({id,own,plate,make,model,year,km,ik:10000,im:6,rt:D(rt),ins:D(ins),col});
+  const vehicles=[
+    veh('v1','me','DEMO 1234','Perodua','Myvi',2019,48200,'#c4cad0',45,20),
+    veh('v2','me','DEMO 5678','Proton','X50',2022,21400,'#2a5db0',210,-5),
+    veh('v3','Faiz (Demo)','DEMO 2211','Honda','City',2020,61000,'#9b2323',120,90),
+    veh('v4','Hana (Demo)','DEMO 9090','Toyota','Vios',2018,51200,'#e4e7e8',15,40),
+    veh('v5','Zul (Demo)','DEMO 3344','Perodua','Axia',2021,28800,'#e6ae22',200,150),
+    veh('v6','Mei Ling (Demo)','DEMO 7788','Proton','Saga',2017,87500,'#33424f',70,12),
+    veh('v7','Rahman (Demo)','DEMO 5150','Toyota','Hilux',2019,102300,'#56616b',33,66),
+    veh('v8','Salmah (Demo)','DEMO 4545','Perodua','Bezza',2020,36100,'#7f95a6',95,95),
+    veh('v9','Zainab (Demo)','DEMO 6060','Perodua','Alza',2016,51500,'#b9c0c5',25,5)];
+  vehicles[0].ik=5000;
+  const insp=(km,res,notes)=>({km,done:true,items:CHECK.map((c,i)=>({item:c,res:(res&&res[i])||'ok',note:(notes&&notes[i])||''}))});
+  const bk=(id,vid,svc,h,m,st,x)=>{const s=T(h,m);return Object.assign({id,vid,bid:'KMN',svc,s,e:s+SV[svc].d*60000,st,src:'direct',insp:null,share:false},x||{})};
+  const bookings=[
+    bk('b1','v3','oil',9,0,'service',{insp:insp(61000)}),
+    bk('b4','v6','ac',9,30,'quality',{insp:insp(87500,['ok','ok','ok','ok','perhatian'],['','','','','Gas A/C rendah'])}),
+    bk('b2','v4','brake',10,0,'inspection',{insp:insp(51200,['ok','perhatian','ok','ok','ok','ok'],['','Tapak tayar depan kiri nipis'])}),
+    bk('b3','v5','tyre',11,0,'awaiting',{insp:insp(28800),prev:'inspection'}),
+    bk('b6','v1','oil',11,30,'awaiting',{insp:insp(48200,['ok','ok','ok','ok','ok','ok'],['','','','','','']),prev:'inspection',share:true}),
+    bk('b5','v7','oil',14,0,'confirmed',{src:'reminder'})];
+  const q=(id,bid,items,st)=>({id,bid,items,total:items.reduce((a,x)=>a+x.q*x.p,0),st,add:false});
+  const quotes=[
+    q('q1','b1',[{d:'Servis minyak enjin & penapis',q:1,p:120}],'approved'),
+    q('q3','b4',[{d:'Servis penghawa dingin & tambah gas',q:1,p:180}],'approved'),
+    q('q2','b3',[{d:'Pemeriksaan & pusing tayar',q:1,p:60},{d:'Injap tayar baharu',q:4,p:8}],'sent'),
+    q('q4','b6',[{d:'Servis minyak enjin & penapis',q:1,p:120},{d:'Penapis udara (dicadangkan semasa pemeriksaan)',q:1,p:35}],'sent')];
+  const rec=(n,vid,bid,dd,km,sum,items,cost,oil)=>{const date=D(dd),total=items.reduce((a,x)=>a+x.q*x.p,0);
+    return {id:'r'+n,vid,bid,bk:null,src:'verified',date,km,oil:oil||'',sum,total,cost,inv:'INV-'+bid+'-'+date.replace(/-/g,'').slice(2)+'-'+String(n).padStart(2,'0'),items,ts:new Date(date+'T10:00:00').getTime()}};
+  const oil=(p)=>[{d:'Servis minyak enjin & penapis',q:1,p}];
+  const records=[
+    rec(1,'v1','SHA',-170,38000,'Servis minyak enjin & penapis',oil(130),78,'5W-30 semisintetik'),
+    rec(2,'v1','KMN',-30,43500,'Servis minyak enjin & penapis',oil(120),70,'5W-30 semisintetik'),
+    rec(3,'v3','SHA',-75,57500,'Servis penghawa dingin',[{d:'Servis A/C & tambah gas',q:1,p:180}],100),
+    rec(4,'v9','KMN',-200,41500,'Servis minyak enjin & penapis',oil(120),71,'10W-40'),
+    rec(5,'v6','KMN',-3,87100,'Pemeriksaan tayar & tekanan',[{d:'Pemeriksaan & pusing tayar',q:1,p:60}],25),
+    rec(6,'v2','KMN',-120,15000,'Servis minyak enjin & penapis',oil(120),70,'0W-20 sintetik'),
+    rec(7,'v5','KMN',-1,28700,'Pemeriksaan brek (visual)',[{d:'Pemeriksaan brek',q:1,p:45},{d:'Minyak brek',q:1,p:40}],40),
+    rec(8,'v8','KMN',0,36100,'Servis minyak enjin & penapis',oil(120),70,'5W-30 semisintetik'),
+    rec(10,'v4','KMN',-6,50900,'Servis minyak enjin & penapis',oil(120),72,'5W-30 semisintetik'),
+    rec(11,'v7','KMN',-9,101900,'Pemeriksaan tayar & tekanan',[{d:'Pemeriksaan & pusing tayar',q:1,p:60}],26)];
+  records.push({id:'r9',vid:'v1',bid:null,bk:null,src:'customer',date:D(-400),km:30000,oil:'',sum:'Servis di bengkel lama (resit pelanggan)',total:null,cost:null,inv:'',items:[],ts:new Date(D(-400)+'T10:00:00').getTime()});
+  const bs=(k,i)=>'Anggaran berdasarkan selang '+k+' km atau 6 bulan (tetapan kenderaan). Ini peringatan jadual, bukan diagnosis mekanikal.';
+  const reminders=[
+    {id:'m1',vid:'v1',date:D(150),km:48500,booked:true,st:'open',rec:'r2',basis:bs(5000)},
+    {id:'m2',vid:'v9',date:D(-20),km:50000,booked:false,st:'open',rec:'r4',basis:bs(10000)},
+    {id:'m3',vid:'v2',date:D(60),km:25000,booked:false,st:'open',rec:'r6',basis:bs(10000)},
+    {id:'m4',vid:'v8',date:D(180),km:46100,booked:false,st:'open',rec:'r8',basis:bs(10000)}];
+  const jt=JOB_TPL['Penasihat Servis'];
+  const jobs=[{id:'j1',title:'Penasihat Servis',role:'Penasihat Servis',bid:'KMN',count:1,type:'Sepenuh masa',shift:jt.shift,edu:jt.edu,exp:jt.exp,lic:jt.lic,must:jt.must.slice(),nice:jt.nice.slice(),qs:jt.qs.slice(),salary:'',ben:'',deadline:'',st:'terbuka',flag:false}];
+  const apps=[
+    {id:'a1',jid:'j1',name:'Calon contoh A',phone:'(contoh)',email:'',exp:2,lic:true,must:[true,true,true,false],ans:['Saya dengar dahulu, minta maaf, kemudian terangkan langkah seterusnya.','Saya semak rekod pemeriksaan dan tunjuk bukti kepada pelanggan.','Boleh.'],st:'saringan',ts:Date.now()-5*3600e3},
+    {id:'a2',jid:'j1',name:'Calon contoh B',phone:'(contoh)',email:'',exp:0,lic:false,must:[true,false,false,true],ans:['','',''],st:'baharu',ts:Date.now()-2*3600e3}];
+  return {v:5,seq:300,skip:0,
+    branches:[
+      {id:'KMN',name:'CARREPUBLIC Kemaman',city:'Kemaman',state:'Terengganu',postcode:'24000',bays:2,open:'09:00',close:'18:00',closed:[0],note:'Cawangan perintis. Alamat, waktu dan harga sebenar belum diisi; nilai di sini ialah contoh.'},
+      {id:'SHA',name:'[Contoh] Cawangan Shah Alam',city:'Shah Alam',state:'Selangor',postcode:'40000',bays:1,open:'09:00',close:'18:00',closed:[0],note:'Cawangan contoh untuk menunjukkan perjalanan merentas negeri.'}],
+    prices:{KMN:{oil:120,ac:180,brake:45,tyre:60},SHA:{oil:130,ac:190,brake:50,tyre:65}},
+    vehicles,bookings,records,reminders,quotes,
+    leads:[{id:'l1',type:'insurance',vid:'v2',plate:'DEMO 5678',phone:'(contoh)',exp:D(-5),ts:Date.now()-3*3600e3,st:'baharu',partner:'(slot belum diisi)'},{id:'l2',type:'roadtax',vid:'v6',plate:'DEMO 7788',phone:'(contoh)',exp:D(70),ts:Date.now()-26*3600e3,st:'dihubungi',partner:'(slot belum diisi)'}],
+    consent:{reminder:true,marketing:false,history:true,location:false},
+    partners:{insurance:{on:true,name:'',url:'',note:'Slot rakan insurans kenderaan'},roadtax:{on:true,name:'',url:'',note:'Slot rakan pembaharuan cukai jalan'}},
+    profile:{name:'Aisyah (Demo)',phone:'',postcode:'24000'},
+    wa:{before:14,tpl:{reminder:WA_DEF.reminder,overdue:WA_DEF.overdue},log:[{id:'w1',rid:'m3',ts:Date.now()-40*3600e3,plat:'DEMO 5678',kind:'reminder',text:'(contoh)',status:'Dihantar (simulasi)',ok:true}]},
+    jobs,apps,fb:[]};
 }
+const KEY5='careos-demo-v5';
 let S;try{S=JSON.parse(store.get())}catch(e){}
-if(!S||(S.v!==3&&S.v!==4))S=seed();ext();
+if(!S||S.v!==5)S=seed();
 const save=()=>store.set(JSON.stringify(S));
 const nid=p=>p+(++S.seq);
 const now=()=>new Date(Date.now()+S.skip*DAY);
 const by=(a,id)=>S[a].find(x=>x.id===id);
-const ui={logged:false,role:'cust',ct:'garaj',branch:'KMN',f:{},msg:null,slot:null,done:null};
+const authGet=()=>{try{return sessionStorage.getItem('careos-auth')==='1'}catch(e){return false}};
+const authSet=v=>{try{v?sessionStorage.setItem('careos-auth','1'):sessionStorage.removeItem('careos-auth')}catch(e){}};
+const ui={logged:authGet(),role:'master',ct:'utama',bt:'papan',ht:'ringkas',branch:'KMN',f:{le:'master@carrepublic.demo',lp:'Demo#2026'},msg:null,slot:null,done:null,sel:null,fb:false,menu:false};
 
 /* ---------- domain ---------- */
 function slotsFor(bid,svc,date){
@@ -138,7 +341,7 @@ function book(){
   const b={id:nid('b'),vid,bid,svc,s:sl.s,e:sl.e,st:'confirmed',src:f.src||'direct',insp:null,share:!!f.share};
   S.bookings.push(b);S.consent.history=!!f.share;
   S.reminders.forEach(r=>{if(r.vid===vid&&r.st!=='completed')r.booked=true});
-  ui.slot=null;ui.f.src='';ui.done='Tempahan disahkan di '+by('branches',bid).name+' pada '+dtfmt(sl.s)+'.';setMsg('ok',ui.done);ui.ct='garaj';save();
+  ui.slot=null;ui.f.src='';ui.done='Tempahan disahkan di '+by('branches',bid).name+' pada '+dtfmt(sl.s)+'.';setMsg('ok',ui.done);ui.ct='utama';save();
 }
 function cancel(id){const b=by('bookings',id);if(!b||b.st!=='confirmed')return;b.st='cancelled';
   if(!S.bookings.some(k=>k.vid===b.vid&&!['cancelled','noshow','completed'].includes(k.st)))S.reminders.forEach(r=>{if(r.vid===b.vid)r.booked=false});setMsg('ok','Tempahan dibatalkan.');save()}
@@ -183,118 +386,223 @@ function submitLead(type){const f=ui.f,v=by('vehicles',f['lv:'+type]);
   S.leads.push({id:nid('l'),type,vid:v.id,plate:v.plate,phone:f['lp:'+type],exp:type==='insurance'?v.ins:v.rt,ts:Date.now(),st:'baharu',partner:S.partners[type].name||'(slot belum diisi)'});
   setMsg('ok','Permohonan dihantar. Rakan akan menghubungi anda. (Demo: tiada mesej sebenar dihantar.)');save()}
 function addVehicle(){const f=ui.f;if(!f.nvp||!f.nvm)return setMsg('err','Isi nombor plat dan model.');
-  S.vehicles.push({id:nid('v'),plate:f.nvp.toUpperCase(),make:f.nvb||'',model:f.nvm,year:+f.nvy||null,km:+f.nvk||0,ik:10000,im:6,rt:'',ins:''});f.nvp=f.nvm=f.nvb=f.nvy=f.nvk='';setMsg('ok','Kenderaan ditambah.');save()}
+  S.vehicles.push({id:nid('v'),own:'me',col:'#9aa5ad',plate:f.nvp.toUpperCase(),make:f.nvb||'',model:f.nvm,year:+f.nvy||null,km:+f.nvk||0,ik:10000,im:6,rt:'',ins:''});f.nvp=f.nvm=f.nvb=f.nvy=f.nvk='';setMsg('ok','Kenderaan ditambah.');save()}
 function updKm(id){const v=by('vehicles',id),k=+ui.f['km:'+id];if(!k||k<v.km)return setMsg('err','Odometer tidak boleh lebih rendah daripada rekod terakhir ('+v.km+' km).');v.km=k;setMsg('ok','Odometer dikemas kini.');save()}
 function addExt(){const f=ui.f;if(!f.ev||!f.ed||!f.es)return setMsg('err','Isi kenderaan, tarikh dan ringkasan.');if(f.ed>ymd(now()))return setMsg('err','Tarikh tidak boleh pada masa hadapan.');
   S.records.push({id:nid('r'),vid:f.ev,bid:null,src:'customer',date:f.ed,km:+f.ek||null,sum:f.es,total:null,cost:null,inv:'',items:[],ts:new Date(f.ed+'T00:00:00').getTime()});setMsg('ok','Rekod ditambah (dilabel sebagai dokumen pelanggan).');save()}
 
-/* ---------- views ---------- */
+/* ---------- paparan ---------- */
+const PATHS={
+ home:'<path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',
+ cal:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
+ book:'<path d="M5 3h12a2 2 0 0 1 2 2v16H7a2 2 0 0 1-2-2z"/><path d="M5 19a2 2 0 0 1 2-2h12"/>',
+ shield:'<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/>',
+ user:'<circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/>',
+ board:'<rect x="3" y="4" width="5" height="16" rx="1"/><rect x="10" y="4" width="5" height="10" rx="1"/><rect x="17" y="4" width="4" height="13" rx="1"/>',
+ chart:'<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',
+ chat:'<path d="M4 5h16v11H9l-5 4z"/>',
+ people:'<circle cx="9" cy="8" r="3.5"/><path d="M2 20c.7-3.5 3.3-5 7-5s6.3 1.5 7 5"/><path d="M16 5a3.5 3.5 0 0 1 0 6M18 15c2 .5 3.5 2 4 5"/>',
+ brief:'<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V4h6v3M3 13h18"/>',
+ star:'<path d="M12 3l2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.2 6.5 20.2l1-6.2L3 9.6l6.2-.9z"/>',
+ wrench:'<path d="M14 6a4 4 0 0 0 5 5l-9 9a2.1 2.1 0 0 1-3-3l9-9"/><path d="M14 6l-1-3 3 1"/>',
+ gear:'<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/>'
+};
+const I=n=>`<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${PATHS[n]||''}</svg>`;
+const ownerName=v=>v.own==='me'?S.profile.name:v.own;
+const consentOf=v=>v.own==='me'?S.consent.reminder:true;
+const phoneOk=v=>v.own==='me'?!!waPhone(S.profile.phone):true;
+const plate=(p,c)=>`<span class="plate ${c||''}">${esc(p)}</span>`;
+const activeB=b=>!['completed','cancelled','noshow'].includes(b.st);
+const mine=()=>S.vehicles.filter(v=>v.own==='me');
+const carSvg=()=>'<svg viewBox="0 0 220 90" aria-hidden="true"><path d="M8 66V52q0-7 9-9l34-7 22-22q4-4 10-4h58q8 0 14 7l18 19 28 6q9 2 9 11v13z" fill="currentColor"/><path d="M80 17h22v19H62zM110 17h30q5 0 9 5l12 14h-51z" fill="rgba(255,255,255,.5)"/><circle cx="58" cy="66" r="16" fill="#0b1218"/><circle cx="58" cy="66" r="7" fill="#aeb8c0"/><circle cx="164" cy="66" r="16" fill="#0b1218"/><circle cx="164" cy="66" r="7" fill="#aeb8c0"/></svg>';
+let cur=null;
+const msgBox=()=>cur?`<div class="toast ${cur.t}" role="status">${esc(cur.s)}</div>`:'';
 const input=(k,label,o={})=>`<label>${label}<input id="${esc(k)}" data-ui="${esc(k)}" ${o.type?`type="${o.type}"`:''} ${o.mode?`inputmode="${o.mode}"`:''} ${o.ph?`placeholder="${esc(o.ph)}"`:''} value="${esc(ui.f[k]||'')}"></label>`;
 const sel=(k,label,opts)=>`<label>${label}<select id="${esc(k)}" data-ui="${esc(k)}">${opts.map(([v,t])=>`<option value="${esc(v)}" ${(ui.f[k]||'')===v?'selected':''}>${esc(t)}</option>`).join('')}</select></label>`;
-const msgBox=()=>ui.msg?`<div class="msg ${ui.msg.t}" role="status">${esc(ui.msg.s)}</div>`:'';
-const vOpts=()=>[['','Pilih kenderaan'],...S.vehicles.map(v=>[v.id,v.plate+' · '+v.make+' '+v.model])];
+const vOpts=()=>[['','Pilih kenderaan'],...mine().map(v=>[v.id,v.plate+' · '+v.make+' '+v.model])];
+const hm=t=>new Date(t).toLocaleTimeString('ms-MY',{hour:'2-digit',minute:'2-digit'});
 
-function viewLogin(){return `<div class="login card"><div class="brand">CARREPUBLIC <b>CareOS</b><small>Your Car. Our Care.</small></div>
-<h1>Log masuk demo</h1>
-<form id="lf"><label>E-mel<input id="le" data-ui="le" autocomplete="username" value="${esc(ui.f.le||'')}"></label>
+const NAV=[
+ {id:'master',t:'Gambaran Master',ic:'star',subs:[]},
+ {id:'cust',t:'Pelanggan (app)',ic:'user',k:'ct',subs:[['utama','Utama','home'],['tempah','Tempah','cal'],['pasport','Pasport','book'],['rakan','Rakan','shield'],['saya','Saya','user']]},
+ {id:'branch',t:'Cawangan (BranchOS)',ic:'wrench',k:'bt',subs:[['papan','Papan kerja','board'],['jadual','Jadual','cal'],['due','Akan due','chat'],['jualan','Jualan','chart'],['staf','Staf','people']]},
+ {id:'hq',t:'HQ',ic:'chart',k:'ht',subs:[['ringkas','Ringkasan','chart'],['rakan','Rakan','shield'],['wa','WhatsApp','chat'],['rekrut','Rekrutmen','people']]},
+ {id:'kerja',t:'Kerjaya (calon)',ic:'brief',subs:[]}];
+
+function viewLogin(){return `<div class="lg"><section class="lg-l"><div class="logo"><i></i><b>CARREPUBLIC</b><small>CareOS</small></div>
+<h1>Satu rekod servis untuk setiap kereta.</h1>
+<p>Sistem aftercare untuk bengkel dan pelanggan: tempahan merentas cawangan, status servis masa nyata, peringatan yang menghormati persetujuan, dan pasport servis yang kekal walaupun pelanggan bertukar cawangan.</p>
+<ul><li>Pelanggan nampak status kerja dan meluluskan sebut harga dari telefon</li><li>Cawangan Kemaman mengurus kerja di papan bengkel</li><li>HQ nampak seluruh rangkaian, rakan insurans dan roadtax, WhatsApp dan rekrutmen</li></ul></section>
+<section class="lg-r"><form id="lf"><h1 style="font-size:26px">Log masuk demo</h1><p class="muted">Akaun master sudah diisi. Tekan Masuk untuk lihat semua paparan.</p>
+<label>E-mel<input id="le" data-ui="le" autocomplete="username" value="${esc(ui.f.le||'')}"></label>
 <label>Kata laluan<input id="lp" data-ui="lp" type="password" autocomplete="current-password" value="${esc(ui.f.lp||'')}"></label>
-${msgBox()}<button class="btn alt" type="submit">Log masuk</button></form>
-<div class="hint" style="margin-top:14px"><b>Akaun master (demo)</b><br>E-mel: <code>master@carrepublic.demo</code><br>Kata laluan: <code>Demo#2026</code><br>Satu akaun ini boleh menukar paparan antara Pelanggan, Cawangan Kemaman dan HQ.</div>
-<p class="muted">Demo sahaja. Data contoh disimpan dalam pelayar anda dan tidak dikongsi.</p></div>`}
+<button class="btn alt full" type="submit">Masuk</button>
+<p class="muted" style="margin-top:14px">Demo sahaja. Semua nama, plat dan harga ialah contoh. Data tersimpan dalam pelayar anda dan tidak dikongsi.</p></form></section></div>${msgBox()}`}
 
-function head(){return `<div class="top"><div class="brand">CARREPUBLIC <b>CareOS</b><small>Your Car. Our Care.</small></div>
-<div class="row"><button class="btn ghost" data-act="skip">Simulasi +6 bulan${S.skip?' ('+Math.round(S.skip/30)+' bln)':''}</button><button class="btn ghost" data-act="reset">Set semula demo</button><button class="btn ghost" data-act="logout">Log keluar</button></div></div>
-<div class="demo"><b>Persekitaran DEMO.</b> Semua data ialah contoh dan tersimpan dalam pelayar ini sahaja. Cawangan Kemaman: alamat, waktu dan harga sebenar belum diisi. Tiada rakan insurans atau roadtax sebenar disambungkan.</div>
-<div class="tabs" role="tablist">${[['cust','Pelanggan'],['branch','Cawangan'],['hq','HQ'],['kerja','Kerjaya (calon)']].map(([k,t])=>`<button class="tab" aria-pressed="${ui.role===k}" data-act="role" data-v="${k}">${t}</button>`).join('')}</div>${msgBox()}`}
+function ctrls(){return `<button class="btn" data-act="fbOpen">${I('chat')}Beri komen</button><button class="btn" data-act="skip">${I('gear')}Simulasi +6 bulan${S.skip?' ('+Math.round(S.skip/30)+' bln)':''}</button><button class="btn" data-act="reset">${I('wrench')}Set semula data demo</button><button class="btn out" data-act="logout">Log keluar</button>`}
 
-function viewCust(){
-  const tabs=[['garaj','Garaj'],['tempah','Tempah'],['rakan','Insurans & Roadtax'],['privasi','Privasi']];
-  let h=`<div class="tabs">${tabs.map(([k,t])=>`<button class="tab sub" aria-pressed="${ui.ct===k}" data-act="ct" data-v="${k}">${t}</button>`).join('')}</div>`;
-  if(ui.ct==='garaj')h+=cGaraj();if(ui.ct==='tempah')h+=cTempah();if(ui.ct==='rakan')h+=cRakan();if(ui.ct==='privasi')h+=cPrivasi();return h}
+function shell(){
+  const n=NAV.find(x=>x.id===ui.role);
+  const side=`<aside class="side"><div class="logo"><i></i><b>CARREPUBLIC</b><small>CareOS</small></div><nav aria-label="Peranan">${NAV.map(x=>`<button class="nb" aria-current="${ui.role===x.id}" data-act="role" data-v="${x.id}">${I(x.ic)}${x.t}</button>${ui.role===x.id&&x.subs.length?`<div class="subs">${x.subs.map(([k,t])=>`<button class="sb" aria-current="${ui[x.k]===k}" data-act="${x.k}" data-v="${k}">${t}</button>`).join('')}</div>`:''}`).join('')}</nav><div class="sidef">${ctrls()}<div class="env">Persekitaran demo. Data contoh disimpan dalam pelayar ini.</div></div></aside>`;
+  const mtop=`<header class="mtop"><div class="row1"><span class="logo2">CARREPUBLIC<small>CareOS</small></span><button class="menub" data-act="menu" aria-expanded="${!!ui.menu}">${ui.menu?'Tutup':'Menu'}</button></div><div class="chips">${NAV.map(x=>`<button class="chip-r" aria-pressed="${ui.role===x.id}" data-act="role" data-v="${x.id}">${x.t.replace(/ \(.*\)/,'')}</button>`).join('')}</div>${ui.menu?`<div class="pop">${ctrls()}</div>`:''}</header>`;
+  const bnav=n.subs.length?`<nav class="bnav" aria-label="Menu">${n.subs.map(([k,t,ic])=>`<button aria-current="${ui[n.k]===k}" data-act="${n.k}" data-v="${k}">${I(ic)}${t}</button>`).join('')}</nav>`:'';
+  const body=ui.role==='master'?viewMaster():ui.role==='cust'?viewCust():ui.role==='branch'?viewBranch():ui.role==='kerja'?viewKerja():viewHQ();
+  return `<div class="shell">${side}${mtop}<main class="main" id="main">${body}</main>${bnav}</div><button class="fab" data-act="fbOpen">${I('chat')}<span>Komen</span></button>${ui.fb?fbModal():''}${msgBox()}`}
 
-function cGaraj(){
-  let h='<h1>Garaj Saya</h1>';
-  const pend=S.quotes.filter(q=>q.st==='sent');
-  pend.forEach(q=>{const b=by('bookings',q.bid),v=by('vehicles',b.vid);h+=`<div class="card" style="border-color:var(--accent)"><h2>Sebut harga menunggu kelulusan anda</h2><p class="muted">${esc(v.plate)} · ${esc(by('branches',b.bid).name)}${q.add?' · <b>Kerja tambahan</b>':''}</p>
+function fbModal(){return `<div class="modal" data-act="fbClose"><div role="dialog" aria-label="Beri komen"><h2>Beri komen</h2><p class="muted">Tulis apa yang baik, mengelirukan atau kurang. Komen dihantar kepada pemilik demo bersama nama paparan yang anda sedang lihat.</p>
+${input('fb:n','Nama anda (pilihan)')}<label>Komen<textarea id="fb:t" data-ui="fb:t" rows="4" maxlength="1000" placeholder="Contoh: Saya mahu nampak harga insurans di sini.">${esc(ui.f['fb:t']||'')}</textarea></label>
+<div class="row"><button class="btn alt" data-act="fbSend">Hantar komen</button><button class="btn ghost" data-act="fbClose">Batal</button></div></div></div>`}
+
+/* ---------- master ---------- */
+function stats(){const rs=S.records.filter(r=>r.src==='verified'),rev=rs.reduce((a,r)=>a+r.total,0);
+  const act=S.bookings.filter(activeB);return {rs,rev,act,wait:act.filter(b=>b.st==='awaiting').length,over:S.reminders.filter(r=>remStatus(r)==='overdue').length,leads:S.leads.filter(l=>l.st==='baharu').length,apps:S.apps.filter(a=>a.st==='baharu').length}}
+const PIPE=[['confirmed','Akan tiba'],['arrived','Tiba'],['inspection','Pemeriksaan'],['awaiting','Tunggu kelulusan'],['service','Diservis'],['quality','Semakan kualiti'],['ready','Sedia diambil']];
+function viewMaster(){const x=stats();
+  const stp=(n,role,sub,t,d)=>`<li><div><b>${t}</b><span class="muted">${d}</span></div><button class="btn sm ghost" data-act="go" data-id="${role}:${sub}">Buka</button></li>`;
+  return `<div class="hero-m"><h1>Gambaran Master</h1><p>Anda melihat seluruh CareOS sekaligus: apa yang pelanggan nampak di telefon, apa yang cawangan buat di bengkel, dan apa yang HQ pantau. Cawangan perintis ialah Kemaman.</p><div class="strip" style="margin:12px 0 0"><span class="pill warn">Data contoh</span><span class="pill info">Cawangan perintis: Kemaman</span></div></div>
+  <div class="kpis"><div class="kpi"><small>Kereta dalam bengkel</small><b>${x.act.length}</b></div><div class="kpi ${x.wait?'hot':''}"><small>Menunggu kelulusan pelanggan</small><b>${x.wait}</b></div><div class="kpi"><small>Hasil direkod (contoh)</small><b>${rm(x.rev)}</b></div><div class="kpi"><small>Peringatan tertunggak</small><b>${x.over}</b></div><div class="kpi"><small>Permohonan rakan baharu</small><b>${x.leads}</b></div><div class="kpi"><small>Calon baharu</small><b>${x.apps}</b></div></div>
+  <h2 class="sec">Bengkel Kemaman sekarang</h2><div class="pipe">${PIPE.map(([k,n])=>{const l=S.bookings.filter(b=>b.bid==='KMN'&&b.st===k);return `<div><b>${l.length}</b><small>${n}</small></div>`}).join('')}</div>
+  <h2 class="sec">Lihat sebagai</h2><div class="roles">
+  <div class="card"><h3>Pelanggan</h3><p class="muted">Garaj, status servis, sebut harga untuk diluluskan, tempahan, pasport servis, ruangan insurans dan roadtax.</p><button class="btn" data-act="go" data-id="cust:utama">Buka app pelanggan</button></div>
+  <div class="card"><h3>Cawangan Kemaman</h3><p class="muted">Papan kerja bengkel, jadual bay, senarai pelanggan akan due, jualan dan staf.</p><button class="btn" data-act="go" data-id="branch:papan">Buka papan kerja</button></div>
+  <div class="card"><h3>HQ</h3><p class="muted">Prestasi rangkaian, rakan insurans dan roadtax, WhatsApp peringatan, rekrutmen staf.</p><button class="btn" data-act="go" data-id="hq:ringkas">Buka HQ</button></div></div>
+  <h2 class="sec">Cuba aliran penuh (lebih kurang 5 minit)</h2><ol class="flow">
+  ${stp(1,'cust','utama','Pelanggan: luluskan sebut harga','Aisyah ada sebut harga servis Myvi menunggu kelulusan.')}
+  ${stp(2,'branch','papan','Cawangan: gerakkan kerja hingga siap','Buka kad kerja, lengkapkan semakan, isi odometer keluar, jana invois.')}
+  ${stp(3,'cust','tempah','Pelanggan: tempah servis baharu','Pilih servis, hari dan slot. Slot dikira ikut bay bengkel.')}
+  ${stp(4,'hq','wa','HQ: lihat baris gilir WhatsApp','Tekan Simulasi +6 bulan di menu, kemudian semak siapa layak diingatkan.')}
+  ${stp(5,'hq','rakan','HQ: rakan insurans dan roadtax','Pelanggan memohon sebut harga rakan selepas memberi persetujuan.')}
+  ${stp(6,'hq','rekrut','HQ: rekrutmen staf','Buka jawatan dengan syarat wajib, lihat calon bersama skor padanan.')}</ol>
+  <h2 class="sec">Komen anda</h2><div class="card">${S.fb.length?S.fb.slice().reverse().map(c=>`<div class="cm"><div class="row sp"><b>${esc(c.name||'Tanpa nama')}</b><span class="pill ${c.sent?'ok':'warn'}">${c.sent?'Sampai ke pemilik':'Simpan setempat'}</span></div><div>${esc(c.body)}</div><div class="muted">${dtfmt(c.ts)} · ${esc(c.ctx)}</div></div>`).join(''):'<p class="muted">Belum ada komen. Tekan butang Komen di mana-mana skrin.</p>'}<button class="btn alt" data-act="fbOpen" style="margin-top:8px">Tulis komen</button></div>`}
+
+/* ---------- pelanggan ---------- */
+const TRK=['Disahkan','Tiba','Periksa','Kelulusan','Servis','Siap'];
+const TRKI={confirmed:0,arrived:1,inspection:2,awaiting:3,service:4,quality:4,ready:5,completed:5};
+const SAY={confirmed:'Tempahan anda disahkan. Kami menunggu anda.',arrived:'Kenderaan diterima. Pemeriksaan akan bermula.',inspection:'Juruteknik sedang memeriksa kenderaan anda.',awaiting:'Sebut harga sedia. Kerja hanya bermula selepas anda meluluskan.',service:'Kerja sedang dibuat.',quality:'Semakan kualiti akhir sedang dibuat.',ready:'Kenderaan sedia diambil. Sila ke kaunter.'};
+const tracker=b=>{const i=TRKI[b.st];return `<ol class="trk" aria-label="Status: ${esc(ST[b.st])}">${TRK.map((n,k)=>`<li class="${k<i?'done':k===i?'now':''}"><i></i>${n}</li>`).join('')}</ol>`};
+function ring(pct,over){const r=26,c=2*Math.PI*r,o=c*(1-Math.min(Math.max(pct,0),1));
+  return `<svg class="ring ${over?'over':''}" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="${r}" class="rb"/><circle cx="32" cy="32" r="${r}" class="rf" stroke-dasharray="${c.toFixed(1)}" stroke-dashoffset="${o.toFixed(1)}" transform="rotate(-90 32 32)"/><text x="32" y="37" text-anchor="middle">${Math.round(Math.min(Math.max(pct,0),1.99)*100)}%</text></svg>`}
+function vCard(v){const r=S.reminders.find(x=>x.vid===v.id&&x.st!=='completed');let pct=0,sub='Belum ada jadual',over=false;
+  if(r){pct=(v.km-(r.km-v.ik))/v.ik;const left=r.km-v.km;over=left<=0;sub=left>0?left.toLocaleString('ms-MY')+' km lagi':'Lebih '+(-left).toLocaleString('ms-MY')+' km'}
+  const e1=expiry(v.rt),e2=expiry(v.ins);
+  const ch=(l,e)=>`<span class="xchip ${e==null?'':e<0?'bad':e<=60?'warn':'ok'}">${l}: ${e==null?'belum diisi':e<0?'tamat':e+' hari'}</span>`;
+  return `<article class="vcard"><div class="row sp">${plate(v.plate)}<span class="vm">${esc(v.make)} ${esc(v.model)}${v.year?' · '+v.year:''}</span></div><div class="carw" style="color:${esc(v.col||'#9aa5ad')}">${carSvg()}</div>
+  <div class="vstats"><div><small>Odometer</small><b>${v.km.toLocaleString('ms-MY')} km</b></div><div class="rg">${ring(pct,over)}<div><small>Servis seterusnya</small><b>${sub}</b></div></div></div><div class="row" style="gap:6px">${ch('Cukai jalan',e1)}${ch('Insurans',e2)}</div></article>`}
+function quoteCard(q){const b=by('bookings',q.bid),v=by('vehicles',b.vid);
+  return `<div class="card action"><h2>Sebut harga menunggu anda</h2><p class="muted">${plate(v.plate,'sm')} ${esc(by('branches',b.bid).name)}${q.add?' · <b>Kerja tambahan</b>':''}</p>
   <div class="scroll"><table><tbody>${q.items.map(i=>`<tr><td>${esc(i.d)}</td><td class="num">${i.q} × ${rm(i.p)}</td></tr>`).join('')}</tbody></table></div>
-  <div class="row sp" style="margin-top:10px"><b>Jumlah ${rm(q.total)}</b><span class="row"><button class="btn" data-act="approve" data-id="${q.id}">Luluskan</button><button class="btn ghost" data-act="reject" data-id="${q.id}">Tolak</button></span></div></div>`});
-  const rems=S.reminders.filter(r=>r.st!=='completed');
-  if(rems.length)h+=`<div class="card"><h2>Peringatan servis</h2>${rems.map(r=>{const v=by('vehicles',r.vid),s=remStatus(r),[t,c]=REM[s];return `<div style="margin-bottom:10px"><div class="row sp"><span><b>${esc(v.plate)}</b> <span class="pill ${c}">${t}</span></span>${s!=='booked'?`<button class="btn alt" data-act="remBook" data-id="${r.vid}">Cari cawangan & tempah</button>`:''}</div><div class="sm">Anggaran: ${dfmt(r.date)} / ${r.km} km (semasa ${v.km} km)</div><div class="muted">${esc(r.basis)}</div></div>`}).join('')}${S.consent.reminder?'':'<p class="muted">Peringatan mesej dimatikan. Anda masih nampak status ini di sini.</p>'}</div>`;
-  h+=`<div class="grid"><div class="card"><h2>Kenderaan</h2>${S.vehicles.map(v=>{
-    const e1=expiry(v.rt),e2=expiry(v.ins);const pill=e=>e==null?'<span class="pill">Belum diisi</span>':e<0?`<span class="pill bad">Tamat ${-e} hari lalu</span>`:e<=60?`<span class="pill warn">${e} hari lagi</span>`:`<span class="pill ok">${e} hari lagi</span>`;
-    return `<div class="card" style="margin-bottom:10px"><div class="row sp"><b>${esc(v.plate)}</b><span class="pill warn">DEMO</span></div><div class="muted">${esc(v.make)} ${esc(v.model)} ${v.year||''}</div><div class="sm">Odometer: <b>${v.km} km</b></div>
-    <div class="row" style="margin:8px 0"><input id="km:${v.id}" data-ui="km:${v.id}" inputmode="numeric" placeholder="km baharu" style="width:120px;margin:0" value="${esc(ui.f['km:'+v.id]||'')}"><button class="btn ghost" data-act="updKm" data-id="${v.id}">Kemas kini</button><button class="btn" data-act="remBook" data-id="${v.id}">Tempah</button></div>
-    <div class="sm">Cukai jalan tamat: ${v.rt?dfmt(v.rt):'-'} ${pill(e1)}</div><div class="sm">Insurans tamat: ${v.ins?dfmt(v.ins):'-'} ${pill(e2)}</div>
-    <div class="row" style="margin-top:6px"><label style="margin:0;flex:1 1 130px">Tarikh cukai jalan<input type="date" id="rt:${v.id}" data-ui="rt:${v.id}" value="${esc(v.rt)}"></label><label style="margin:0;flex:1 1 130px">Tarikh insurans<input type="date" id="in:${v.id}" data-ui="in:${v.id}" value="${esc(v.ins)}"></label></div>
-    <p class="muted">Tarikh dimasukkan sendiri oleh anda. Sahkan di sumber rasmi sebelum bergantung padanya.</p></div>`}).join('')}
-    <details><summary>+ Tambah kenderaan</summary><div class="grid">${input('nvp','No. plat')}${input('nvb','Buatan')}${input('nvm','Model')}${input('nvy','Tahun',{mode:'numeric'})}${input('nvk','Odometer (km)',{mode:'numeric'})}</div><button class="btn" data-act="addVeh">Simpan</button></details></div>
-  <div class="card"><h2>Tempahan</h2>${S.bookings.length?S.bookings.slice().reverse().map(b=>{const v=by('vehicles',b.vid);return `<div style="border-bottom:1px solid var(--line);padding:8px 0"><div class="row sp"><b>${SV[b.svc].n}</b><span class="pill ${b.st==='completed'?'ok':b.st==='cancelled'||b.st==='noshow'?'bad':'info'}">${ST[b.st]}</span></div><div class="muted">${esc(v.plate)} · ${esc(by('branches',b.bid).name)} · ${dtfmt(b.s)}</div>${b.st==='confirmed'?`<button class="btn ghost" data-act="cancel" data-id="${b.id}" style="margin-top:6px">Batal</button>`:''}</div>`}).join(''):'<p class="muted">Tiada tempahan lagi.</p>'}</div></div>`;
-  h+=`<div class="card"><h2>Pasport Servis Kebangsaan</h2>${S.vehicles.map(v=>{const rs=S.records.filter(r=>r.vid===v.id).sort((a,b)=>b.ts-a.ts);return `<h3>${esc(v.plate)}</h3>${rs.length?`<ol class="tl">${rs.map(r=>`<li><div class="row"><b>${dfmt(r.date)}</b>${r.src==='verified'?'<span class="pill ok">Disahkan CARREPUBLIC</span>':'<span class="pill">Dokumen pelanggan (tidak disahkan)</span>'}<span class="pill warn">DEMO</span></div><div>${esc(r.sum)}</div><div class="muted">${r.bid?esc(by('branches',r.bid).name):'Luar rangkaian'} · ${r.km||'?'} km${r.oil?' · '+esc(r.oil):''}${r.total!=null?' · '+rm(r.total):''}${r.inv?' · '+esc(r.inv):''}</div>${r.items.length?`<ul class="sm">${r.items.map(i=>`<li>${esc(i.d)}: ${rm(i.q*i.p)}</li>`).join('')}</ul>`:''}</li>`).join('')}</ol>`:'<p class="muted">Belum ada rekod.</p>'}`}).join('')}
-  <details><summary>+ Tambah rekod servis luar</summary><div class="grid">${sel('ev','Kenderaan',vOpts())}${input('ed','Tarikh',{type:'date'})}${input('ek','Odometer',{mode:'numeric'})}${input('es','Ringkasan')}</div><button class="btn" data-act="addExt">Simpan</button></details></div>`;
+  <div class="row sp" style="margin:10px 0"><b>Jumlah ${rm(q.total)}</b></div><div class="row"><button class="btn" data-act="approve" data-id="${q.id}">Luluskan</button><button class="btn ghost" data-act="reject" data-id="${q.id}">Tolak</button></div><p class="muted" style="margin-top:8px">Tiada kerja tambahan dibuat tanpa kelulusan anda.</p></div>`}
+function bookCard(b){const v=by('vehicles',b.vid);
+  return `<div class="card"><div class="row sp"><span>${plate(v.plate,'sm')} <b>${SV[b.svc].n}</b></span><span class="pill ${b.st==='awaiting'?'warn':b.st==='confirmed'?'info':'ok'}">${ST[b.st]}</span></div><div class="muted">${esc(by('branches',b.bid).name)} · ${dtfmt(b.s)}</div>${tracker(b)}<div class="say">${SAY[b.st]||''}</div>${b.st==='confirmed'?`<button class="btn ghost sm" style="margin-top:10px" data-act="cancel" data-id="${b.id}">Batal tempahan</button>`:''}</div>`}
+
+function viewCust(){const t=ui.ct;
+  const body=t==='utama'?cUtama():t==='tempah'?cTempah():t==='pasport'?cPasport():t==='rakan'?cRakan():cSaya();
+  const side=`<div class="sidecol"><div class="card"><h3>Anda sedang melihat app pelanggan</h3><p class="muted">Ini apa yang Aisyah nampak di telefonnya. Gunakan Cawangan dan HQ di menu kiri untuk melihat sisi bengkel dan pejabat pusat bagi data yang sama.</p><p class="muted">Cuba: luluskan sebut harga Myvi, kemudian buka Cawangan untuk lihat status berubah.</p></div></div>`;
+  return `<div class="phonewrap"><div class="phone" id="phone">${body}</div>${side}</div>`}
+function cUtama(){const ids=mine().map(v=>v.id);
+  const qs=S.quotes.filter(q=>q.st==='sent'&&ids.includes(by('bookings',q.bid).vid));
+  const bks=S.bookings.filter(b=>ids.includes(b.vid)&&activeB(b)).sort((a,b)=>a.s-b.s);
+  const rems=S.reminders.filter(r=>r.st!=='completed'&&ids.includes(r.vid));
+  let h=`<div class="greet"><div><small>Selamat datang,</small><h1 style="margin:0">${esc((S.profile.name||'Pelanggan').split(' ')[0])}</h1></div><span class="av" aria-hidden="true">${esc((S.profile.name||'A')[0])}</span></div>`;
+  h+=qs.map(quoteCard).join('');
+  h+=`<div class="vscroll">${mine().map(vCard).join('')}</div>`;
+  if(bks.length)h+=`<h2 class="sec">Servis anda</h2>`+bks.map(bookCard).join('');
+  h+=`<div class="qa"><button data-act="ct" data-v="tempah">${I('cal')}Tempah servis</button><button data-act="ct" data-v="pasport">${I('book')}Pasport servis</button><button data-act="ct" data-v="rakan">${I('shield')}Insurans dan roadtax</button><button data-act="ct" data-v="saya">${I('user')}Profil dan privasi</button></div>`;
+  if(rems.length)h+=`<div class="card"><h2>Peringatan servis</h2>${rems.map(r=>{const v=by('vehicles',r.vid),s=remStatus(r),[tt,c]=REM[s];return `<div style="margin-bottom:12px"><div class="row sp"><span>${plate(v.plate,'sm')} <span class="pill ${c}">${tt}</span></span>${s!=='booked'?`<button class="btn alt sm" data-act="remBook" data-id="${r.vid}">Tempah</button>`:''}</div><div class="sm">Anggaran ${dfmt(r.date)} atau ${r.km.toLocaleString('ms-MY')} km</div><div class="muted">${esc(r.basis)}</div></div>`}).join('')}${S.consent.reminder?'':'<p class="muted">Peringatan mesej dimatikan. Status masih kelihatan di sini.</p>'}</div>`;
   return h}
-
-function cTempah(){
-  const f=ui.f;if(!f.vid&&S.vehicles[0])f.vid=S.vehicles[0].id;if(!f.bid)f.bid='KMN';if(!f.svc)f.svc='oil';
-  const sl=f.date?slotsFor(f.bid,f.svc,f.date):[];const pr=S.prices[f.bid]&&S.prices[f.bid][f.svc];
-  return `<h1>Tempah servis</h1><div class="card"><div class="grid">${sel('vid','Kenderaan',S.vehicles.map(v=>[v.id,v.plate+' · '+v.model]))}${sel('bid','Cawangan (disahkan sahaja)',S.branches.map(b=>[b.id,b.name+' ('+b.city+')']))}${sel('svc','Servis',Object.entries(SV).map(([k,v])=>[k,v.n]))}${input('date','Tarikh',{type:'date'})}</div>
-  <p class="sm">Harga: <b>${pr==null?'Hubungi cawangan':rm(pr)}</b> ${pr!=null?'<span class="pill warn">Harga contoh demo</span>':''} <span class="muted">· Harga akhir mengikut sebut harga selepas pemeriksaan. Kerja tambahan perlu kelulusan anda.</span></p>
-  <p class="muted">${esc(by('branches',f.bid).note)}</p>
-  ${f.date?`<h3>Slot tersedia</h3><div class="slots">${sl.length?sl.map(x=>`<button class="slot" aria-pressed="${ui.slot===x.s}" data-act="slot" data-v="${x.s}">${new Date(x.s).toLocaleTimeString('ms-MY',{hour:'2-digit',minute:'2-digit'})}</button>`).join(''):'<span class="muted">Tiada slot (cawangan tutup, penuh atau tarikh telah lalu).</span>'}</div>`:'<p class="muted">Pilih tarikh untuk melihat slot.</p>'}
-  <label style="margin-top:12px"><input type="checkbox" id="share" data-ui="share" data-cb="1" ${f.share?'checked':''}>Kongsi sejarah servis kenderaan ini dengan cawangan ini sepanjang tempahan aktif (boleh ditarik balik).</label>
-  <button class="btn alt" data-act="book" ${ui.slot?'':'disabled'}>Sahkan tempahan</button></div>`}
-
+function cTempah(){const f=ui.f,mv=mine();if(!f.vid||!mv.find(v=>v.id===f.vid))f.vid=mv[0]&&mv[0].id;if(!f.bid)f.bid='KMN';if(!f.svc)f.svc='oil';
+  const days=[0,1,2,3,4,5].map(n=>ymd(addDays(now(),n)));if(!f.date)f.date=days[1];
+  const sl=slotsFor(f.bid,f.svc,f.date),pr=(S.prices[f.bid]||{})[f.svc];
+  const dn=(s,i)=>i===0?'Hari ini':i===1?'Esok':new Date(s+'T00:00:00').toLocaleDateString('ms-MY',{weekday:'short'});
+  const mb=S.bookings.filter(b=>mv.some(v=>v.id===b.vid)).sort((a,b)=>b.s-a.s);
+  return `<h1>Tempah servis</h1><p class="muted">Cawangan yang disahkan sahaja. Harga akhir mengikut sebut harga selepas pemeriksaan.</p>
+  <div class="step"><span>1</span>Kenderaan</div>${sel('vid','',mv.map(v=>[v.id,v.plate+' · '+v.make+' '+v.model]))}
+  <div class="step"><span>2</span>Servis</div><div class="svcs">${Object.entries(SV).map(([k,s])=>{const p=(S.prices[f.bid]||{})[k];return `<button class="svc" aria-pressed="${f.svc===k}" data-act="svc" data-v="${k}"><span><b>${s.n}</b><small>${s.d} minit</small></span><b>${p==null?'Hubungi':rm(p)}</b></button>`}).join('')}</div>
+  ${pr!=null?'<p class="muted" style="margin-top:6px"><span class="pill warn">Harga contoh demo</span></p>':''}
+  <div class="step"><span>3</span>Cawangan</div>${sel('bid','',S.branches.map(b=>[b.id,b.name+' ('+b.city+')']))}<p class="muted">${esc(by('branches',f.bid).note)}</p>
+  <div class="step"><span>4</span>Hari dan masa</div><div class="days">${days.map((d,i)=>`<button class="day" aria-pressed="${f.date===d}" data-act="day" data-v="${d}">${dn(d,i)}<small>${new Date(d+'T00:00:00').toLocaleDateString('ms-MY',{day:'numeric',month:'short'})}</small></button>`).join('')}</div>
+  <div class="slots" style="margin-top:10px">${sl.length?sl.map(x=>`<button class="slot" aria-pressed="${ui.slot===x.s}" data-act="slot" data-v="${x.s}">${hm(x.s)}</button>`).join(''):'<span class="muted">Tiada slot (cawangan tutup, penuh atau masa telah lalu). Pilih hari lain.</span>'}</div>
+  <label style="margin:14px 0 10px;color:var(--ink)"><input type="checkbox" id="share" data-ui="share" data-cb="1" ${f.share?'checked':''}>Kongsi sejarah servis kenderaan ini dengan cawangan ini sepanjang tempahan aktif (boleh ditarik balik).</label>
+  <button class="btn alt full" data-act="book" ${ui.slot?'':'disabled'}>Sahkan tempahan</button>
+  <h2 class="sec">Tempahan saya</h2>${mb.length?mb.map(b=>{const v=by('vehicles',b.vid);return `<div class="card"><div class="row sp"><b>${SV[b.svc].n}</b><span class="pill ${b.st==='completed'?'ok':b.st==='cancelled'||b.st==='noshow'?'bad':'info'}">${ST[b.st]}</span></div><div class="muted">${esc(v.plate)} · ${esc(by('branches',b.bid).name)} · ${dtfmt(b.s)}</div>${b.st==='confirmed'?`<button class="btn ghost sm" style="margin-top:8px" data-act="cancel" data-id="${b.id}">Batal</button>`:''}</div>`}).join(''):'<p class="muted">Tiada tempahan lagi.</p>'}`}
+function cPasport(){
+  return `<h1>Pasport servis</h1><p class="muted">Satu sejarah untuk kenderaan anda, di mana-mana cawangan CARREPUBLIC.</p>${mine().map(v=>{const rs=S.records.filter(r=>r.vid===v.id).sort((a,b)=>b.ts-a.ts),nb=new Set(rs.filter(r=>r.bid).map(r=>r.bid)).size;
+    return `<div class="card"><div class="row sp">${plate(v.plate)}<span class="muted">${esc(v.make)} ${esc(v.model)}</span></div><p class="muted" style="margin-top:6px">${rs.filter(r=>r.src==='verified').length} servis disahkan · ${nb} cawangan</p>${rs.length?`<ol class="tl">${rs.map(r=>`<li class="${r.src==='verified'?'':'ext'}"><div class="row"><b>${dfmt(r.date)}</b>${r.src==='verified'?'<span class="pill ok">Disahkan CARREPUBLIC</span>':'<span class="pill">Dokumen pelanggan</span>'}</div><div>${esc(r.sum)}</div><div class="muted">${r.bid?esc(by('branches',r.bid).name):'Luar rangkaian'} · ${r.km?r.km.toLocaleString('ms-MY')+' km':'km tiada'}${r.oil?' · '+esc(r.oil):''}${r.total!=null?' · '+rm(r.total):''}${r.inv?' · '+esc(r.inv):''}</div>${r.items.length?`<ul class="sm" style="margin:4px 0 0;padding-left:18px">${r.items.map(i=>`<li>${esc(i.d)}: ${rm(i.q*i.p)}</li>`).join('')}</ul>`:''}</li>`).join('')}</ol>`:'<p class="muted">Belum ada rekod.</p>'}</div>`}).join('')}
+  <details class="card"><summary>Tambah rekod servis luar</summary><div class="grid">${sel('ev','Kenderaan',vOpts())}${input('ed','Tarikh',{type:'date'})}${input('ek','Odometer',{mode:'numeric'})}${input('es','Ringkasan')}</div><button class="btn" data-act="addExt">Simpan rekod</button><p class="muted" style="margin-top:6px">Rekod ini dilabel sebagai dokumen pelanggan, bukan disahkan.</p></details>`}
 function cRakan(){
-  const pt=(type,title,desc,field)=>{const p=S.partners[type];if(!p.on)return '';return `<div class="partner"><div class="row sp"><h2 style="margin:0">${title}</h2><span class="pill warn">SLOT RAKAN${p.name?'':' · KOSONG'}</span></div>
-  <p class="sm">${desc}</p><p class="muted">${p.name?'Rakan: <b>'+esc(p.name)+'</b>':'Belum ada rakan sebenar disambungkan. Ini susun atur contoh untuk ruangan rakan.'} Harga, produk dan kelayakan ditentukan oleh rakan, bukan CARREPUBLIC.</p>
-  <div class="grid">${sel('lv:'+type,'Kenderaan',vOpts())}${input('lp:'+type,'No. telefon',{mode:'tel',ph:'01X-XXXXXXX'})}</div>
-  <p class="sm">Tarikh ${type==='insurance'?'insurans':'cukai jalan'} tamat: ${(()=>{const v=by('vehicles',ui.f['lv:'+type]);const d=v&&(type==='insurance'?v.ins:v.rt);return d?dfmt(d):'(isi di Garaj)'})()}</p>
-  <label><input type="checkbox" id="lc:${type}" data-ui="lc:${type}" data-cb="1" ${ui.f['lc:'+type]?'checked':''}>Saya bersetuju CARREPUBLIC berkongsi nama, telefon dan nombor plat saya dengan rakan untuk tujuan sebut harga ini sahaja.</label>
-  <button class="btn alt" data-act="lead" data-id="${type}">Minta sebut harga</button></div>`};
-  return `<h1>Insurans &amp; Roadtax</h1><p class="muted">Ruangan rakan di dalam aplikasi. Pelanggan hanya dihubungi selepas memberi persetujuan, dan setiap permohonan dijejak ke HQ.</p><div class="grid">${pt('insurance','Insurans kenderaan','Bandingkan dan perbaharui insurans kenderaan melalui rakan.')}${pt('roadtax','Pembaharuan cukai jalan','Perbaharui cukai jalan tanpa beratur, melalui rakan.')}</div>
-  <div class="card" style="margin-top:12px"><h3>Permohonan anda</h3>${S.leads.length?S.leads.slice().reverse().map(l=>`<div class="sm">${l.type==='insurance'?'Insurans':'Cukai jalan'} · ${esc(l.plate)} · ${dtfmt(l.ts)} · <span class="pill info">${esc(l.st)}</span></div>`).join(''):'<span class="muted">Belum ada.</span>'}</div>`}
+  const pt=(type,title,desc)=>{const p=S.partners[type];if(!p.on)return '';return `<div class="partner"><div class="logoslot">${p.name?esc(p.name):'Ruang logo rakan'}</div><div class="row sp"><h2 style="margin:0">${title}</h2><span class="pill warn">${p.name?'Rakan':'Slot kosong'}</span></div>
+  <p class="sm" style="margin-top:6px">${desc}</p><p class="muted">${p.name?'Rakan: <b>'+esc(p.name)+'</b>. ':'Belum ada rakan sebenar disambungkan; ini susun atur contoh. '}Harga, produk dan kelayakan ditentukan oleh rakan, bukan CARREPUBLIC.</p>
+  ${sel('lv:'+type,'Kenderaan',vOpts())}${input('lp:'+type,'No. telefon',{mode:'tel',ph:'01X-XXXXXXX'})}
+  <p class="sm">Tarikh ${type==='insurance'?'insurans':'cukai jalan'} tamat: ${(()=>{const v=by('vehicles',ui.f['lv:'+type]);const d=v&&(type==='insurance'?v.ins:v.rt);return d?dfmt(d):'(pilih kenderaan)'})()}</p>
+  <label style="color:var(--ink)"><input type="checkbox" id="lc:${type}" data-ui="lc:${type}" data-cb="1" ${ui.f['lc:'+type]?'checked':''}>Saya bersetuju CARREPUBLIC berkongsi nama, telefon dan nombor plat saya dengan rakan untuk sebut harga ini sahaja.</label>
+  <button class="btn alt full" data-act="lead" data-id="${type}">Minta sebut harga</button></div>`};
+  const my=S.leads.filter(l=>mine().some(v=>v.id===l.vid));
+  return `<h1>Insurans dan roadtax</h1><p class="muted">Ruangan rakan dalam app. Anda hanya dihubungi selepas memberi persetujuan.</p><div class="grid">${pt('insurance','Insurans kenderaan','Bandingkan dan perbaharui insurans melalui rakan.')}${pt('roadtax','Pembaharuan cukai jalan','Perbaharui cukai jalan tanpa beratur, melalui rakan.')}</div>
+  <div class="card" style="margin-top:12px"><h3>Permohonan anda</h3>${my.length?my.slice().reverse().map(l=>`<div class="sm">${l.type==='insurance'?'Insurans':'Cukai jalan'} · ${esc(l.plate)} · ${dtfmt(l.ts)} · <span class="pill info">${esc(l.st)}</span></div>`).join(''):'<span class="muted">Belum ada.</span>'}</div>`}
+function cSaya(){const c=S.consent;const row=(k,t)=>`<label style="color:var(--ink)"><input type="checkbox" id="c:${k}" data-act="consent" data-id="${k}" ${c[k]?'checked':''}>${t}</label>`;
+  return `<h1>Profil dan privasi</h1><div class="card"><h2>Profil</h2>${input('pf:name','Nama')}${input('pf:phone','No. telefon (untuk WhatsApp)',{mode:'tel',ph:'01X-XXXXXXX'})}${input('pf:pc','Poskod (untuk cadangan cawangan)',{mode:'numeric'})}</div>
+  <div class="card"><h2>Persetujuan</h2>${row('reminder','Peringatan servis')}${row('marketing','Mesej promosi')}${row('history','Kongsi sejarah servis dengan cawangan yang saya tempah')}${row('location','Guna lokasi untuk cadangan cawangan')}<p class="muted">Menarik balik persetujuan menghentikan mesej berkaitan, tetapi sejarah servis anda kekal.</p></div>
+  <div class="card"><h2>Kenderaan</h2>${mine().map(v=>{const e1=expiry(v.rt),e2=expiry(v.ins);return `<div style="border-bottom:1px solid var(--line);padding:10px 0"><div class="row sp">${plate(v.plate,'sm')}<span class="muted">${v.km.toLocaleString('ms-MY')} km</span></div>
+  <div class="row" style="margin:8px 0"><input id="km:${v.id}" data-ui="km:${v.id}" inputmode="numeric" placeholder="km baharu" style="width:130px;margin:0" value="${esc(ui.f['km:'+v.id]||'')}"><button class="btn ghost sm" data-act="updKm" data-id="${v.id}">Kemas kini odometer</button></div>
+  <div class="grid"><label>Cukai jalan tamat<input type="date" id="rt:${v.id}" data-ui="rt:${v.id}" value="${esc(v.rt)}"></label><label>Insurans tamat<input type="date" id="in:${v.id}" data-ui="in:${v.id}" value="${esc(v.ins)}"></label></div></div>`}).join('')}
+  <p class="muted">Tarikh dimasukkan sendiri. Sahkan di sumber rasmi sebelum bergantung padanya.</p>
+  <details><summary>Tambah kenderaan</summary><div class="grid">${input('nvp','No. plat')}${input('nvb','Buatan')}${input('nvm','Model')}${input('nvy','Tahun',{mode:'numeric'})}${input('nvk','Odometer (km)',{mode:'numeric'})}</div><button class="btn" data-act="addVeh">Simpan kenderaan</button></details></div>`}
 
-function cPrivasi(){const c=S.consent;const row=(k,t)=>`<label style="color:var(--fg)"><input type="checkbox" id="c:${k}" data-act="consent" data-id="${k}" ${c[k]?'checked':''}>${t}</label>`;
-  return `<h1>Privasi &amp; persetujuan</h1><div class="card">${row('reminder','Peringatan servis')}${row('marketing','Mesej promosi / pemasaran')}${row('history','Kongsi sejarah servis dengan cawangan yang saya tempah')}${row('location','Guna lokasi untuk cadangan cawangan')}<h3 style="margin-top:12px">Profil untuk peringatan</h3><div class="grid"><label>Nama<input id="pf:name" data-ui="pf:name" value="${esc(S.profile.name)}"></label><label>No. telefon (untuk WhatsApp)<input id="pf:phone" data-ui="pf:phone" inputmode="tel" placeholder="01X-XXXXXXX" value="${esc(S.profile.phone)}"></label><label>Poskod (untuk cadangan cawangan)<input id="pf:pc" data-ui="pf:pc" inputmode="numeric" value="${esc(S.profile.postcode)}"></label></div><p class="muted">Menarik balik persetujuan menghentikan mesej berkaitan, tetapi sejarah servis anda kekal.</p></div>`}
-
-function viewBranch(){
-  const bid=ui.branch,br=by('branches',bid);
-  const act=S.bookings.filter(b=>b.bid===bid&&!['completed','cancelled','noshow'].includes(b.st)).sort((a,b)=>a.s-b.s);
-  const done=S.records.filter(r=>r.bid===bid&&r.src==='verified').sort((a,b)=>b.ts-a.ts);
-  const today=ymd(now());
-  const due=S.reminders.filter(r=>r.st!=='completed'&&S.records.find(x=>x.id===r.rec&&x.bid===bid));
-  let h=`<div class="row sp"><h1>BranchOS: ${esc(br.name)}</h1><label style="margin:0">Cawangan<select id="bsel" data-act="bsel">${S.branches.map(b=>`<option value="${b.id}" ${b.id===bid?'selected':''}>${esc(b.name)}</option>`).join('')}</select></label></div>
-  <p class="muted">${esc(br.note)} Waktu ${br.open}–${br.close} · ${br.bays} bay.</p>
-  <div class="kpis"><div class="kpi"><small>Dalam rangkaian kerja</small><b>${act.length}</b></div><div class="kpi"><small>Menunggu kelulusan</small><b>${act.filter(b=>b.st==='awaiting').length}</b></div><div class="kpi"><small>Jualan hari ini</small><b>${rm(done.filter(r=>r.date===today).reduce((a,r)=>a+r.total,0))}</b></div><div class="kpi"><small>Pelanggan akan due</small><b>${due.length}</b></div></div>
-  <div class="card"><h2>Tempahan &amp; kerja sedang berjalan</h2>${act.length?act.map(b=>bCard(b)).join(''):'<p class="muted">Tiada tempahan aktif. Buat tempahan di paparan Pelanggan.</p>'}</div>
-  <div class="card"><h2>Servis terkini</h2>${done.length?done.map(r=>`<div class="sm" style="padding:5px 0;border-bottom:1px solid var(--line)">${dfmt(r.date)} · ${esc(by('vehicles',r.vid).plate)} · ${esc(r.sum)} · <b>${rm(r.total)}</b> · ${esc(r.inv)}</div>`).join(''):'<span class="muted">Belum ada.</span>'}</div>
-  <div class="card"><h2>Pelanggan akan due servis</h2>${due.length?due.map(r=>`<div class="sm">${esc(by('vehicles',r.vid).plate)} · anggaran ${dfmt(r.date)} / ${r.km} km · <span class="pill ${REM[remStatus(r)][1]}">${REM[remStatus(r)][0]}</span></div>`).join(''):'<span class="muted">Tiada.</span>'}</div>
-  ${branchJobs(bid)}<div class="hint">Cawangan tidak nampak tempahan cawangan lain, maklumat insurans/roadtax pelanggan, atau kos cawangan lain. Sejarah servis cawangan lain hanya kelihatan semasa tempahan aktif dan dengan persetujuan pelanggan.</div>`;return h}
-
-function bCard(b){const v=by('vehicles',b.vid),id=b.id;let h=`<div class="card" style="margin-bottom:10px"><div class="row sp"><span><b>${esc(v.plate)}</b> ${esc(v.make)} ${esc(v.model)}<div class="muted">${SV[b.svc].n} · ${dtfmt(b.s)}</div></span><span class="pill ${b.st==='awaiting'?'warn':'info'}">${ST[b.st]}</span></div>`;
+/* ---------- cawangan ---------- */
+const COLS=[['confirmed','Akan tiba'],['arrived','Tiba'],['inspection','Pemeriksaan'],['awaiting','Tunggu kelulusan'],['service','Diservis'],['quality,ready','Semakan dan sedia']];
+function viewBranch(){const bid=ui.branch,br=by('branches',bid),t=ui.bt;
+  const act=S.bookings.filter(b=>b.bid===bid&&activeB(b)),done=S.records.filter(r=>r.bid===bid&&r.src==='verified'),today=ymd(now());
+  let h=`<div class="row sp" style="margin-bottom:8px"><div><h1 style="margin:0">${esc(br.name)}</h1><p class="muted">${esc(br.note)} Waktu ${br.open} hingga ${br.close} · ${br.bays} bay.</p></div><label style="margin:0;min-width:210px">Cawangan<select id="bsel" data-act="bsel">${S.branches.map(b=>`<option value="${b.id}" ${b.id===bid?'selected':''}>${esc(b.name)}</option>`).join('')}</select></label></div>
+  <div class="kpis"><div class="kpi"><small>Kerja aktif</small><b>${act.length}</b></div><div class="kpi ${act.some(b=>b.st==='awaiting')?'hot':''}"><small>Tunggu kelulusan</small><b>${act.filter(b=>b.st==='awaiting').length}</b></div><div class="kpi"><small>Jualan hari ini</small><b>${rm(done.filter(r=>r.date===today).reduce((a,r)=>a+r.total,0))}</b></div><div class="kpi"><small>Bay</small><b>${br.bays}</b></div></div>`;
+  h+=t==='papan'?bBoard(bid,act):t==='jadual'?bJadual(bid):t==='due'?bDue(bid):t==='jualan'?bJualan(bid,done):branchJobs(bid);
+  return h+`<div class="hint" style="margin-top:12px">Cawangan tidak nampak tempahan cawangan lain, maklumat insurans atau roadtax pelanggan, atau kos cawangan lain. Sejarah cawangan lain hanya kelihatan semasa tempahan aktif dan dengan persetujuan pelanggan.</div>`}
+function kcard(b){const v=by('vehicles',b.vid);return `<button class="kc ${b.st==='awaiting'?'wait':''}" aria-pressed="${ui.sel===b.id}" data-act="sel" data-id="${b.id}"><div class="row sp">${plate(v.plate,'sm')}<span class="sm" style="color:var(--mut)">${hm(b.s)}</span></div><div style="font-weight:700;margin-top:6px">${esc(v.make)} ${esc(v.model)}</div><div class="t">${SV[b.svc].n}<br>${esc(ownerName(v))}</div></button>`}
+function bBoard(bid,act){const list=act.slice().sort((a,b)=>a.s-b.s);
+  const cols=COLS.map(([ks,n])=>{const l=list.filter(b=>ks.split(',').includes(b.st));return `<section class="col" aria-label="${n}"><h3><span>${n}</span><span class="cnt">${l.length}</span></h3>${l.map(kcard).join('')||'<p class="muted" style="padding:2px 6px">Kosong</p>'}</section>`}).join('');
+  const b=ui.sel&&by('bookings',ui.sel);
+  return `<h2>Papan kerja</h2><div class="kan" id="kan">${cols}</div>${b&&b.bid===bid&&activeB(b)?`<div class="detail" id="detail"><h2>Kerja dipilih</h2>${bCard(b)}</div>`:'<p class="muted">Tekan satu kad untuk buka butiran dan teruskan ke peringkat seterusnya.</p>'}`}
+function bJadual(bid){const br=by('branches',bid),[oh,om]=br.open.split(':').map(Number),[ch,cm]=br.close.split(':').map(Number),a=oh*60+om,z=ch*60+cm,span=z-a;
+  const day=ymd(now()),list=S.bookings.filter(b=>b.bid===bid&&b.st!=='cancelled'&&b.st!=='noshow'&&ymd(new Date(b.s))===day).sort((x,y)=>x.s-y.s);
+  const ends=Array(br.bays).fill(0),lanes=Array.from({length:br.bays},()=>[]);
+  list.forEach(b=>{let i=ends.findIndex(e=>e<=b.s);if(i<0)i=ends.indexOf(Math.min(...ends));ends[i]=b.e;lanes[i].push(b)});
+  const pos=t=>{const d=new Date(t),m=d.getHours()*60+d.getMinutes();return Math.max(0,Math.min(100,(m-a)/span*100))};
+  const hrs=[];for(let m=a;m<z;m+=Math.ceil(span/9))hrs.push(pad(Math.floor(m/60))+':'+pad(m%60));
+  return `<h2>Jadual bay hari ini</h2><div class="card"><div class="hours">${hrs.map(x=>`<span>${x}</span>`).join('')}</div>${lanes.map((l,i)=>`<div class="bay"><b>Bay ${i+1}</b><div class="lane">${l.map(b=>{const v=by('vehicles',b.vid),L=pos(b.s),W=Math.max(6,pos(b.e)-L);return `<div class="blk s-${b.st}" style="left:${L}%;width:${W}%" title="${esc(v.plate)} · ${esc(SV[b.svc].n)} · ${esc(ST[b.st])}"><b>${esc(v.plate)}</b></div>`}).join('')}</div></div>`).join('')}
+  <p class="muted">Kuning: menunggu kelulusan pelanggan. Hijau: kerja sedang berjalan. Garis putus: belum tiba.</p></div>
+  <div class="card"><h2>Senarai hari ini</h2>${list.length?list.map(b=>{const v=by('vehicles',b.vid);return `<div class="row sp" style="padding:7px 0;border-bottom:1px solid var(--line)"><span>${hm(b.s)} · ${plate(v.plate,'sm')} ${SV[b.svc].n}</span><span class="pill info">${ST[b.st]}</span></div>`}).join(''):'<p class="muted">Tiada tempahan hari ini.</p>'}</div>`}
+function bDue(bid){const due=S.reminders.filter(r=>r.st!=='completed'&&S.records.find(x=>x.id===r.rec&&x.bid===bid)).sort((a,b)=>a.date<b.date?-1:1);
+  return `<h2>Pelanggan akan due servis</h2><div class="card">${due.length?due.map(r=>{const v=by('vehicles',r.vid),s=remStatus(r);return `<div class="row sp" style="padding:9px 0;border-bottom:1px solid var(--line)"><span>${plate(v.plate,'sm')} <b>${esc(v.make)} ${esc(v.model)}</b><div class="muted">${esc(ownerName(v))} · anggaran ${dfmt(r.date)} atau ${r.km.toLocaleString('ms-MY')} km</div></span><span class="pill ${REM[s][1]}">${REM[s][0]}</span></div>`}).join(''):'<p class="muted">Tiada pelanggan akan due.</p>'}<p class="muted" style="margin-top:8px">HQ menghantar peringatan WhatsApp hanya kepada pelanggan yang bersetuju.</p></div>`}
+function bJualan(bid,done){const t=ymd(now());const sum=(f)=>done.filter(f).reduce((a,r)=>a+r.total,0);
+  return `<h2>Jualan cawangan</h2><div class="kpis"><div class="kpi"><small>Hari ini</small><b>${rm(sum(r=>r.date===t))}</b></div><div class="kpi"><small>7 hari</small><b>${rm(sum(r=>r.date>=ymd(addDays(now(),-6))))}</b></div><div class="kpi"><small>Semua rekod</small><b>${rm(sum(()=>true))}</b></div></div>
+  <div class="card scroll"><table><thead><tr><th>Tarikh</th><th>Plat</th><th>Kerja</th><th class="num">Jumlah</th><th>Invois</th></tr></thead><tbody>${done.slice().sort((a,b)=>b.ts-a.ts).map(r=>`<tr><td>${dfmt(r.date)}</td><td>${esc(by('vehicles',r.vid).plate)}</td><td>${esc(r.sum)}</td><td class="num">${rm(r.total)}</td><td>${esc(r.inv)}</td></tr>`).join('')||'<tr><td colspan="5" class="muted">Belum ada.</td></tr>'}</tbody></table></div>`}
+function bCard(b){const v=by('vehicles',b.vid),id=b.id;let h=`<div class="card"><div class="row sp"><span>${plate(v.plate)} <b>${esc(v.make)} ${esc(v.model)}</b><div class="muted">${esc(ownerName(v))} · ${SV[b.svc].n} · ${dtfmt(b.s)}</div></span><span class="pill ${b.st==='awaiting'?'warn':'info'}">${ST[b.st]}</span></div>${tracker(b)}`;
   const other=S.consent.history&&b.share?S.records.filter(r=>r.vid===b.vid&&r.bid!==b.bid&&r.src==='verified'):[];
-  if(other.length)h+=`<div class="hint" style="margin-top:8px"><b>Sejarah dikongsi pelanggan (cawangan lain):</b> ${other.map(r=>dfmt(r.date)+' · '+esc(by('branches',r.bid).name)+' · '+r.km+' km').join('; ')}</div>`;
+  if(other.length)h+=`<div class="hint" style="margin:8px 0"><b>Sejarah dikongsi pelanggan (cawangan lain):</b> ${other.map(r=>dfmt(r.date)+' · '+esc(by('branches',r.bid).name)+' · '+r.km+' km').join('; ')}</div>`;
   if(b.st==='confirmed')h+=`<div class="row" style="margin-top:8px"><button class="btn" data-act="stage" data-id="${id}" data-v="arrived">Pelanggan tiba</button><button class="btn ghost" data-act="stage" data-id="${id}" data-v="noshow">Tidak hadir</button></div>`;
-  if(b.st==='arrived'||(b.st==='inspection'&&!(b.insp&&b.insp.done)))h+=`<h3 style="margin-top:10px">Senarai semak pemeriksaan <span class="muted">(isi hanya yang benar-benar diperiksa)</span></h3>${CHECK.map((c,i)=>`<div class="row" style="margin-bottom:6px"><span class="sm" style="width:170px">${c}</span><select id="ir:${id}:${i}" data-ui="ir:${id}:${i}" style="width:auto;margin:0"><option value="tidak">Tidak diperiksa</option><option value="ok" ${ui.f['ir:'+id+':'+i]==='ok'?'selected':''}>OK</option><option value="perhatian" ${ui.f['ir:'+id+':'+i]==='perhatian'?'selected':''}>Perlu perhatian</option></select><input id="in:${id}:${i}" data-ui="in:${id}:${i}" placeholder="Catatan" style="flex:1;margin:0" value="${esc(ui.f['in:'+id+':'+i]||'')}"></div>`).join('')}<div class="row">${input('ikm:'+id,'Odometer masuk (km)',{mode:'numeric'})}<button class="btn" data-act="insp" data-id="${id}">Lengkapkan pemeriksaan</button></div>`;
-  if((b.st==='inspection'&&b.insp&&b.insp.done)||b.st==='service')h+=`<h3 style="margin-top:10px">${b.st==='service'?'Kerja tambahan (perlu kelulusan pelanggan)':'Sebut harga berperincian'}</h3>${[0,1,2,3].map(i=>`<div class="row" style="margin-bottom:6px"><input id="qd:${id}:${i}" data-ui="qd:${id}:${i}" placeholder="Keterangan" style="flex:2 1 160px;margin:0" value="${esc(ui.f['qd:'+id+':'+i]||'')}"><input id="qq:${id}:${i}" data-ui="qq:${id}:${i}" placeholder="Qty" inputmode="decimal" style="flex:0 0 70px;margin:0" value="${esc(ui.f['qq:'+id+':'+i]||'')}"><input id="qp:${id}:${i}" data-ui="qp:${id}:${i}" placeholder="RM seunit" inputmode="decimal" style="flex:0 0 110px;margin:0" value="${esc(ui.f['qp:'+id+':'+i]||'')}"></div>`).join('')}<div class="row"><button class="btn" data-act="quote" data-id="${id}">Hantar sebut harga</button>${b.st==='service'?`<button class="btn ghost" data-act="stage" data-id="${id}" data-v="quality">Kerja siap → Semakan kualiti</button>`:''}</div>`;
-  if(b.st==='awaiting')h+=`<p class="sm" style="color:var(--warn)">Menunggu pelanggan meluluskan sebut harga. Tiada kerja bermula tanpa kelulusan.</p>`;
-  if(b.st==='quality')h+=`<div style="margin-top:8px"><button class="btn" data-act="stage" data-id="${id}" data-v="ready">Lulus semakan kualiti → Sedia diambil</button></div>`;
-  if(b.st==='quality'||b.st==='ready')h+=`<h3 style="margin-top:10px">Selesai &amp; invois</h3><div class="grid">${input('ok:'+id,'Odometer keluar (km)',{mode:'numeric'})}${input('oo:'+id,'Spesifikasi minyak enjin')}${input('os:'+id,'Ringkasan kerja')}${input('oc:'+id,'Kos dalaman RM (margin, tidak dipapar kepada pelanggan)',{mode:'decimal'})}</div><button class="btn alt" data-act="complete" data-id="${id}">Selesai &amp; jana invois</button>`;
+  if(b.st==='arrived'||(b.st==='inspection'&&!(b.insp&&b.insp.done)))h+=`<h3 style="margin-top:12px">Senarai semak pemeriksaan <span class="muted">(isi hanya yang benar-benar diperiksa)</span></h3>${CHECK.map((c,i)=>`<div class="row" style="margin-bottom:6px"><span class="sm" style="width:170px">${c}</span><select id="ir:${id}:${i}" data-ui="ir:${id}:${i}" style="width:auto;margin:0"><option value="tidak">Tidak diperiksa</option><option value="ok" ${ui.f['ir:'+id+':'+i]==='ok'?'selected':''}>OK</option><option value="perhatian" ${ui.f['ir:'+id+':'+i]==='perhatian'?'selected':''}>Perlu perhatian</option></select><input id="in:${id}:${i}" data-ui="in:${id}:${i}" placeholder="Catatan" style="flex:1;margin:0" value="${esc(ui.f['in:'+id+':'+i]||'')}"></div>`).join('')}<div class="row">${input('ikm:'+id,'Odometer masuk (km)',{mode:'numeric'})}<button class="btn" data-act="insp" data-id="${id}">Lengkapkan pemeriksaan</button></div>`;
+  if(b.insp&&b.insp.done)h+=`<details style="margin-top:8px"><summary>Keputusan pemeriksaan (${b.insp.km?b.insp.km.toLocaleString('ms-MY')+' km':'km tiada'})</summary>${b.insp.items.map(x=>`<div class="sm row sp" style="padding:3px 0"><span>${esc(x.item)}${x.note?' · '+esc(x.note):''}</span><span class="pill ${x.res==='ok'?'ok':x.res==='perhatian'?'warn':''}">${x.res==='ok'?'OK':x.res==='perhatian'?'Perlu perhatian':'Tidak diperiksa'}</span></div>`).join('')}</details>`;
+  if((b.st==='inspection'&&b.insp&&b.insp.done)||b.st==='service')h+=`<h3 style="margin-top:12px">${b.st==='service'?'Kerja tambahan (perlu kelulusan pelanggan)':'Sebut harga berperincian'}</h3>${[0,1,2,3].map(i=>`<div class="row" style="margin-bottom:6px"><input id="qd:${id}:${i}" data-ui="qd:${id}:${i}" placeholder="Keterangan" style="flex:2 1 160px;margin:0" value="${esc(ui.f['qd:'+id+':'+i]||'')}"><input id="qq:${id}:${i}" data-ui="qq:${id}:${i}" placeholder="Qty" inputmode="decimal" style="flex:0 0 70px;margin:0" value="${esc(ui.f['qq:'+id+':'+i]||'')}"><input id="qp:${id}:${i}" data-ui="qp:${id}:${i}" placeholder="RM seunit" inputmode="decimal" style="flex:0 0 110px;margin:0" value="${esc(ui.f['qp:'+id+':'+i]||'')}"></div>`).join('')}<div class="row"><button class="btn" data-act="quote" data-id="${id}">Hantar sebut harga</button>${b.st==='service'?`<button class="btn ghost" data-act="stage" data-id="${id}" data-v="quality">Kerja siap, ke semakan kualiti</button>`:''}</div>`;
+  if(b.st==='awaiting')h+=`<div class="say" style="background:var(--amb-bg);color:var(--amb)">Menunggu pelanggan meluluskan sebut harga. Tiada kerja bermula tanpa kelulusan. Buka app Pelanggan untuk meluluskan.</div>`;
+  if(b.st==='quality')h+=`<div style="margin-top:8px"><button class="btn" data-act="stage" data-id="${id}" data-v="ready">Lulus semakan kualiti, sedia diambil</button></div>`;
+  if(b.st==='quality'||b.st==='ready')h+=`<h3 style="margin-top:12px">Selesai dan invois</h3><div class="grid">${input('ok:'+id,'Odometer keluar (km)',{mode:'numeric'})}${input('oo:'+id,'Spesifikasi minyak enjin')}${input('os:'+id,'Ringkasan kerja')}${input('oc:'+id,'Kos dalaman RM (tidak dipapar kepada pelanggan)',{mode:'decimal'})}</div><button class="btn alt" data-act="complete" data-id="${id}">Selesai dan jana invois</button>`;
   return h+'</div>'}
 
-function hqSummary(){
-  const rs=S.records.filter(r=>r.src==='verified'),rev=rs.reduce((a,r)=>a+r.total,0),withCost=rs.filter(r=>r.cost!=null);
-  const flows={};const byV={};rs.slice().sort((a,b)=>a.ts-b.ts).forEach(r=>{const p=byV[r.vid];if(p&&p!==r.bid){const k=p+'→'+r.bid;flows[k]=(flows[k]||0)+1}byV[r.vid]=r.bid});
-  const rst={};S.reminders.forEach(r=>{const s=remStatus(r);rst[s]=(rst[s]||0)+1});
-  const bk=S.bookings,rb=bk.filter(b=>b.src==='reminder');
-  const lead=(t)=>S.leads.filter(l=>l.type===t).length;
-  return `<h1>Pusat Kawalan HQ</h1><p class="muted">Sumber data: <span class="pill warn">demo: ${rs.length} rekod</span> Semua angka dikira daripada rekod operasi di bawah. Peringatan ialah anggaran jadual, bukan diagnosis.</p>
-  <div class="kpis"><div class="kpi"><small>Servis selesai</small><b>${rs.length}</b></div><div class="kpi"><small>Hasil</small><b>${rm(rev)}</b></div><div class="kpi"><small>Purata invois</small><b>${rs.length?rm(rev/rs.length):'-'}</b></div><div class="kpi"><small>Kenderaan aktif</small><b>${new Set(rs.map(r=>r.vid)).size}</b></div><div class="kpi"><small>Margin kasar</small><b>${withCost.length?rm(withCost.reduce((a,r)=>a+r.total-r.cost,0)):'-'}</b><small>${withCost.length} rekod ada kos</small></div><div class="kpi"><small>Kenderaan merentas cawangan</small><b>${Object.values(flows).reduce((a,b)=>a+b,0)}</b></div></div>
-  <div class="grid"><div class="card"><h2>Mengikut cawangan</h2>${S.branches.map(b=>{const x=rs.filter(r=>r.bid===b.id);return `<div class="row sp sm" style="padding:5px 0;border-bottom:1px solid var(--line)"><span>${esc(b.name)}</span><span>${x.length} servis · ${rm(x.reduce((a,r)=>a+r.total,0))}</span></div>`}).join('')}</div>
-  <div class="card"><h2>Aliran merentas cawangan</h2>${Object.keys(flows).length?Object.entries(flows).map(([k,n])=>{const [a,c]=k.split('→');return `<div class="sm">${esc(by('branches',a).name)} (${by('branches',a).state}) → ${esc(by('branches',c).name)} (${by('branches',c).state}): <b>${n}</b> kenderaan</div>`}).join(''):'<span class="muted">Belum ada. Servis kenderaan sama di dua cawangan untuk melihatnya.</span>'}</div>
-  <div class="card"><h2>Peringatan &amp; tempahan</h2><div class="sm">${Object.keys(rst).length?Object.entries(rst).map(([k,n])=>`Peringatan ${k}: ${n}`).join('<br>'):'Tiada peringatan.'}<br>Tempahan: ${bk.length} · dari peringatan: ${rb.length} (selesai ${rb.filter(b=>b.st==='completed').length}) · tidak hadir: ${bk.filter(b=>b.st==='noshow').length}<br>Boleh dihubungi (persetujuan peringatan): ${S.consent.reminder?'Ya':'Tidak'} · pemasaran: ${S.consent.marketing?'Ya':'Tidak'}</div></div></div>
-  <div class="card"><h2>Ruangan rakan (insurans &amp; roadtax)</h2><p class="muted">Permohonan datang daripada pelanggan yang memberi persetujuan. Insurans: ${lead('insurance')} · Cukai jalan: ${lead('roadtax')}</p>
-  <div class="grid">${['insurance','roadtax'].map(t=>{const p=S.partners[t];return `<div class="card" style="margin:0"><h3>${t==='insurance'?'Slot insurans':'Slot roadtax'}</h3><label style="color:var(--fg)"><input type="checkbox" id="pon:${t}" data-act="pon" data-id="${t}" ${p.on?'checked':''}>Paparkan kepada pelanggan</label>${input('pn:'+t,'Nama rakan (kosong = slot kosong)',{ph:'cth. nama syarikat rakan'})}<button class="btn ghost" data-act="pname" data-id="${t}">Simpan nama rakan</button></div>`}).join('')}</div>
-  <div class="scroll" style="margin-top:10px"><table><thead><tr><th>Jenis</th><th>Plat</th><th>Telefon</th><th>Tarikh tamat</th><th>Rakan</th><th>Status</th></tr></thead><tbody>${S.leads.length?S.leads.slice().reverse().map(l=>`<tr><td>${l.type==='insurance'?'Insurans':'Roadtax'}</td><td>${esc(l.plate)}</td><td>${esc(l.phone)}</td><td>${l.exp?dfmt(l.exp):'-'}</td><td>${esc(l.partner)}</td><td><select data-act="lst" data-id="${l.id}" style="margin:0;width:auto">${['baharu','dihubungi','sebut harga','berjaya','tidak berminat'].map(s=>`<option ${l.st===s?'selected':''}>${s}</option>`).join('')}</select></td></tr>`).join(''):'<tr><td colspan="6" class="muted">Belum ada permohonan.</td></tr>'}</tbody></table></div></div>`}
+/* ---------- HQ ---------- */
+function viewHQ(){const t=ui.ht;return t==='wa'?hqWa():t==='rekrut'?hqRec():t==='rakan'?hqRakan():hqRingkas()}
+function hqRingkas(){const x=stats(),rs=x.rs,withCost=rs.filter(r=>r.cost!=null);
+  const flows={},byV={};rs.slice().sort((a,b)=>a.ts-b.ts).forEach(r=>{const p=byV[r.vid];if(p&&p!==r.bid){const k=p+'→'+r.bid;flows[k]=(flows[k]||0)+1}byV[r.vid]=r.bid});
+  const days=[];for(let i=13;i>=0;i--)days.push(ymd(addDays(now(),-i)));const dv=days.map(d=>rs.filter(r=>r.date===d).reduce((a,r)=>a+r.total,0)),mx=Math.max(1,...dv);
+  const rst={};S.reminders.forEach(r=>{const s=remStatus(r);rst[s]=(rst[s]||0)+1});const bk=S.bookings,rb=bk.filter(b=>b.src==='reminder');
+  return `<h1>Pusat Kawalan HQ</h1><p class="muted">Sumber: <span class="pill warn">demo, ${rs.length} rekod</span> Angka dikira daripada rekod operasi. Peringatan ialah anggaran jadual, bukan diagnosis.</p>
+  <div class="kpis"><div class="kpi"><small>Servis selesai</small><b>${rs.length}</b></div><div class="kpi"><small>Hasil</small><b>${rm(x.rev)}</b></div><div class="kpi"><small>Purata invois</small><b>${rs.length?rm(x.rev/rs.length):'-'}</b></div><div class="kpi"><small>Kenderaan aktif</small><b>${new Set(rs.map(r=>r.vid)).size}</b></div><div class="kpi"><small>Margin kasar</small><b>${withCost.length?rm(withCost.reduce((a,r)=>a+r.total-r.cost,0)):'-'}</b></div><div class="kpi"><small>Merentas cawangan</small><b>${Object.values(flows).reduce((a,b)=>a+b,0)}</b></div></div>
+  <div class="card"><h2>Hasil 14 hari terakhir</h2><div class="bars" role="img" aria-label="Carta hasil harian 14 hari">${dv.map((v,i)=>`<div class="b ${i===13?'t':''}" title="${dfmt(days[i])}: ${rm(v)}"><em>${v?Math.round(v):''}</em><i style="height:${Math.max(2,v/mx*92)}%"></i><span>${days[i].slice(8)}</span></div>`).join('')}</div></div>
+  <div class="grid"><div class="card"><h2>Mengikut cawangan</h2>${S.branches.map(b=>{const l=rs.filter(r=>r.bid===b.id);return `<div class="row sp sm" style="padding:7px 0;border-bottom:1px solid var(--line)"><span><b>${esc(b.name)}</b><div class="muted">${esc(b.city)}, ${esc(b.state)}</div></span><span>${l.length} servis · ${rm(l.reduce((a,r)=>a+r.total,0))}</span></div>`}).join('')}</div>
+  <div class="card"><h2>Aliran merentas cawangan</h2>${Object.keys(flows).length?Object.entries(flows).map(([k,n])=>{const [a,c]=k.split('→');return `<div class="sm">${esc(by('branches',a).name)} (${by('branches',a).state}) kepada ${esc(by('branches',c).name)} (${by('branches',c).state}): <b>${n}</b> kenderaan</div>`}).join(''):'<span class="muted">Belum ada.</span>'}</div>
+  <div class="card"><h2>Peringatan dan tempahan</h2><div class="sm">${Object.keys(rst).length?Object.entries(rst).map(([k,n])=>`${REM[k]?REM[k][0]:k}: ${n}`).join('<br>'):'Tiada peringatan.'}<br>Tempahan: ${bk.length} · dari peringatan: ${rb.length} (selesai ${rb.filter(b=>b.st==='completed').length}) · tidak hadir: ${bk.filter(b=>b.st==='noshow').length}<br>Persetujuan peringatan (demo): ${S.consent.reminder?'Ya':'Tidak'} · pemasaran: ${S.consent.marketing?'Ya':'Tidak'}</div></div></div>`}
+function hqRakan(){const lead=t=>S.leads.filter(l=>l.type===t).length;
+  return `<h1>Rakan insurans dan roadtax</h1><p class="muted">Permohonan datang daripada pelanggan yang memberi persetujuan. Insurans: ${lead('insurance')} · Cukai jalan: ${lead('roadtax')}</p>
+  <div class="grid">${['insurance','roadtax'].map(t=>{const p=S.partners[t];return `<div class="card"><h3>${t==='insurance'?'Slot insurans':'Slot roadtax'}</h3><label style="color:var(--ink)"><input type="checkbox" id="pon:${t}" data-act="pon" data-id="${t}" ${p.on?'checked':''}>Paparkan kepada pelanggan</label>${input('pn:'+t,'Nama rakan (kosong = slot kosong)',{ph:'cth. nama syarikat rakan'})}<button class="btn ghost" data-act="pname" data-id="${t}">Simpan nama rakan</button></div>`}).join('')}</div>
+  <div class="card scroll"><table><thead><tr><th>Jenis</th><th>Plat</th><th>Telefon</th><th>Tamat</th><th>Rakan</th><th>Status</th></tr></thead><tbody>${S.leads.length?S.leads.slice().reverse().map(l=>`<tr><td>${l.type==='insurance'?'Insurans':'Roadtax'}</td><td>${esc(l.plate)}</td><td>${esc(l.phone)}</td><td>${l.exp?dfmt(l.exp):'-'}</td><td>${esc(l.partner)}</td><td><select data-act="lst" data-id="${l.id}" style="margin:0;width:auto">${['baharu','dihubungi','sebut harga','berjaya','tidak berminat'].map(s=>`<option ${l.st===s?'selected':''}>${s}</option>`).join('')}</select></td></tr>`).join(''):'<tr><td colspan="6" class="muted">Belum ada permohonan.</td></tr>'}</tbody></table></div>`}
 
 /* ---------- WhatsApp & rekrutmen ---------- */
 const TAv=(k,label,val,rows)=>`<label>${label}<textarea id="${esc(k)}" data-ui="${esc(k)}" rows="${rows||3}">${esc(ui.f[k]!=null?ui.f[k]:val)}</textarea></label>`;
@@ -302,11 +610,11 @@ const TA=(k,label,rows,ph)=>`<label>${label}<textarea id="${esc(k)}" data-ui="${
 function waPhone(p){let d=String(p||'').replace(/\D/g,'');if(d.startsWith('0'))d='6'+d;return /^601\d{8,9}$/.test(d)?d:''}
 function nearBranch(){const pc=(S.profile.postcode||'').slice(0,2);const m=S.branches.filter(b=>b.postcode.slice(0,2)===pc);return (m.length?m:S.branches).map(b=>b.name).slice(0,2).join(' / ')}
 function waMsg(r){const v=by('vehicles',r.vid),st=remStatus(r);const t=st==='overdue'?S.wa.tpl.overdue:S.wa.tpl.reminder;
-  return t.replace(/\{nama\}/g,S.profile.name||'pelanggan').replace(/\{plat\}/g,v.plate).replace(/\{tarikh\}/g,dfmt(r.date)).replace(/\{km\}/g,r.km).replace(/\{cawangan\}/g,nearBranch()).replace(/\{pautan\}/g,location.href.split('#')[0])+STOPLINE}
-function waQueue(){return S.reminders.filter(r=>r.st!=='completed').map(r=>{const st=remStatus(r),why=[];
-  if(!S.consent.reminder)why.push('Pelanggan tiada persetujuan peringatan');
+  return t.replace(/\{nama\}/g,ownerName(v)).replace(/\{plat\}/g,v.plate).replace(/\{tarikh\}/g,dfmt(r.date)).replace(/\{km\}/g,r.km).replace(/\{cawangan\}/g,nearBranch()).replace(/\{pautan\}/g,location.href.split('#')[0])+STOPLINE}
+function waQueue(){return S.reminders.filter(r=>r.st!=='completed').map(r=>{const v=by('vehicles',r.vid),st=remStatus(r),why=[];
+  if(!consentOf(v))why.push('Pelanggan tiada persetujuan peringatan');
   if(st==='booked')why.push('Sudah ditempah (peringatan ditindas)');
-  if(!waPhone(S.profile.phone))why.push('Nombor telefon pelanggan tiada atau tidak sah');
+  if(!phoneOk(v))why.push('Nombor telefon pelanggan tiada atau tidak sah');
   const days=Math.round((new Date(r.date+'T00:00:00')-new Date(ymd(now())+'T00:00:00'))/DAY);
   if(st==='upcoming'&&days>S.wa.before)why.push('Belum masuk tempoh ('+S.wa.before+' hari sebelum anggaran)');
   const kind=st==='overdue'?'overdue':'reminder';
@@ -321,7 +629,7 @@ function waSave(){const a=(ui.f['wt:reminder']!=null?ui.f['wt:reminder']:S.wa.tp
 function hqWa(){ui.f.wb=String(S.wa.before);const q=waQueue(),ok=q.filter(x=>!x.why.length);
   return `<h1>WhatsApp peringatan</h1><p class="muted">Hanya untuk pelanggan yang memberi persetujuan, ditindas selepas tempahan, dan sentiasa ada arahan BERHENTI. <b>Mod demo:</b> tiada mesej dihantar automatik. Penghantaran automatik memerlukan WhatsApp Business Platform rasmi dan templat yang diluluskan Meta. "Buka WhatsApp" membolehkan staf menghantar secara manual.</p>
   <div class="kpis"><div class="kpi"><small>Layak dihantar sekarang</small><b>${ok.length}</b></div><div class="kpi"><small>Ditindas atau belum masa</small><b>${q.length-ok.length}</b></div><div class="kpi"><small>Mesej dalam log</small><b>${S.wa.log.length}</b></div></div>
-  <div class="card"><h2>Baris gilir peringatan</h2>${q.length?q.map(x=>{const v=by('vehicles',x.r.vid),txt=waMsg(x.r),R=REM[x.st];return `<div style="border-bottom:1px solid var(--line);padding:10px 0"><div class="row sp"><b>${esc(v.plate)} · ${esc(S.profile.name)}</b><span class="pill ${R?R[1]:''}">${R?R[0]:x.st}</span></div>${x.why.length?`<div class="sm" style="color:var(--warn)">Tidak dihantar: ${x.why.map(esc).join('; ')}</div>`:`<div class="sm" style="background:var(--chip);border-radius:10px;padding:8px;white-space:pre-wrap;margin-top:6px">${esc(txt)}</div><div class="row" style="margin-top:8px"><button class="btn" data-act="waSend" data-id="${x.r.id}">Hantar (simulasi)</button><a class="btn alt" style="text-decoration:none;display:inline-block" target="_blank" rel="noopener" href="https://wa.me/${waPhone(S.profile.phone)}?text=${encodeURIComponent(txt)}">Buka WhatsApp</a></div>`}</div>`}).join(''):'<p class="muted">Tiada peringatan. Siapkan satu servis, kemudian guna "Simulasi +6 bulan".</p>'}
+  <div class="card"><h2>Baris gilir peringatan</h2>${q.length?q.map(x=>{const v=by('vehicles',x.r.vid),txt=waMsg(x.r),R=REM[x.st];return `<div style="border-bottom:1px solid var(--line);padding:10px 0"><div class="row sp"><b>${esc(v.plate)} · ${esc(ownerName(v))}</b><span class="pill ${R?R[1]:''}">${R?R[0]:x.st}</span></div>${x.why.length?`<div class="sm" style="color:var(--warn)">Tidak dihantar: ${x.why.map(esc).join('; ')}</div>`:`<div class="sm" style="background:var(--chip);border-radius:10px;padding:8px;white-space:pre-wrap;margin-top:6px">${esc(txt)}</div><div class="row" style="margin-top:8px"><button class="btn" data-act="waSend" data-id="${x.r.id}">Hantar (simulasi)</button>${v.own==='me'&&waPhone(S.profile.phone)?`<a class="btn alt" style="text-decoration:none" target="_blank" rel="noopener" href="https://wa.me/${waPhone(S.profile.phone)}?text=${encodeURIComponent(txt)}">Buka WhatsApp</a>`:'<span class="muted">Pratonton sahaja (nombor contoh)</span>'}</div>`}</div>`}).join(''):'<p class="muted">Tiada peringatan. Siapkan satu servis, kemudian guna "Simulasi +6 bulan".</p>'}
   <button class="btn ghost" data-act="waStop" style="margin-top:10px">Simulasi: pelanggan balas BERHENTI</button></div>
   <div class="card"><h2>Tetapan</h2>${sel('wb','Hantar peringatan sebelum anggaran servis',[['7','7 hari'],['14','14 hari'],['30','30 hari']].map(([v,t])=>[v,t]))}
   <p class="muted">Pemboleh ubah: {nama} {plat} {tarikh} {km} {cawangan} {pautan}. Nada mesti sopan dan tidak mendesak; peringatan ialah jadual, bukan diagnosis.</p>${TAv('wt:reminder','Templat peringatan',S.wa.tpl.reminder,4)}${TAv('wt:overdue','Templat tertunggak',S.wa.tpl.overdue,4)}<button class="btn" data-act="waSave">Simpan templat</button></div>
@@ -369,40 +677,60 @@ function hqRec(){const jobs=S.jobs;
   <div class="card"><h2>Calon (disusun ikut skor padanan)</h2><p class="muted">Skor = 70% syarat wajib yang calon tanda + 30% pengalaman berbanding minimum. Ia alat bantu saringan berdasarkan pengakuan calon, bukan keputusan. Semak setiap calon secara manusia.</p>
   ${S.apps.length?S.apps.map(a=>({a,j:by('jobs',a.jid)})).filter(x=>x.j).map(x=>({...x,s:scoreOf(x.j,x.a)})).sort((p,q)=>q.s.total-p.s.total).map(({a,j,s})=>`<div style="border-bottom:1px solid var(--line);padding:10px 0"><div class="row sp"><span><b>${esc(a.name)}</b> · ${esc(j.title)}</span><span class="pill ${s.total>=70?'ok':s.total>=40?'warn':'bad'}">Skor ${s.total}/100</span></div>
   <div class="sm">Syarat wajib ${s.met}/${s.tot} · pengalaman ${a.exp} tahun (min ${j.exp})${s.licFlag?' · <span class="pill bad">Tiada lesen (wajib)</span>':''}</div>
-  <div class="sm">Tel: <a href="https://wa.me/${waPhone(a.phone)}" target="_blank" rel="noopener">${esc(a.phone)}</a>${a.email?' · '+esc(a.email):''}</div>
+  <div class="sm">Tel: ${waPhone(a.phone)?`<a href="https://wa.me/${waPhone(a.phone)}" target="_blank" rel="noopener">${esc(a.phone)}</a>`:esc(a.phone)}${a.email?' · '+esc(a.email):''}</div>
   <details><summary>Jawapan saringan</summary>${j.qs.map((q,i)=>`<div class="sm"><b>${esc(q)}</b><br>${esc(a.ans[i]||'(tiada jawapan)')}</div>`).join('')}</details>
   <label>Peringkat<select data-act="stg" data-id="${a.id}">${STAGES.map(t=>`<option ${a.st===t?'selected':''}>${t}</option>`).join('')}</select></label></div>`).join(''):'<p class="muted">Belum ada calon. Tukar ke paparan Kerjaya (calon) dan hantar satu permohonan untuk mencuba.</p>'}</div>`}
 function branchJobs(bid){const js=S.jobs.filter(j=>j.bid===bid&&j.st==='terbuka');return `<div class="card"><h2>Kekosongan staf cawangan ini</h2>${js.length?js.map(j=>`<div class="sm">${esc(j.title)} · ${j.count} kekosongan · ${S.apps.filter(a=>a.jid===j.id).length} calon</div>`).join(''):'<span class="muted">Tiada. HQ membuka jawatan di tab Rekrutmen.</span>'}</div>`}
-function viewHQ(){const t=ui.ht||'ringkas';
-  return `<div class="tabs">${[['ringkas','Ringkasan'],['wa','WhatsApp peringatan'],['rekrut','Rekrutmen staf']].map(([k,n])=>`<button class="tab sub" aria-pressed="${t===k}" data-act="ht" data-v="${k}">${n}</button>`).join('')}</div>`+(t==='wa'?hqWa():t==='rekrut'?hqRec():hqSummary())}
+/* ---------- komen ---------- */
+function fbSend(){const t=(ui.f['fb:t']||'').trim(),n=(ui.f['fb:n']||'').trim().slice(0,60);
+  if(t.length<3)return setMsg('err','Tulis komen dahulu (sekurang-kurangnya 3 aksara).');
+  const nv=NAV.find(x=>x.id===ui.role),ctx=nv.t+(nv.k?' / '+ui[nv.k]:'');
+  const row={name:n||null,body:t.slice(0,1000),ctx:ctx.slice(0,80),ua:(navigator.userAgent||'').slice(0,160)};
+  const rec={name:row.name,body:row.body,ctx,ts:Date.now(),sent:false};S.fb.push(rec);save();
+  ui.fb=false;ui.f['fb:t']='';setMsg('ok','Komen dihantar. Terima kasih.');
+  if(SB_URL.indexOf('__')<0){try{fetch(SB_URL+'/rest/v1/demo_feedback',{method:'POST',headers:{apikey:SB_KEY,Authorization:'Bearer '+SB_KEY,'Content-Type':'application/json',Prefer:'return=minimal'},body:JSON.stringify(row)}).then(r=>{rec.sent=r.ok;save();render()}).catch(()=>{})}catch(e){}}}
 
+/* ---------- render ---------- */
 function render(){
-  const y=window.scrollY,fid=document.activeElement&&document.activeElement.id,fs=document.activeElement&&document.activeElement.selectionStart;
-  const app=document.getElementById('app');
-  app.innerHTML=!ui.logged?viewLogin():head()+(ui.role==='cust'?viewCust():ui.role==='branch'?viewBranch():ui.role==='kerja'?viewKerja():viewHQ());
+  const y=window.scrollY,ae=document.activeElement,fid=ae&&ae.id,fs=ae&&ae.selectionStart;
+  const kan=document.getElementById('kan'),kx=kan?kan.scrollLeft:0;
+  cur=ui.msg;ui.msg=null;
+  document.getElementById('app').innerHTML=!ui.logged?viewLogin():shell();
+  const k2=document.getElementById('kan');if(k2)k2.scrollLeft=kx;
   window.scrollTo(0,y);
-  if(fid){const el=document.getElementById(fid);if(el){el.focus();try{if(fs!=null)el.setSelectionRange(fs,fs)}catch(e){}}}
+  if(fid){const el=document.getElementById(fid);if(el){el.focus({preventScroll:true});try{if(fs!=null)el.setSelectionRange(fs,fs)}catch(e){}}}
 }
-/* ---------- events ---------- */
+/* ---------- tindakan ---------- */
+const SUBK={cust:'ct',branch:'bt',hq:'ht'};
 const A={
- role:e=>{ui.role=e.v;ui.msg=null},ct:e=>{ui.ct=e.v;ui.msg=null},
- skip:()=>{S.skip+=182;setMsg('ok','Masa disimulasi maju 6 bulan (demo). Peringatan dikira semula.');save()},
- reset:()=>{S=seed();ext();ui.f={};ui.slot=null;ui.msg=null;store.set(JSON.stringify(S));setMsg('ok','Demo disetkan semula.')},
- logout:()=>{ui.logged=false;ui.msg=null},
+ role:e=>{ui.role=e.v;ui.menu=false;window.scrollTo(0,0)},
+ ct:e=>{ui.ct=e.v;ui.role='cust';window.scrollTo(0,0)},bt:e=>{ui.bt=e.v;ui.role='branch';window.scrollTo(0,0)},ht:e=>{ui.ht=e.v;ui.role='hq';window.scrollTo(0,0)},
+ go:e=>{const [r,s]=e.id.split(':');ui.role=r;if(SUBK[r])ui[SUBK[r]]=s;window.scrollTo(0,0)},
+ menu:()=>{ui.menu=!ui.menu},
+ skip:()=>{S.skip+=182;ui.menu=false;setMsg('ok','Masa disimulasi maju 6 bulan (demo). Peringatan dikira semula.');save()},
+ reset:()=>{S=seed();ui.f={le:'master@carrepublic.demo',lp:''};ui.slot=null;ui.sel=null;ui.menu=false;store.set(JSON.stringify(S));setMsg('ok','Data demo disetkan semula.')},
+ logout:()=>{ui.logged=false;authSet(false);ui.menu=false;ui.f.lp='Demo#2026'},
  approve:e=>decide(e.id,true),reject:e=>decide(e.id,false),
- remBook:e=>{ui.f.vid=e.id;ui.f.src='reminder';ui.ct='tempah';ui.msg=null},
+ remBook:e=>{ui.f.vid=e.id;ui.f.src='reminder';ui.ct='tempah';window.scrollTo(0,0)},
  updKm:e=>updKm(e.id),addVeh:addVehicle,addExt,cancel:e=>cancel(e.id),
- slot:e=>{ui.slot=+e.v},book,
+ svc:e=>{ui.f.svc=e.v;ui.slot=null},day:e=>{ui.f.date=e.v;ui.slot=null},slot:e=>{ui.slot=+e.v},book,
+ sel:e=>{ui.sel=ui.sel===e.id?null:e.id},
  stage:e=>stage(e.id,e.v),insp:e=>saveInsp(e.id),quote:e=>sendQuote(e.id),complete:e=>complete(e.id),
- lead:e=>submitLead(e.id),ht:e=>{ui.ht=e.v;ui.msg=null},waSend:e=>waSend(e.id),waStop,waSave,jobFill,jobDraft:()=>jobSave('draf'),jobPub:()=>jobSave('terbuka'),jobSt:e=>{by('jobs',e.id).st=e.v;save()},jobDel:e=>{S.jobs=S.jobs.filter(j=>j.id!==e.id);S.apps=S.apps.filter(a=>a.jid!==e.id);save()},apply:e=>applyJob(e.id),applyOpen:e=>{ui.apply=e.id},applyClose:()=>{ui.apply=null},
- pname:e=>{S.partners[e.id].name=(ui.f['pn:'+e.id]||'').trim();setMsg('ok','Nama rakan disimpan.');save()}
+ lead:e=>submitLead(e.id),waSend:e=>waSend(e.id),waStop,waSave,jobFill,jobDraft:()=>jobSave('draf'),jobPub:()=>jobSave('terbuka'),
+ jobSt:e=>{by('jobs',e.id).st=e.v;save()},jobDel:e=>{S.jobs=S.jobs.filter(j=>j.id!==e.id);S.apps=S.apps.filter(a=>a.jid!==e.id);save()},
+ apply:e=>applyJob(e.id),applyOpen:e=>{ui.apply=e.id},applyClose:()=>{ui.apply=null},
+ pname:e=>{S.partners[e.id].name=(ui.f['pn:'+e.id]||'').trim();setMsg('ok','Nama rakan disimpan.');save()},
+ fbOpen:()=>{ui.fb=true;ui.menu=false},fbClose:()=>{ui.fb=false},fbSend
 };
-document.addEventListener('click',ev=>{const t=ev.target.closest('[data-act]');if(!t||t.tagName==='SELECT'||t.type==='checkbox')return;const f=A[t.dataset.act];if(!f)return;f({id:t.dataset.id,v:t.dataset.v});render()});
+document.addEventListener('click',ev=>{const t=ev.target.closest('[data-act]');if(!t||t.tagName==='SELECT'||t.type==='checkbox')return;
+  if(t.classList.contains('modal')&&ev.target!==t)return;
+  const f=A[t.dataset.act];if(!f)return;f({id:t.dataset.id,v:t.dataset.v});render()});
+document.addEventListener('keydown',ev=>{if(ev.key==='Escape'&&ui.fb){ui.fb=false;render()}});
 document.addEventListener('change',ev=>{const t=ev.target;
   if(t.dataset.act==='consent'){S.consent[t.dataset.id]=t.checked;setMsg('ok','Pilihan disimpan.');save();render();return}
   if(t.dataset.act==='pon'){S.partners[t.dataset.id].on=t.checked;save();render();return}
   if(t.dataset.act==='lst'){by('leads',t.dataset.id).st=t.value;save();render();return}
-  if(t.dataset.act==='bsel'){ui.branch=t.value;render();return}
+  if(t.dataset.act==='bsel'){ui.branch=t.value;ui.sel=null;render();return}
   if(t.dataset.act==='stg'){by('apps',t.dataset.id).st=t.value;save();render();return}
   if(t.dataset.ui){const k=t.dataset.ui;ui.f[k]=t.dataset.cb?t.checked:t.value;
     if(k.startsWith('rt:')){by('vehicles',k.slice(3)).rt=t.value;save()}
@@ -414,10 +742,10 @@ document.addEventListener('change',ev=>{const t=ev.target;
     render()}});
 document.addEventListener('input',ev=>{const t=ev.target;if(t.dataset.ui&&!t.dataset.cb&&t.type!=='date')ui.f[t.dataset.ui]=t.value});
 document.addEventListener('submit',ev=>{if(ev.target.id==='lf'){ev.preventDefault();const e=(ui.f.le||'').trim().toLowerCase(),p=ui.f.lp||'';
-  if(e==='master@carrepublic.demo'&&p==='Demo#2026'){ui.logged=true;ui.msg=null;ui.f.lp=''}else setMsg('err','E-mel atau kata laluan salah. Guna akaun master demo di bawah.');render()}});
+  if(e==='master@carrepublic.demo'&&p==='Demo#2026'){ui.logged=true;authSet(true);ui.msg=null;ui.f.lp=''}else setMsg('err','E-mel atau kata laluan salah. Guna akaun master demo.');render()}});
 window.__careos={S:()=>S,ui,A,render};
 render();
 })();
 </script>
-
-</body></html>
+</body>
+</html>
