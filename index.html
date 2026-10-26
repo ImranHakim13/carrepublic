@@ -251,6 +251,20 @@ ol.tl li.ext::before{background:#aab5b3}
 .dxd{margin-top:8px}.dxd>summary{cursor:pointer;font-weight:700}.dxs4{margin-top:8px}
 .dxs{margin-top:10px;background:var(--red-bg);color:var(--red);border-radius:12px;padding:8px 11px;display:grid;font-size:13px}.dxs span{color:var(--ink);opacity:.8}
 .dxtodo{border:1.5px solid #e8908a}
+
+.est .gh{background:var(--chip);font:700 12.5px var(--bd);padding:6px 10px;border-radius:8px;margin-top:6px}.er{display:flex;justify-content:space-between;gap:10px;padding:8px 4px;border-bottom:1px solid var(--line);font-size:14px}.er small{display:block;color:var(--mut);font-size:12.5px}.er .num{white-space:nowrap}
+.tot{display:grid;gap:4px;margin-top:10px}.big{font:800 20px var(--hd);border-top:2px solid var(--ink);padding-top:8px;margin-top:4px}
+.plines{display:grid;gap:10px}.pl{border:1px solid var(--line);border-radius:12px;padding:10px;display:grid;gap:8px}.pl.labour{background:#f6f9ff}.pl .pd{width:100%;font-weight:600}
+.pn{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px;align-items:end}.pn label{font-size:12px;margin:0}.pn input{width:100%}.lt small{display:block;color:var(--mut);font-size:12px}.lt b{font-size:15px}
+.potot{position:sticky;bottom:72px;z-index:5;box-shadow:0 -6px 20px rgba(0,0,0,.12)}
+.pms{display:flex;flex-wrap:wrap;gap:8px}.ch2.on2{background:var(--ink);color:#fff;border-color:var(--ink)}.chg{background:var(--chip);border-radius:12px;padding:10px 12px}.chg small{display:block;color:var(--mut)}.chg b{font:800 20px var(--hd)}
+.cprow{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--line)}.cpl{display:flex;align-items:center;gap:4px;margin:0;font-weight:700}.cpl input{width:90px;text-align:right}
+.doc{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px;margin:10px 0;max-width:760px}.dh{display:flex;justify-content:space-between;gap:12px;border-bottom:2px solid var(--ink);padding-bottom:10px;margin-bottom:10px;flex-wrap:wrap}.dh h2{margin:0;font:800 26px var(--hd);letter-spacing:.04em}.dt{text-align:right}.dlogo{font:800 20px var(--hd)}
+.dc{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:10px;font-size:14px}.dc small{display:block;color:var(--mut)}
+.dtab{width:100%;border-collapse:collapse;font-size:14px}.dtab th{text-align:left;border-bottom:1px solid var(--ink);padding:6px 4px}.dtab td{padding:7px 4px;border-bottom:1px solid var(--line);vertical-align:top}.dtab small{display:block;color:var(--mut);font-size:11.5px}.dtab .num,.dtab th.num{text-align:right}
+.dsum{margin-top:10px;margin-left:auto;max-width:360px;display:grid;gap:4px;font-size:14px}.paid{border:2px solid #0d8a73;color:#0d8a73;text-align:center;font-weight:800;padding:4px;border-radius:8px;margin-top:6px;letter-spacing:.06em}.unpaid{border:2px solid #d6342c;color:#d6342c;text-align:center;font-weight:800;padding:4px;border-radius:8px;margin-top:6px}
+.dn{margin-top:12px;background:var(--chip);border-radius:10px;padding:9px 12px;font-size:14px}.df{margin-top:12px;font-size:12px;color:var(--mut);border-top:1px dashed var(--line);padding-top:8px}
+@media print{body{background:#fff!important}.side,.mtop,.bnav,.fab,.noprint,.toast,.scopebar,.kpis,.banner,.menub,.pop,h1,.hint{display:none!important}.shell{display:block!important}.main{padding:0!important;max-width:none!important}.doc{border:0!important;box-shadow:none!important;max-width:none!important;margin:0!important}main>div>p{display:none}}
 </style>
 </head>
 <body>
@@ -318,6 +332,56 @@ function dxMake(o){const fl=o.flags||{};return {km:o.km,done:true,ts:Date.now(),
   items:DXI.map(i=>{const f=fl[i.k];return {k:i.k,item:i.n,sec:i.sn,res:f?f[0]:'ok',note:f?f[1]:'',act:f?f[2]||'':'',est:f?f[3]||0:0,val:f?f[4]||'':''}})}}
 function dxSnap(x,handled){const c=dxCount(x),it=c.flag.map(i=>Object.assign({},i,{fixed:(handled||[]).includes(i.k)}));
   return {fm:x.fm,km:x.km,fuel:x.fuel,verdict:x.verdict||dxAuto(c),sum:x.sum,ok:c.ok,pantau:c.pantau,kritikal:c.kritikal,skip:c.skip,items:it,defer:it.filter(i=>!i.fixed)}}
+
+/* ---------- POS: katalog, pakej, model ---------- */
+const GL='Upah (labour)';
+const CAT=[
+ {id:'oil1',g:'Minyak enjin',n:'Minyak enjin 5W-30 semisintetik',u:'liter',p:22},
+ {id:'oil2',g:'Minyak enjin',n:'Minyak enjin 10W-40 mineral',u:'liter',p:16},
+ {id:'oil3',g:'Minyak enjin',n:'Minyak enjin 0W-20 sintetik penuh',u:'liter',p:38},
+ {id:'fo',g:'Penapis dan alat ganti',n:'Penapis minyak enjin',u:'biji',p:18},
+ {id:'wsh',g:'Penapis dan alat ganti',n:'Washer plug minyak (drain)',u:'biji',p:2},
+ {id:'fa',g:'Penapis dan alat ganti',n:'Penapis udara',u:'biji',p:35},
+ {id:'fc',g:'Penapis dan alat ganti',n:'Penapis kabin',u:'biji',p:45},
+ {id:'sp',g:'Penapis dan alat ganti',n:'Palam pencucuh (set 4)',u:'set',p:60},
+ {id:'wip',g:'Penapis dan alat ganti',n:'Bilah wiper (sepasang)',u:'pasang',p:30},
+ {id:'bat',g:'Penapis dan alat ganti',n:'Bateri 12V',u:'biji',p:220},
+ {id:'pad',g:'Brek',n:'Pad brek depan (set)',u:'set',p:110},
+ {id:'bf',g:'Brek',n:'Minyak brek DOT 4 (500 ml)',u:'botol',p:25},
+ {id:'gas',g:'Penghawa dingin',n:'Gas penyejuk R134a',u:'100 g',p:12},
+ {id:'cool',g:'Cecair lain',n:'Air penyejuk (coolant)',u:'liter',p:18},
+ {id:'l_oil',g:GL,n:'Upah servis minyak enjin',u:'kerja',p:25,lab:1},
+ {id:'l_maj',g:GL,n:'Upah servis besar',u:'kerja',p:60,lab:1},
+ {id:'l_ac',g:GL,n:'Upah servis penghawa dingin',u:'kerja',p:80,lab:1},
+ {id:'l_pad',g:GL,n:'Upah tukar pad brek depan',u:'kerja',p:50,lab:1},
+ {id:'l_rot',g:GL,n:'Upah pusing dan seimbang tayar',u:'kerja',p:40,lab:1},
+ {id:'l_bchk',g:GL,n:'Upah pemeriksaan brek',u:'kerja',p:45,lab:1},
+ {id:'l_tchk',g:GL,n:'Upah pemeriksaan tayar dan tekanan',u:'kerja',p:60,lab:1},
+ {id:'l_bat',g:GL,n:'Upah pasang bateri',u:'kerja',p:10,lab:1},
+ {id:'l_dx',g:GL,n:'Upah diagnosis dan imbasan OBD',u:'kerja',p:30,lab:1}];
+const PKG={
+ oil:{n:'Servis minyak enjin',lines:[['@oil','cap'],['fo',1],['wsh',1],['l_oil',1]]},
+ maj:{n:'Servis besar',lines:[['@oil','cap'],['fo',1],['wsh',1],['fa',1],['fc',1],['sp',1],['l_maj',1]]},
+ ac:{n:'Servis penghawa dingin',lines:[['gas',5],['l_ac',1]]},
+ pad:{n:'Ganti pad brek depan',lines:[['pad',1],['bf',1],['l_pad',1]]},
+ rot:{n:'Pusing dan seimbang tayar',lines:[['l_rot',1]]},
+ bchk:{n:'Pemeriksaan brek (visual)',lines:[['l_bchk',1]]},
+ tchk:{n:'Pemeriksaan tayar dan tekanan',lines:[['l_tchk',1]]},
+ dx:{n:'Diagnosis dan imbasan OBD',lines:[['l_dx',1]]}};
+const SV2P={oil:'oil',ac:'ac',brake:'bchk',tyre:'tchk'};
+const MODELS={'Proton Saga':3.0,'Proton Persona':3.3,'Proton Iriz':3.3,'Proton X50':4.2,'Perodua Axia':3.0,'Perodua Myvi':3.0,'Perodua Bezza':3.0,'Perodua Alza':3.7,'Perodua Aruz':3.7,'Toyota Vios':3.7,'Honda City':3.7,'Toyota Hilux':6.3};
+const OIL_IK={oil1:5000,oil2:3000,oil3:10000};
+const r2=x=>Math.round(x*100)/100;
+const fq=q=>Number.isInteger(q)?String(q):String(r2(q));
+function estimate(cat,pkg,o){o=o||{};const P=PKG[pkg],g=id=>cat.find(c=>c.id===id),oil=o.oil||'oil1',cap=o.cap>0?+o.cap:3.5;
+  const lines=P.lines.map(([c,q])=>{const id=c==='@oil'?oil:c,it=g(id);return {c:id,d:it.n,q:q==='cap'?cap:q,u:it.u,p:it.p,t:it.lab?'labour':'part'}});
+  const sum=t=>r2(lines.filter(l=>l.t===t).reduce((a,l)=>a+l.q*l.p,0));const parts=sum('part'),labour=sum('labour');return {lines,parts,labour,total:r2(parts+labour),pkg,oil}}
+const saleTotal=s=>r2(s.lines.reduce((a,l)=>a+l.q*l.p,0)-(+s.disc||0));
+function seedSales(){const t=new Date(),ymd2=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'),ds=ymd2(t),yy=ds.slice(2).replace(/-/g,'');
+  const mk=(id,n,cust,pkg,o,st,pay,mins)=>{const e=estimate(CAT,pkg,o);return {id,bid:'KMN',vid:null,pkg,cust,lines:e.lines,odo:'',nextKm:'',nextDate:'',remark:'',disc:0,st,inv:'INV-KMN-'+yy+'-0'+n,rcp:st==='dibayar'?'RCP-KMN-'+yy+'-0'+n:null,pay,ts:Date.now()-mins*60000}};
+  return [mk('sa1',11,{name:'Encik Azman (Demo)',phone:'',email:'',plate:'DEMO 7001',car:'Proton Saga'},'oil',{oil:'oil1',cap:3},'dibayar',{method:'tunai',amt:120,change:5,ref:'',ts:Date.now()-300*60000},320),
+   mk('sa2',12,{name:'Puan Ros (Demo)',phone:'',email:'',plate:'DEMO 7002',car:'Perodua Myvi'},'ac',{},'dibayar',{method:'duitnow',amt:140,change:0,ref:'DN-88231',ts:Date.now()-150*60000},170),
+   mk('sa3',13,{name:'Encik Lim (Demo)',phone:'',email:'',plate:'DEMO 7003',car:'Perodua Alza'},'pad',{},'invois',null,25)]}
 
 /* ---------- data contoh (semua DEMO; nama dan plat rekaan) ---------- */
 const SB_URL='https://yzlwshrywctlcwfbpddp.supabase.co',SB_KEY='sb_publishable_yA1MJyxUca8tUbjnQVN3Eg_2Is0jjYG';
@@ -395,7 +459,7 @@ function seed(){
   const apps=[
     {id:'a1',jid:'j1',name:'Calon contoh A',phone:'(contoh)',email:'',exp:2,lic:true,must:[true,true,true,false],ans:['Saya dengar dahulu, minta maaf, kemudian terangkan langkah seterusnya.','Saya semak rekod pemeriksaan dan tunjuk bukti kepada pelanggan.','Boleh.'],st:'saringan',ts:Date.now()-5*3600e3},
     {id:'a2',jid:'j1',name:'Calon contoh B',phone:'(contoh)',email:'',exp:0,lic:false,must:[true,false,false,true],ans:['','',''],st:'baharu',ts:Date.now()-2*3600e3}];
-  return {v:7,tasks:seedTasks(),seq:300,skip:0,hist:genHist(),targets:{KMN:36000,SHA:11500},
+  return {v:8,catalog:CAT.map(x=>Object.assign({},x)),sales:seedSales(),tasks:seedTasks(),seq:300,skip:0,hist:genHist(),targets:{KMN:36000,SHA:11500},
     branches:[
       {id:'KMN',st:'aktif',name:'CARREPUBLIC Kemaman',city:'Kemaman',state:'Terengganu',postcode:'24000',bays:2,open:'09:00',close:'18:00',closed:[0],note:'Cawangan perintis. Alamat, waktu dan harga sebenar belum diisi; nilai di sini ialah contoh.'},
       {id:'SHA',st:'aktif',name:'[Contoh] Cawangan Shah Alam',city:'Shah Alam',state:'Selangor',postcode:'40000',bays:1,open:'09:00',close:'18:00',closed:[0],note:'Cawangan contoh untuk menunjukkan perjalanan merentas negeri.'},
@@ -412,7 +476,7 @@ function seed(){
 }
 const KEY5='careos-demo-v5';
 let S;try{S=JSON.parse(store.get())}catch(e){}
-if(!S||S.v!==7)S=seed();
+if(!S||S.v!==8)S=seed();
 const save=()=>store.set(JSON.stringify(S));
 const nid=p=>p+(++S.seq);
 const now=()=>new Date(Date.now()+S.skip*DAY);
@@ -509,6 +573,7 @@ const PATHS={
  brief:'<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V4h6v3M3 13h18"/>',
  star:'<path d="M12 3l2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.2 6.5 20.2l1-6.2L3 9.6l6.2-.9z"/>',
  wrench:'<path d="M14 6a4 4 0 0 0 5 5l-9 9a2.1 2.1 0 0 1-3-3l9-9"/><path d="M14 6l-1-3 3 1"/>',
+ till:'<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 7h8M8 12h2M12 12h2M16 12h0M8 16h2M12 16h2M16 16h0"/>',
  gear:'<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/>'
 };
 const I=n=>`<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${PATHS[n]||''}</svg>`;
@@ -530,7 +595,7 @@ const NAV=[
  {id:'master',t:'Gambaran Master',ic:'star',subs:[]},
  {id:'arahan',t:'Arahan CEO',ic:'brief',subs:[]},
  {id:'cust',t:'Pelanggan (app)',ic:'user',k:'ct',subs:[['utama','Utama','home'],['tempah','Tempah','cal'],['pasport','Pasport','book'],['rakan','Rakan','shield'],['saya','Saya','user']]},
- {id:'branch',t:'Cawangan (BranchOS)',ic:'wrench',k:'bt',subs:[['papan','Papan kerja','board'],['jadual','Jadual','cal'],['due','Akan due','chat'],['jualan','Jualan','chart'],['arahan','Arahan','brief'],['staf','Staf','people']]},
+ {id:'branch',t:'Cawangan (BranchOS)',ic:'wrench',k:'bt',subs:[['papan','Papan kerja','board'],['jadual','Jadual','cal'],['due','Akan due','chat'],['pos','POS','till'],['arahan','Arahan','brief'],['staf','Staf','people']]},
  {id:'hq',t:'HQ',ic:'chart',k:'ht',subs:[['ringkas','Ringkasan','chart'],['rakan','Rakan','shield'],['wa','WhatsApp','chat'],['rekrut','Rekrutmen','people']]},
  {id:'kerja',t:'Kerjaya (calon)',ic:'brief',subs:[]}];
 
@@ -610,8 +675,8 @@ function cTempah(){const f=ui.f,mv=mine();if(!f.vid||!mv.find(v=>v.id===f.vid))f
   const mb=S.bookings.filter(b=>mv.some(v=>v.id===b.vid)).sort((a,b)=>b.s-a.s);
   return `<h1>Tempah servis</h1><p class="muted">Cawangan yang disahkan sahaja. Harga akhir mengikut sebut harga selepas pemeriksaan.</p>
   <div class="step"><span>1</span>Kenderaan</div>${sel('vid','',mv.map(v=>[v.id,v.plate+' · '+v.make+' '+v.model]))}
-  <div class="step"><span>2</span>Servis</div><div class="svcs">${Object.entries(SV).map(([k,s])=>{const p=(S.prices[f.bid]||{})[k];return `<button class="svc" aria-pressed="${f.svc===k}" data-act="svc" data-v="${k}"><span><b>${s.n}</b><small>${s.d} minit</small></span><b>${p==null?'Hubungi':rm(p)}</b></button>`}).join('')}</div>
-  ${pr!=null?'<p class="muted" style="margin-top:6px"><span class="pill warn">Harga contoh demo</span></p>':''}
+  <div class="step"><span>2</span>Servis</div><div class="svcs">${Object.entries(SV).map(([k,s])=>{const p=estP(k);return `<button class="svc" aria-pressed="${f.svc===k}" data-act="svc" data-v="${k}"><span><b>${s.n}</b><small>${s.d} minit</small></span><b>${p==null?'Hubungi':rm(p)}</b></button>`}).join('')}</div>
+  ${estBreak()}
   <div class="step"><span>3</span>Cawangan</div>${sel('bid','',S.branches.filter(b=>b.st==='aktif').map(b=>[b.id,b.name+' ('+b.city+')']))}<p class="muted">${esc(by('branches',f.bid).note)}</p>
   <div class="step"><span>4</span>Hari dan masa</div><div class="days">${days.map((d,i)=>`<button class="day" aria-pressed="${f.date===d}" data-act="day" data-v="${d}">${dn(d,i)}<small>${new Date(d+'T00:00:00').toLocaleDateString('ms-MY',{day:'numeric',month:'short'})}</small></button>`).join('')}</div>
   <div class="slots" style="margin-top:10px">${sl.length?sl.map(x=>`<button class="slot" aria-pressed="${ui.slot===x.s}" data-act="slot" data-v="${x.s}">${hm(x.s)}</button>`).join(''):'<span class="muted">Tiada slot (cawangan tutup, penuh atau masa telah lalu). Pilih hari lain.</span>'}</div>
@@ -647,7 +712,7 @@ function viewBranch(){if(ui.branch==='ALL')ui.branch='KMN';const bid=ui.branch,b
   const act=S.bookings.filter(b=>b.bid===bid&&activeB(b)),done=S.records.filter(r=>r.bid===bid&&r.src==='verified'),today=ymd(now());
   let h=`${scopeBar(false)}<div style="margin-bottom:8px"><h1 style="margin:0">${esc(br.name)}</h1><p class="muted">${esc(br.city)}, ${esc(br.state)} · ${br.st==='aktif'?'Aktif':'Onboarding'} · ${esc(br.note)} Waktu ${br.open} hingga ${br.close} · ${br.bays} bay.</p></div>
   <div class="kpis"><div class="kpi"><small>Kerja aktif</small><b>${act.length}</b></div><div class="kpi ${act.some(b=>b.st==='awaiting')?'hot':''}"><small>Tunggu kelulusan</small><b>${act.filter(b=>b.st==='awaiting').length}</b></div><div class="kpi"><small>Jualan hari ini</small><b>${rm(done.filter(r=>r.date===today).reduce((a,r)=>a+r.total,0))}</b></div><div class="kpi"><small>Bay</small><b>${br.bays}</b></div></div>`;
-  h=tkBanner(bid)+h;h+=t==='arahan'?tkBranchView(bid):t==='papan'?bBoard(bid,act):t==='jadual'?bJadual(bid):t==='due'?bDue(bid):t==='jualan'?bJualan(bid,done):branchJobs(bid);
+  h=tkBanner(bid)+h;h+=t==='arahan'?tkBranchView(bid):t==='papan'?bBoard(bid,act):t==='jadual'?bJadual(bid):t==='due'?bDue(bid):t==='pos'?viewPOS(bid):branchJobs(bid);
   return h+`<div class="hint" style="margin-top:12px">Cawangan tidak nampak tempahan cawangan lain, maklumat insurans atau roadtax pelanggan, atau kos cawangan lain. Sejarah cawangan lain hanya kelihatan semasa tempahan aktif dan dengan persetujuan pelanggan.</div>`}
 function kcard(b){const v=by('vehicles',b.vid);return `<button class="kc ${b.st==='awaiting'?'wait':''}" aria-pressed="${ui.sel===b.id}" data-act="sel" data-id="${b.id}"><div class="row sp">${plate(v.plate,'sm')}<span class="sm" style="color:var(--mut)">${b.insp&&b.insp.fm&&dxCount(b.insp).kritikal?'<i class="dot bad" title="Penemuan segera"></i> ':''}${hm(b.s)}</span></div><div style="font-weight:700;margin-top:6px">${esc(v.make)} ${esc(v.model)}</div><div class="t">${SV[b.svc].n}<br>${esc(ownerName(v))}</div></button>`}
 function bBoard(bid,act){const list=act.slice().sort((a,b)=>a.s-b.s);
@@ -950,6 +1015,114 @@ const pendingDx=v=>{const r=S.records.filter(x=>x.vid===v.id&&x.dx).sort((a,b)=>
 function dxTodo(){const l=mine().map(v=>({v,r:pendingDx(v)})).filter(x=>x.r);if(!l.length)return '';
   return `<div class="card dxtodo"><h2>Tindakan disyorkan foreman</h2>${l.map(({v,r})=>{const cr=r.dx.defer.filter(i=>i.res==='kritikal').length;return `<div style="margin-bottom:12px"><div class="row sp"><span>${plate(v.plate,'sm')} <span class="pill ${cr?'bad':'warn'}">${r.dx.defer.length} perkara${cr?' · '+cr+' segera':''}</span></span><button class="btn alt sm" data-act="remBook" data-id="${v.id}">Tempah</button></div>${dxActions(r.dx.defer)}<div class="muted sm">Daripada laporan ${dfmt(r.date)} oleh ${esc(r.dx.fm)}.</div></div>`}).join('')}</div>`}
 
+/* ---------- POS: jualan, invois, resit, anggaran harga ---------- */
+const PM={tunai:'Tunai',kad:'Kad debit atau kredit',duitnow:'DuitNow QR',bank:'Pindahan bank',ewallet:'E-dompet'};
+const sBy=id=>S.sales.find(x=>x.id===id);
+const modelOf=v=>MODELS[v.make+' '+v.model]!=null?v.make+' '+v.model:'';
+const capFor=v=>(v&&MODELS[v.make+' '+v.model])||3.5;
+const sumBy=(s,t)=>r2(s.lines.filter(l=>l.t===t).reduce((a,l)=>a+l.q*l.p,0));
+const qtxt=l=>fq(l.q)+(l.u?' '+l.u:'');
+const optS=(v,list)=>list.map(([k,t])=>`<option value="${esc(k)}" ${v===k?'selected':''}>${esc(t)}</option>`).join('');
+const selF=(k,label,list,dflt)=>`<label>${label}<select id="${esc(k)}" data-ui="${esc(k)}">${optS(ui.f[k]||dflt||'',list)}</select></label>`;
+const oilOpts=()=>S.catalog.filter(c=>c.g==='Minyak enjin').map(c=>[c.id,c.n+' · '+rm(c.p)+'/liter']);
+const pkgOpts=()=>Object.entries(PKG).map(([k,p])=>[k,p.n]);
+function estP(k){const v=by('vehicles',ui.f.vid)||mine()[0];return estimate(S.catalog,SV2P[k],{cap:capFor(v)}).total}
+/* jadual harga terperinci (digunakan di POS dan app pelanggan) */
+function estTable(e,opt){opt=opt||{};const row=l=>`<div class="er"><div><b>${esc(l.d)}</b><small>${fq(l.q)}${l.u?' '+esc(l.u):''} × ${rm(l.p)}</small></div><b class="num">${rm(r2(l.q*l.p))}</b></div>`,P=e.lines.filter(l=>l.t==='part'),L=e.lines.filter(l=>l.t==='labour');
+  return `<div class="est">${P.length?`<div class="gh">Alat ganti dan bahan</div>${P.map(row).join('')}`:''}<div class="gh">Upah (labour)</div>${L.map(row).join('')}</div>
+  <div class="tot"><div class="row sp"><span>Alat ganti dan bahan</span><b>${rm(e.parts)}</b></div><div class="row sp"><span>Upah</span><b>${rm(e.labour)}</b></div><div class="row sp big"><span>Jumlah penuh</span><b>${rm(e.total)}</b></div></div>
+  <p class="muted sm" style="margin:8px 0 0">${opt.note||'Ini harga penuh. Tiada caj tersembunyi. Jika foreman jumpa kerja tambahan, kami minta kelulusan anda dahulu sebelum buat.'}</p>`}
+function estBreak(){const f=ui.f,v=by('vehicles',f.vid),e=estimate(S.catalog,SV2P[f.svc||'oil'],{cap:capFor(v)});
+  return `<div class="card" style="margin-top:10px"><div class="row sp"><b>Pecahan harga${v?' untuk '+esc(v.make)+' '+esc(v.model):''}</b><span class="pill warn">Harga contoh demo</span></div>${estTable(e)}</div>`}
+/* ---------- halaman POS ---------- */
+function viewPOS(bid){const t=ui.pt||'jual',tabs=[['jual','Jualan baharu'],['harga','Anggaran harga'],['senarai','Senarai harga'],['rekod','Invois dan resit']];
+  return `<div class="noprint"><div class="seg" role="group" aria-label="POS" style="flex-wrap:wrap">${tabs.map(([k,n])=>`<button aria-pressed="${t===k}" data-act="pt" data-v="${k}">${n}</button>`).join('')}</div></div>${t==='harga'?posEst(bid):t==='senarai'?posCatalog():t==='rekod'?posList(bid):posSale(bid)}`}
+function posSale(bid){const s=ui.posId&&sBy(ui.posId);if(!s||s.bid!==bid)return posNew(bid);
+  return s.st==='draf'?posEditor(s):s.st==='invois'?posInvoice(s):posDone(s)}
+function posNew(bid){const f=ui.f,pc=f.pc||'walk',pkg=f.pp||'oil',oil=f.po||'oil1',walk=pc==='walk',v=!walk&&by('vehicles',pc),model=walk?(f['pw:car']||''):modelOf(v||{make:'',model:''}),cap=+f.pl||MODELS[model]||3.5,e=estimate(S.catalog,pkg,{oil,cap}),hasOil=PKG[pkg].lines.some(l=>l[0]==='@oil');
+  const open=S.sales.filter(x=>x.bid===bid&&['draf','invois'].includes(x.st));
+  return `<h2>Jualan baharu</h2>${open.length?`<div class="card"><b>Belum selesai</b>${open.map(x=>`<div class="row sp" style="padding:8px 0;border-bottom:1px solid var(--line)"><span>${plate(x.cust.plate,'sm')} ${esc(x.cust.name)} · ${rm(saleTotal(x))}</span><button class="btn sm ghost" data-act="posOpen" data-id="${x.id}">${x.st==='draf'?'Sambung':'Terima bayaran'}</button></div>`).join('')}</div>`:''}
+  <div class="grid"><div class="card"><h3 style="margin-top:0">1. Pelanggan dan kereta</h3>${selF('pc','Pilih kereta',[['walk','Pelanggan walk-in (kereta belum dalam sistem)'],...S.vehicles.map(x=>[x.id,x.plate+' · '+x.make+' '+x.model+' · '+ownerName(x)])],'walk')}
+   ${walk?`<div class="grid">${input('pw:plate','No. plat',{ph:'Contoh: DEMO 9999'})}${input('pw:name','Nama pelanggan')}${input('pw:phone','Telefon',{mode:'tel'})}${input('pw:email','E-mel (untuk hantar resit)',{type:'email'})}${selF('pw:car','Model kereta',[['','Pilih model'],...Object.keys(MODELS).map(k=>[k,k]),['Lain','Lain-lain']])}</div>`:`<p class="muted sm">Sejarah servis akan dikemas kini dalam pasport pelanggan selepas bayaran. Anggaran minyak enjin untuk ${esc(model||'model ini')}: ${fq(cap)} liter.</p>`}</div>
+  <div class="card"><h3 style="margin-top:0">2. Servis</h3>${selF('pp','Pakej servis',pkgOpts(),'oil')}${hasOil?selF('po','Jenis minyak enjin (jenama dan gred)',oilOpts(),'oil1')+input('pl','Jumlah minyak (liter)',{mode:'decimal',ph:fq(cap)}):''}
+   <p class="muted sm">Item dan harga di bawah boleh ditambah atau diubah selepas ini.</p></div></div>
+  <div class="card"><h3 style="margin-top:0">Pratonton harga</h3>${estTable(e)}<button class="btn alt full" data-act="posStart" style="margin-top:10px">Mula jualan</button></div>`}
+function posStart(){const f=ui.f,pc=f.pc||'walk',pkg=f.pp||'oil',oil=f.po||'oil1';let cust,vid=null,model='',v=null;
+  if(pc==='walk'){const plt=(f['pw:plate']||'').trim().toUpperCase();if(!plt)return setMsg('err','Isi nombor plat.');model=f['pw:car']||'';cust={name:(f['pw:name']||'').trim()||'Pelanggan walk-in',phone:(f['pw:phone']||'').trim(),email:(f['pw:email']||'').trim(),plate:plt,car:model}}
+  else{v=by('vehicles',pc);vid=v.id;model=modelOf(v);cust={name:ownerName(v),phone:v.own==='me'?(S.profile.phone||''):'',email:v.own==='me'?(S.profile.email||''):'',plate:v.plate,car:v.make+' '+v.model}}
+  const cap=+f.pl||MODELS[model]||3.5,e=estimate(S.catalog,pkg,{oil,cap}),odo=v?v.km:0,ik=(v&&v.ik)||OIL_IK[oil]||5000,svc=['oil','maj'].includes(pkg),d=new Date(now());d.setMonth(d.getMonth()+6);
+  const s={id:nid('s'),bid:ui.branch,vid,pkg,cust,lines:e.lines,odo:odo?String(odo):'',nextKm:svc&&odo?String(odo+ik):'',nextDate:svc?ymd(d):'',remark:svc?'Servis seterusnya selepas '+ik.toLocaleString('ms-MY')+' km atau 6 bulan, mana yang dahulu.':'',disc:0,st:'draf',inv:null,rcp:null,pay:null,ts:Date.now()};
+  S.sales.unshift(s);ui.posId=s.id;ui.pt='jual';setMsg('ok','Jualan dimulakan. Semak item, tambah kerja lain jika perlu.');save()}
+function posSumHtml(s){const p=sumBy(s,'part'),l=sumBy(s,'labour'),o=sumBy(s,'lain'),dc=+s.disc||0;
+  return `<div class="row sp"><span>Alat ganti dan bahan</span><b>${rm(p)}</b></div><div class="row sp"><span>Upah</span><b>${rm(l)}</b></div>${o?`<div class="row sp"><span>Lain-lain</span><b>${rm(o)}</b></div>`:''}${dc?`<div class="row sp"><span>Diskaun</span><b>-${rm(dc)}</b></div>`:''}<div class="row sp big"><span>Jumlah perlu dibayar</span><b>${rm(saleTotal(s))}</b></div>`}
+function posEditor(s){const id=s.id,fld=(f,label,o)=>`<label>${label}<input id="sf:${id}:${f}" data-ui="sf:${id}:${f}" ${o&&o.type?`type="${o.type}"`:''} ${o&&o.mode?`inputmode="${o.mode}"`:''} value="${esc(f in s.cust?s.cust[f]:s[f]||'')}"></label>`;
+  const groups={};S.catalog.forEach(c=>(groups[c.g]=groups[c.g]||[]).push(c));
+  return `<div class="row sp"><h2 style="margin:0">Jualan ${esc(s.cust.plate)}</h2><span class="pill warn">Draf</span></div>
+  <div class="card"><div class="grid">${fld('name','Nama pelanggan')}${fld('phone','Telefon',{mode:'tel'})}${fld('email','E-mel',{type:'email'})}${fld('odo','Odometer masuk (km)',{mode:'numeric'})}</div><p class="muted sm" style="margin:6px 0 0">${esc(s.cust.car||'Model belum dipilih')} · ${s.vid?'Pelanggan dalam sistem, rekod pasport dikemas kini selepas bayaran.':'Walk-in, tiada rekod pasport.'}</p></div>
+  <div class="card"><h3 style="margin-top:0">Item dan harga</h3><div class="plines">${s.lines.map((l,i)=>`<div class="pl ${l.t}"><input class="pd" id="sl:${id}:${i}:d" data-ui="sl:${id}:${i}:d" value="${esc(l.d)}" aria-label="Keterangan"><div class="pn"><label>Kuantiti${l.u?' ('+esc(l.u)+')':''}<input id="sl:${id}:${i}:q" data-ui="sl:${id}:${i}:q" inputmode="decimal" value="${fq(l.q)}"></label><label>Harga seunit (RM)<input id="sl:${id}:${i}:p" data-ui="sl:${id}:${i}:p" inputmode="decimal" value="${l.p}"></label><div class="lt"><small>${l.t==='labour'?'Upah':l.t==='lain'?'Lain-lain':'Bahan'}</small><b id="lt:${id}:${i}">${rm(r2(l.q*l.p))}</b></div><button class="btn sm ghost" data-act="posDel" data-id="${id}" data-v="${i}" aria-label="Buang baris">Buang</button></div></div>`).join('')}</div>
+   <label style="margin-top:10px">Tambah item atau servis lain<select data-act="posAdd" data-id="${id}"><option value="">Pilih daripada senarai harga</option>${Object.entries(groups).map(([g,l])=>`<optgroup label="${esc(g)}">${l.map(c=>`<option value="${c.id}">${esc(c.n)} · ${rm(c.p)}/${esc(c.u)}</option>`).join('')}</optgroup>`).join('')}<option value="free">Baris bebas (taip sendiri)</option></select></label></div>
+  <div class="card"><h3 style="margin-top:0">Nota dan servis seterusnya</h3><div class="grid">${fld('nextKm','Odometer servis seterusnya (km)',{mode:'numeric'})}${fld('nextDate','Atau tarikh servis seterusnya',{type:'date'})}${fld('disc','Diskaun (RM)',{mode:'decimal'})}</div><label style="margin-top:8px">Catatan untuk pelanggan (dicetak pada resit)<textarea id="sf:${id}:remark" data-ui="sf:${id}:remark" rows="2" maxlength="300">${esc(s.remark)}</textarea></label></div>
+  <div class="card potot"><div id="pos-sum">${posSumHtml(s)}</div><div class="row" style="margin-top:10px"><button class="btn alt" data-act="posInv" data-id="${id}">Jana invois</button><button class="btn ghost" data-act="posVoid" data-id="${id}">Batal jualan</button></div></div>`}
+function posDocBody(s){const br=by('branches',s.bid),paid=s.st==='dibayar',no=paid?s.rcp:s.inv,dt=new Date(paid?s.pay.ts:s.ts),dc=+s.disc||0;
+  return `<div class="doc" id="doc"><div class="dh"><div><b class="dlogo">CARREPUBLIC</b><div>${esc(br.name)}</div><div class="muted sm">${esc(br.city)}, ${esc(br.state)}<br>Alamat dan no. pendaftaran syarikat belum diisi (demo)</div></div><div class="dt"><h2>${paid?'RESIT':'INVOIS'}</h2><div>No: <b>${esc(no)}</b></div>${paid?`<div class="muted sm">Rujukan invois: ${esc(s.inv)}</div>`:''}<div>${dtfmt(dt.getTime())}</div></div></div>
+  <div class="dc"><div><small>Pelanggan</small><b>${esc(s.cust.name)}</b>${s.cust.phone?`<div>${esc(s.cust.phone)}</div>`:''}${s.cust.email?`<div>${esc(s.cust.email)}</div>`:''}</div><div><small>Kenderaan</small><b>${esc(s.cust.plate)}</b><div>${esc(s.cust.car||'-')}</div>${+s.odo?`<div>Odometer: ${(+s.odo).toLocaleString('ms-MY')} km</div>`:''}</div></div>
+  <table class="dtab"><thead><tr><th>Keterangan</th><th class="num">Kuantiti</th><th class="num">Harga</th><th class="num">Jumlah</th></tr></thead><tbody>${s.lines.map(l=>`<tr><td>${esc(l.d)}<small>${l.t==='labour'?'Upah':l.t==='lain'?'Lain-lain':'Bahan'}</small></td><td class="num">${qtxt(l)}</td><td class="num">${rm(l.p)}</td><td class="num">${rm(r2(l.q*l.p))}</td></tr>`).join('')}</tbody></table>
+  <div class="dsum"><div class="row sp"><span>Alat ganti dan bahan</span><span>${rm(sumBy(s,'part'))}</span></div><div class="row sp"><span>Upah</span><span>${rm(sumBy(s,'labour'))}</span></div>${sumBy(s,'lain')?`<div class="row sp"><span>Lain-lain</span><span>${rm(sumBy(s,'lain'))}</span></div>`:''}${dc?`<div class="row sp"><span>Diskaun</span><span>-${rm(dc)}</span></div>`:''}<div class="row sp big"><span>Jumlah</span><b>${rm(saleTotal(s))}</b></div>${paid?`<div class="row sp"><span>Dibayar (${esc(PM[s.pay.method])}${s.pay.ref?' · '+esc(s.pay.ref):''})</span><span>${rm(s.pay.amt)}</span></div>${s.pay.change?`<div class="row sp"><span>Baki dipulangkan</span><span>${rm(s.pay.change)}</span></div>`:''}<div class="paid">DIBAYAR PENUH</div>`:'<div class="unpaid">BELUM DIBAYAR</div>'}</div>
+  ${s.remark||+s.nextKm||s.nextDate?`<div class="dn"><b>Servis seterusnya</b><div>${+s.nextKm?(+s.nextKm).toLocaleString('ms-MY')+' km':''}${+s.nextKm&&s.nextDate?' atau ':''}${s.nextDate?dfmt(s.nextDate):''}</div>${s.remark?`<div>${esc(s.remark)}</div>`:''}</div>`:''}
+  <div class="df">Tiada caj tersembunyi. Kerja tambahan hanya dibuat dengan kelulusan anda. Dokumen demo, bukan dokumen cukai sebenar.</div></div>`}
+function posText(s){const br=by('branches',s.bid),paid=s.st==='dibayar';
+  return [`CARREPUBLIC ${br.name}`,`${paid?'RESIT':'INVOIS'} ${paid?s.rcp:s.inv}`,`Pelanggan: ${s.cust.name} (${s.cust.plate}${s.cust.car?', '+s.cust.car:''})`,+s.odo?`Odometer: ${(+s.odo).toLocaleString('ms-MY')} km`:'','',...s.lines.map(l=>`- ${l.d}: ${qtxt(l)} x ${rm(l.p)} = ${rm(r2(l.q*l.p))}`),+s.disc?`Diskaun: -${rm(s.disc)}`:'',`JUMLAH: ${rm(saleTotal(s))}`,paid?`Dibayar: ${PM[s.pay.method]} ${rm(s.pay.amt)}`:'Belum dibayar',+s.nextKm||s.nextDate?`Servis seterusnya: ${+s.nextKm?(+s.nextKm).toLocaleString('ms-MY')+' km':''} ${s.nextDate?dfmt(s.nextDate):''}`:'',s.remark,'','Tiada caj tersembunyi. Terima kasih.'].filter(x=>x!=='').join('\n')}
+function shareBtns(s){const paid=s.st==='dibayar',sub=(paid?'Resit ':'Invois ')+(paid?s.rcp:s.inv)+' - CARREPUBLIC',tx=posText(s),ph=waPhone(s.cust.phone);
+  return `<div class="card noprint"><h3 style="margin-top:0">Hantar kepada pelanggan</h3><div class="row"><button class="btn" data-act="posPrint">Cetak atau simpan PDF</button>${s.cust.email?`<a class="btn alt" style="text-decoration:none" href="mailto:${esc(s.cust.email)}?subject=${encodeURIComponent(sub)}&body=${encodeURIComponent(tx)}">Emel kepada pelanggan</a>`:'<span class="muted sm">Isi e-mel pelanggan di draf untuk hantar emel.</span>'}<a class="btn ghost" style="text-decoration:none" target="_blank" rel="noopener" href="https://wa.me/${ph||''}?text=${encodeURIComponent(tx)}">WhatsApp</a></div><p class="muted sm" style="margin:8px 0 0">Emel dibuka dalam app emel anda dengan butiran penuh, anda tekan hantar. Penghantaran automatik dan lampiran PDF perlukan sambungan pelayan emel (belum ada dalam demo).</p></div>`}
+function posInvoice(s){const tot=saleTotal(s),m=ui.f.pm||'',amt=ui.f['pay:amt'];
+  return `<div class="noprint"><div class="row sp"><h2 style="margin:0">Invois ${esc(s.inv)}</h2><span class="pill warn">Belum dibayar</span></div></div>${posDocBody(s)}
+  <div class="card noprint"><h3 style="margin-top:0">Terima bayaran</h3><div class="pms">${Object.entries(PM).map(([k,n])=>`<button class="ch2 ${m===k?'on2':''}" aria-pressed="${m===k}" data-act="posM" data-v="${k}">${n}</button>`).join('')}</div>
+  ${m==='tunai'?`<div class="grid" style="margin-top:10px">${input('pay:amt','Wang diterima (RM)',{mode:'decimal',ph:String(tot)})}<div class="chg"><small>Baki dipulangkan</small><b>${amt&&+amt>=tot?rm(r2(+amt-tot)):'-'}</b></div></div><div class="row" style="margin-top:6px"><button class="btn sm ghost" data-act="posTender" data-v="${tot}">Wang tepat</button>${[50,100,200].filter(x=>x>=tot).slice(0,2).map(x=>`<button class="btn sm ghost" data-act="posTender" data-v="${x}">RM ${x}</button>`).join('')}</div>`:m?`<div style="margin-top:10px">${input('pay:ref','Rujukan transaksi (pilihan)')}<p class="muted sm">Pastikan ${rm(tot)} telah masuk sebelum tekan terima.</p></div>`:'<p class="muted sm">Pilih kaedah bayaran.</p>'}
+  <div class="row" style="margin-top:12px"><button class="btn alt" data-act="posPay" data-id="${s.id}">Terima ${rm(tot)} dan jana resit</button><button class="btn ghost" data-act="posEditBack" data-id="${s.id}">Ubah item</button><button class="btn ghost" data-act="posVoid" data-id="${s.id}">Batal</button></div></div>${shareBtns(s)}`}
+function posDone(s){return `<div class="noprint"><div class="row sp"><h2 style="margin:0">Resit ${esc(s.rcp||'')}</h2><span class="pill ${s.st==='dibayar'?'ok':'bad'}">${s.st==='dibayar'?'Dibayar':'Dibatalkan'}</span></div></div>${s.st==='dibayar'?posDocBody(s)+shareBtns(s):'<div class="card"><p class="muted">Jualan ini dibatalkan.</p></div>'}<div class="noprint" style="margin-top:8px"><button class="btn alt" data-act="posNewSale">Jualan baharu</button></div>`}
+/* ---------- tindakan ---------- */
+function posWrite(k,val){const p=k.split(':'),s=sBy(p[1]);if(!s||s.st!=='draf')return;
+  if(p[0]==='sf'){const f=p[2];if(['name','phone','email'].includes(f))s.cust[f]=val;else if(f==='disc')s.disc=Math.max(0,+val||0);else s[f]=val}
+  else{const l=s.lines[+p[2]],f=p[3];if(!l)return;if(f==='d')l.d=val;else l[f]=Math.max(0,+val||0);const e=document.getElementById('lt:'+s.id+':'+p[2]);if(e)e.textContent=rm(r2(l.q*l.p))}
+  save();const sm=document.getElementById('pos-sum');if(sm)sm.innerHTML=posSumHtml(s)}
+function posAdd(id,c){const s=sBy(id);if(!s||!c)return;if(c==='free')s.lines.push({c:'free',d:'Item baharu',q:1,u:'',p:0,t:'lain'});else{const it=S.catalog.find(x=>x.id===c);s.lines.push({c:it.id,d:it.n,q:1,u:it.u,p:it.p,t:it.lab?'labour':'part'})}save()}
+function posInv(id){const s=sBy(id);if(!s.lines.length)return setMsg('err','Tiada item dalam jualan.');
+  if(s.lines.some(l=>!(l.q>0)||!l.d.trim()))return setMsg('err','Setiap baris mesti ada keterangan dan kuantiti lebih daripada 0.');
+  if(saleTotal(s)<=0)return setMsg('err','Jumlah mesti lebih daripada RM 0.');
+  if(s.vid){const v=by('vehicles',s.vid);if(!(+s.odo>0))return setMsg('err','Isi odometer masuk.');if(+s.odo<v.km)return setMsg('err','Odometer lebih rendah daripada rekod terakhir ('+v.km.toLocaleString('ms-MY')+' km).')}
+  if(!s.inv)s.inv='INV-'+s.bid+'-'+ymd(now()).slice(2).replace(/-/g,'')+'-0'+(++S.seq);s.st='invois';setMsg('ok','Invois dijana. Terima bayaran untuk keluarkan resit.');save()}
+function posPay(id){const s=sBy(id),m=ui.f.pm;if(!m)return setMsg('err','Pilih kaedah bayaran.');const tot=saleTotal(s),amt=m==='tunai'?+ui.f['pay:amt']:tot;
+  if(m==='tunai'&&!(amt>=tot))return setMsg('err','Wang diterima kurang daripada '+rm(tot)+'.');
+  s.pay={method:m,amt,change:r2(amt-tot),ref:m==='tunai'?'':(ui.f['pay:ref']||'').trim(),ts:Date.now()};s.st='dibayar';s.rcp='RCP'+s.inv.slice(3);
+  if(s.vid){const v=by('vehicles',s.vid),km=+s.odo||v.km,items=s.lines.map(l=>({d:l.d,q:l.q,p:l.p}));if(+s.disc)items.push({d:'Diskaun',q:1,p:-s.disc});
+    const oil=s.lines.find(l=>(S.catalog.find(c=>c.id===l.c)||{}).g==='Minyak enjin'),rec={id:nid('r'),vid:v.id,bid:s.bid,bk:null,src:'verified',date:ymd(now()),km,oil:oil?oil.d:'',sum:PKG[s.pkg].n,total:tot,cost:null,inv:s.inv,items,ts:Date.now()};
+    S.records.push(rec);if(km>=v.km)v.km=km;
+    if(+s.nextKm||s.nextDate){S.reminders.forEach(r=>{if(r.vid===v.id&&r.st!=='completed')r.st='completed'});const d=new Date(now());d.setMonth(d.getMonth()+v.im);
+      S.reminders.push({id:nid('m'),vid:v.id,date:s.nextDate||ymd(d),km:+s.nextKm||km+v.ik,booked:false,st:'open',rec:rec.id,basis:'Ditetapkan oleh cawangan semasa servis: '+(s.remark||'servis seterusnya mengikut jadual')})}}
+  ui.f['pay:amt']='';ui.f.pm='';setMsg('ok','Bayaran diterima. Resit '+s.rcp+' dijana'+(s.vid?' dan masuk dalam pasport pelanggan.':'.'));save()}
+/* ---------- anggaran harga ---------- */
+function posEst(bid){const f=ui.f,model=f['ep:model']||'Proton Saga',pkg=f['ep:pkg']||'oil',oil=f['ep:oil']||'oil1',cap=+f['ep:cap']||MODELS[model]||3.5,e=estimate(S.catalog,pkg,{oil,cap}),hasOil=PKG[pkg].lines.some(l=>l[0]==='@oil');
+  const tx=`CARREPUBLIC - Anggaran harga\n${model}: ${PKG[pkg].n}\n`+e.lines.map(l=>`- ${l.d}: ${qtxt(l)} x ${rm(l.p)} = ${rm(r2(l.q*l.p))}`).join('\n')+`\nJUMLAH PENUH: ${rm(e.total)} (bahan ${rm(e.parts)}, upah ${rm(e.labour)})\nTiada caj tersembunyi. Kerja tambahan hanya dengan kelulusan anda.`;
+  return `<h2>Anggaran harga untuk pelanggan</h2><p class="muted">Bila pelanggan tanya "berapa servis ${esc(model)}?", pilih model dan servis. Semua bahan dan upah ditunjuk jelas.</p>
+  <div class="grid noprint"><div class="card">${selF('ep:model','Model kereta',Object.keys(MODELS).map(k=>[k,k]),'Proton Saga')}${selF('ep:pkg','Servis',pkgOpts(),'oil')}${hasOil?selF('ep:oil','Jenis minyak enjin',oilOpts(),'oil1')+input('ep:cap','Jumlah minyak (liter)',{mode:'decimal',ph:fq(MODELS[model]||3.5)}):''}<p class="muted sm">Kapasiti minyak ialah anggaran contoh. Sahkan dengan buku manual kenderaan.</p></div></div>
+  <div class="doc"><div class="dh"><div><b class="dlogo">CARREPUBLIC</b><div class="muted sm">Anggaran harga · ${esc(by('branches',bid).name)}</div></div><div class="dt"><h2>ANGGARAN</h2><div>${esc(model)}</div><div class="sm">${esc(PKG[pkg].n)}</div></div></div>${estTable(e)}<div class="df">Harga contoh demo. Tidak mengikat sehingga pemeriksaan di bengkel.</div></div>
+  <div class="card noprint"><div class="row"><button class="btn" data-act="posPrint">Cetak</button><a class="btn ghost" style="text-decoration:none" target="_blank" rel="noopener" href="https://wa.me/?text=${encodeURIComponent(tx)}">Hantar WhatsApp</a><button class="btn alt" data-act="posFromEst">Mulakan jualan</button></div></div>`}
+function posFromEst(){const f=ui.f;f.pc='walk';f['pw:car']=f['ep:model']||'Proton Saga';f.pp=f['ep:pkg']||'oil';f.po=f['ep:oil']||'oil1';f.pl=f['ep:cap']||'';ui.pt='jual';ui.posId=null;setMsg('ok','Anggaran disalin. Isi nombor plat untuk mula.')}
+/* ---------- senarai harga ---------- */
+function posCatalog(){const g={};S.catalog.forEach(c=>(g[c.g]=g[c.g]||[]).push(c));
+  return `<h2>Senarai harga</h2><p class="muted">Harga di sini digunakan dalam jualan, anggaran dan app pelanggan. Tukar harga dan ia terus berubah di semua tempat.</p>
+  ${Object.entries(g).map(([n,l])=>`<div class="card"><h3 style="margin-top:0">${esc(n)}</h3>${l.map(c=>`<div class="cprow"><span>${esc(c.n)}<small class="muted"> · setiap ${esc(c.u)}</small></span><label class="cpl">RM<input id="cp:${c.id}" data-ui="cp:${c.id}" inputmode="decimal" value="${c.p}" aria-label="Harga ${esc(c.n)}"></label></div>`).join('')}</div>`).join('')}
+  <div class="card"><h3 style="margin-top:0">Pakej servis</h3>${Object.values(PKG).map(p=>`<div style="padding:7px 0;border-bottom:1px solid var(--line)"><b>${p.n}</b><div class="muted sm">${p.lines.map(([c,q])=>{const it=c==='@oil'?{n:'Minyak enjin'}:S.catalog.find(x=>x.id===c);return it.n+(q==='cap'?' (ikut kapasiti)':q>1?' ×'+q:'')}).join(' · ')}</div></div>`).join('')}</div>
+  <div class="card"><h3 style="margin-top:0">Tambah produk atau upah baharu</h3><div class="grid">${input('na:n','Nama')}${selF('na:g','Kumpulan',[...Object.keys(g).map(k=>[k,k]),['Lain-lain','Lain-lain']],'Penapis dan alat ganti')}${input('na:u','Unit',{ph:'liter, biji, set, kerja'})}${input('na:p','Harga (RM)',{mode:'decimal'})}</div><button class="btn" data-act="posCatAdd" style="margin-top:8px">Tambah</button></div>`}
+function posCatAdd(){const f=ui.f,n=(f['na:n']||'').trim(),p=+f['na:p'];if(!n||!(p>=0)||f['na:p']==null||f['na:p']==='')return setMsg('err','Isi nama dan harga.');
+  const g=f['na:g']||'Penapis dan alat ganti';S.catalog.push({id:nid('c'),g,n,u:(f['na:u']||'biji').trim(),p,lab:g===GL?1:0});['na:n','na:p','na:u'].forEach(k=>f[k]='');setMsg('ok','Produk ditambah.');save()}
+/* ---------- rekod ---------- */
+function posList(bid){const l=S.sales.filter(x=>x.bid===bid).sort((a,b)=>b.ts-a.ts),today=ymd(now()),paid=l.filter(x=>x.st==='dibayar'&&ymd(new Date(x.pay.ts))===today),sum=a=>r2(a.reduce((t,x)=>t+saleTotal(x),0)),by2={};
+  paid.forEach(x=>by2[x.pay.method]=(by2[x.pay.method]||0)+saleTotal(x));const unp=l.filter(x=>x.st==='invois');
+  return `<h2>Invois dan resit</h2><div class="kpis"><div class="kpi"><small>Jualan hari ini</small><b>${rm(sum(paid))}</b></div><div class="kpi"><small>Resit hari ini</small><b>${paid.length}</b></div><div class="kpi ${unp.length?'hot':''}"><small>Invois belum bayar</small><b>${unp.length}</b></div></div>
+  <div class="card"><h3 style="margin-top:0">Tutup hari mengikut kaedah bayaran</h3>${Object.keys(by2).length?Object.entries(by2).map(([k,v])=>`<div class="row sp" style="padding:4px 0"><span>${PM[k]}</span><b>${rm(r2(v))}</b></div>`).join(''):'<p class="muted">Belum ada bayaran hari ini.</p>'}<p class="muted sm" style="margin:6px 0 0">Gunakan untuk padankan tunai dalam laci dan pindahan masuk akaun.</p></div>
+  <div class="card scroll"><table><thead><tr><th>No.</th><th>Plat</th><th>Servis</th><th>Status</th><th class="num">Jumlah</th><th></th></tr></thead><tbody>${l.map(x=>`<tr><td>${esc(x.rcp||x.inv||'Draf')}</td><td>${esc(x.cust.plate)}</td><td>${esc(PKG[x.pkg]?PKG[x.pkg].n:'')}</td><td><span class="pill ${x.st==='dibayar'?'ok':x.st==='batal'?'bad':x.st==='invois'?'warn':'info'}">${{dibayar:'Dibayar',invois:'Belum bayar',draf:'Draf',batal:'Batal'}[x.st]}</span></td><td class="num">${rm(saleTotal(x))}</td><td><button class="btn sm ghost" data-act="posOpen" data-id="${x.id}">Buka</button></td></tr>`).join('')||'<tr><td colspan="6" class="muted">Belum ada jualan.</td></tr>'}</tbody></table></div>`}
+
 /* ---------- WhatsApp & rekrutmen ---------- */
 const TAv=(k,label,val,rows)=>`<label>${label}<textarea id="${esc(k)}" data-ui="${esc(k)}" rows="${rows||3}">${esc(ui.f[k]!=null?ui.f[k]:val)}</textarea></label>`;
 const TA=(k,label,rows,ph)=>`<label>${label}<textarea id="${esc(k)}" data-ui="${esc(k)}" rows="${rows||3}" placeholder="${esc(ph||'')}">${esc(ui.f[k]||'')}</textarea></label>`;
@@ -1071,6 +1244,8 @@ const A={
  dxSet:e=>{const [k,r]=e.v.split(':'),key=dxK(e.id,k);ui.f[key]=ui.f[key]===r?'':r},
  dxAll:e=>{DXI.filter(i=>i.sec===e.v&&!ui.f[dxK(e.id,i.k)]).forEach(i=>ui.f[dxK(e.id,i.k)]='ok')},
  dxSec:e=>{ui.f['dxs:'+e.id]=dxOpen(e.id)===e.v?'-':e.v},dxLt:e=>{const k=hk(e.id,'lt'),n=LIGHTS[+e.v],a=ui.f[k]||[];ui.f[k]=a.includes(n)?a.filter(x=>x!==n):a.concat(n)},dxQuote:e=>dxQuote(e.id),
+ pt:e=>{ui.pt=e.v},posStart,posOpen:e=>{ui.posId=e.id;ui.pt='jual';ui.f.pm='';window.scrollTo(0,0)},posInv:e=>posInv(e.id),posPay:e=>posPay(e.id),posVoid:e=>{sBy(e.id).st='batal';setMsg('ok','Jualan dibatalkan.');save()},posEditBack:e=>{sBy(e.id).st='draf';save()},
+ posDel:e=>{sBy(e.id).lines.splice(+e.v,1);save()},posM:e=>{ui.f.pm=e.v},posTender:e=>{ui.f['pay:amt']=e.v},posPrint:()=>{setTimeout(()=>window.print(),80)},posNewSale:()=>{ui.posId=null},posFromEst,posCatAdd,
  fbOpen:()=>{ui.fb=true;ui.menu=false},fbClose:()=>{ui.fb=false},fbSend
 };
 document.addEventListener('click',ev=>{if(ui.menu&&!ev.target.closest('.pop,.menub')){ui.menu=false;if(!ev.target.closest('[data-act]')){render();return}}
@@ -1082,6 +1257,7 @@ document.addEventListener('change',ev=>{const t=ev.target;
   if(t.dataset.act==='consent'){S.consent[t.dataset.id]=t.checked;setMsg('ok','Pilihan disimpan.');save();render();return}
   if(t.dataset.act==='pon'){S.partners[t.dataset.id].on=t.checked;save();render();return}
   if(t.dataset.act==='lst'){by('leads',t.dataset.id).st=t.value;save();render();return}
+  if(t.dataset.act==='posAdd'){posAdd(t.dataset.id,t.value);render();return}
   if(t.dataset.act==='bsel'){ui.branch=t.value;ui.sel=null;render();return}
   if(t.dataset.act==='stg'){by('apps',t.dataset.id).st=t.value;save();render();return}
   if(t.dataset.ui){const k=t.dataset.ui;ui.f[k]=t.dataset.cb?t.checked:t.value;
@@ -1090,6 +1266,9 @@ document.addEventListener('change',ev=>{const t=ev.target;
     if(k==='wb'){S.wa.before=+t.value;save()}
     if(k.startsWith('in:')&&k.split(':').length===2){by('vehicles',k.slice(3)).ins=t.value;save()}
     if(['vid','bid','svc','date'].includes(k)){ui.slot=null}
+    if(k.startsWith('sl:')||k.startsWith('sf:')){posWrite(k,t.value);return}
+    if(k.startsWith('cp:')){const c=S.catalog.find(x=>x.id===k.slice(3));if(c){c.p=Math.max(0,+t.value||0);save()}return}
+    if(k.startsWith('ep:')||k==='pl'||k==='pay:amt'){render();return}
     if((t.tagName==='INPUT'||t.tagName==='TEXTAREA')&&!t.dataset.cb&&t.type!=='date')return;
     render()}});
 document.addEventListener('input',ev=>{const t=ev.target;if(t.dataset.ui&&!t.dataset.cb&&t.type!=='date')ui.f[t.dataset.ui]=t.value});
