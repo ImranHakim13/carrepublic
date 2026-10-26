@@ -266,6 +266,7 @@ ol.tl li.ext::before{background:#aab5b3}
 .dn{margin-top:12px;background:var(--chip);border-radius:10px;padding:9px 12px;font-size:14px}.df{margin-top:12px;font-size:12px;color:var(--mut);border-top:1px dashed var(--line);padding-top:8px}
 @media print{body{background:#fff!important}.side,.mtop,.bnav,.fab,.noprint,.toast,.scopebar,.kpis,.banner,.menub,.pop,h1,.hint{display:none!important}.shell{display:block!important}.main{padding:0!important;max-width:none!important}.doc{border:0!important;box-shadow:none!important;max-width:none!important;margin:0!important}main>div>p{display:none}}
 .attn{border:2px solid var(--ink);margin-top:10px}.attn .todo button.r{border-left:5px solid var(--red)}.attn .todo button.a{border-left:5px solid #e0a800}
+.spk{display:block}.pulse .kpis{grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}.rk{display:grid;grid-template-columns:14px 1fr auto;gap:10px;align-items:start;padding:9px 0;border-bottom:1px solid var(--line)}.rk:last-child{border:0}.rk .dot{margin-top:5px}.lgt td,.lgt th{white-space:nowrap}
 </style>
 </head>
 <body>
@@ -826,13 +827,12 @@ function viewMaster(){
   const pmM=monthsBack(1)[0];S.branches.filter(b=>inS(b.id)&&b.st==='aktif'&&S.targets[b.id]).forEach(b=>{const r=aggM([pmM],i=>i===b.id)[0].rev,t=S.targets[b.id];if(r/t<dayFrac()-0.1)alerts.push([`${SHORT(b.id)} di bawah rentak sasaran (${pc(r/t)} daripada sasaran, sepatutnya ${pc(dayFrac())})`,'goBranch:'+b.id,'Buka cawangan'])});
   if(cur.nsP>0.08)alerts.push([`Kadar tidak hadir tinggi (${pc(cur.nsP,1)}). Hantar peringatan tempahan.`,'hq:wa','Buka WhatsApp']);
   const sev=t=>/lewat|segera/.test(t)?'r':'a';alerts.sort((a,b)=>(sev(a[0])==='r'?0:1)-(sev(b[0])==='r'?0:1));
-  const attn=`<div class="card attn"><div class="row sp"><h2 style="margin:0">Perlu perhatian CEO</h2><span class="pill ${alerts.length?(sev(alerts[0][0])==='r'?'bad':'warn'):'ok'}">${alerts.length?alerts.length+' perkara':'Semua terkawal'}</span></div>${alerts.length?`<div class="todo">${alerts.map(([t,g,b])=>`<button class="${sev(t)}" data-act="${g.startsWith('goBranch:')?'goBranch':'go'}" data-id="${g.startsWith('goBranch:')?g.slice(9):g}"><span>${esc(t)}</span><span class="pill info">${b}</span></button>`).join('')}</div>`:'<p class="muted" style="margin:8px 0 0">Tiada pengecualian. Rangkaian berjalan seperti dirancang.</p>'}</div>`;
   const stp=(role,sub,t,d)=>`<li><div><b>${t}</b><span class="muted">${d}</span></div><button class="btn sm ghost" data-act="go" data-id="${role}:${sub}">Buka</button></li>`;
-  return `<div class="hero-m"><h1>Pusat Kawalan CEO</h1><p>Operasi, kewangan dan jualan seluruh rangkaian di satu skrin. Pilih cawangan atau lihat semua, dan tukar tempoh untuk bandingkan dengan tempoh sebelumnya.</p><div class="strip" style="margin:12px 0 0"><span class="pill warn">Data demo</span><span class="pill info">${S.branches.filter(b=>b.st==='aktif').length} cawangan aktif · ${S.branches.length} dalam rangkaian</span></div></div>
+  return `<div class="hero-m"><h1>Mata Helang CEO</h1><p>Adakah rangkaian sihat, berkembang dan menguntungkan? Cawangan mana menang atau tertinggal? Di mana risikonya? Kerja harian bengkel ialah tugas pengurus cawangan, bukan di sini.</p><div class="strip" style="margin:12px 0 0"><span class="pill warn">Data demo</span><span class="pill info">${S.branches.filter(b=>b.st==='aktif').length} cawangan aktif · ${S.branches.length} dalam rangkaian</span></div></div>
   <div class="row sp" style="margin-bottom:6px">${scopeBar(true)}<div class="seg" role="group" aria-label="Tempoh">${per.map(([k,t])=>`<button aria-pressed="${String(n)===k}" data-act="per" data-v="${k}">${t}</button>`).join('')}</div></div>
-  ${attn}
-  ${todayPanel(jobsA,lewat)}
-  ${healthPanel()}
+  ${ceoPulse(cur,prv,thisM,tgt,pace,util)}
+  ${league(n)}
+  <h2 class="sec">Prestasi tempoh dipilih</h2>
   <div class="kpis ceo">
    ${ck('Hasil',rm0(cur.rev),n===1?'Bulan semasa (setakat hari ini)':ms.length+' bulan',prv&&delta(cur.rev,prv.rev))}
    ${ck('Margin kasar',rm0(cur.gm),pc(cur.gmp,1)+' daripada hasil',prv&&delta(cur.gm,prv.gm))}
@@ -849,8 +849,10 @@ function viewMaster(){
    <h3 style="margin-top:12px">Pelanggan baharu lawan ulang</h3><div class="split" role="img" aria-label="Pelanggan baharu dan ulang"><i style="width:${(100-cur.repP*100).toFixed(1)}%;background:var(--tar)"></i><i style="width:${(cur.repP*100).toFixed(1)}%;background:var(--lane)"></i></div><div class="legend"><span><i style="background:var(--tar)"></i>Baharu ${pc(1-cur.repP)}</span><span><i style="background:var(--lane)"></i>Ulang ${pc(cur.repP)}</span></div></div>
   <div class="card"><h2>Servis mengikut kategori</h2>${Object.entries(cur.svc).map(([k,v])=>`<div class="mixrow"><span>${SV[k].n.replace(' & penapis','').replace(' (visual)','')}</span><div class="split"><i style="width:${(v/svcT*100).toFixed(1)}%;background:var(--tar)"></i></div><b>${pc(v/svcT)}</b></div>`).join('')}<p class="muted">Kategori servis hanya dikira daripada data latar demo.</p></div>
 </div>
-  ${netTable(ms,n)}
+  ${pipeline(cur)}
+  ${riskExp(cur,lewat,x)}
   ${monthTable(A12)}
+  <details class="card" style="margin-top:12px"><summary>Pengecualian harian (${alerts.length}) · kerja pengurus cawangan</summary><p class="muted">CEO tidak perlu bertindak atas setiap perkara ini. Jika ia berulang, itu isyarat masalah pengurusan cawangan.</p>${alerts.length?`<div class="todo">${alerts.map(([t,g,b])=>`<button class="${sev(t)}" data-act="${g.startsWith('goBranch:')?'goBranch':'go'}" data-id="${g.startsWith('goBranch:')?g.slice(9):g}"><span>${esc(t)}</span><span class="pill info">${b}</span></button>`).join('')}</div>`:'<p class="muted">Tiada pengecualian.</p>'}</details>
   <details class="card" style="margin-top:12px"><summary>Definisi KPI dan sumber data</summary><ul class="sm"><li><b>Hasil</b>: jumlah invois servis selesai dalam tempoh.</li><li><b>Margin kasar</b>: hasil tolak kos langsung. Tidak termasuk gaji tetap, sewa dan pemasaran.</li><li><b>Pelanggan ulang</b>: pelanggan yang pernah dilayan sebelum ini.</li><li><b>Utilisasi bay</b>: servis selesai dibahagi kapasiti anggaran (bay × 26 hari × 7 servis sehari).</li><li><b>Tidak hadir</b>: tempahan yang tidak hadir dibahagi jumlah tempahan.</li><li><b>Sumber</b>: <span class="pill warn">demo</span> latar 15 bulan yang dijana untuk menunjukkan susun atur, ditambah rekod yang anda jana dalam demo ini. Tiada angka di sini daripada operasi sebenar. Sasaran ialah contoh.</li></ul></details>
   <h2 class="sec">Lihat sebagai</h2><div class="roles">
   <div class="card"><h3>Pelanggan</h3><p class="muted">Garaj, status servis, sebut harga untuk diluluskan, tempahan, pasport servis, ruangan insurans dan roadtax.</p><button class="btn" data-act="go" data-id="cust:utama">Buka app pelanggan</button></div>
@@ -898,6 +900,42 @@ function todayPanel(jobs,lewat){const by_=k=>jobs.filter(b=>b.st===k).length,inS
   return `<h2 class="sec">Hari ini</h2><div class="kpis ceo">${ck('Dalam bengkel',inShop,'kereta sedang dikendalikan')}${ck('Akan tiba',coming,'tempahan disahkan')}${ck('Tunggu kelulusan',wait,wait?'pelanggan belum luluskan':'tiada')}${ck('Lewat siap',lewat.length,lewat.length?'melepasi anggaran':'tiada')}${ck('Sedia diambil',ready,'')}${ck('Siap hari ini',done,'')}</div>
   <div class="card scroll net"><table><thead><tr><th>Cawangan</th><th class="num">Dalam bengkel</th><th class="num">Tunggu kelulusan</th><th class="num">Lewat</th><th class="num">Akan tiba</th><th></th></tr></thead><tbody>${bs.map(b=>{const j=jobs.filter(x=>x.bid===b.id),l=lewat.filter(x=>x.bid===b.id).length,w=j.filter(x=>x.st==='awaiting').length;
    return `<tr><td><b>${esc(SHORT(b.id))}</b></td><td class="num">${j.filter(x=>x.st!=='confirmed').length}</td><td class="num">${w?`<span class="pill warn">${w}</span>`:'0'}</td><td class="num">${l?`<span class="pill bad">${l}</span>`:'0'}</td><td class="num">${j.filter(x=>x.st==='confirmed').length}</td><td><button class="btn sm ghost" data-act="goBranch" data-id="${b.id}">Buka papan</button></td></tr>`}).join('')}</tbody></table></div>`}
+
+const spark=(v,c)=>{const w=84,h=26,mx=Math.max(...v,1),mn=Math.min(...v,0),pts=v.map((y,i)=>[(i/(v.length-1))*(w-4)+2,h-3-((y-mn)/((mx-mn)||1))*(h-6)]);return `<svg class="spk" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" role="img" aria-label="Trend 6 bulan"><polyline fill="none" stroke="${c}" stroke-width="2" stroke-linejoin="round" points="${pts.map(q=>q.map(z=>z.toFixed(1)).join(',')).join(' ')}"/><circle cx="${pts[pts.length-1][0].toFixed(1)}" cy="${pts[pts.length-1][1].toFixed(1)}" r="2.6" fill="${c}"/></svg>`};
+function taskCompl(){let tot=0,done=0,late=0;S.tasks.forEach(t=>tgtOf(t).filter(inS).forEach(b=>{tot++;if(tkSt(t,b)==='siap')done++;else if(tkLate(t,b))late++}));return {tot,done,late,pct:tot?done/tot:null}}
+function ceoPulse(cur,prv,thisM,tgt,pace,util){
+  const proj=pace>0?thisM.rev/pace:thisM.rev,pr=tgt?proj/tgt:null,tc=taskCompl();
+  const verdict=pr==null?['info','Sasaran belum ditetapkan']:pr>=1?['ok','Rangkaian dijangka capai sasaran bulan ini']:pr>=.9?['warn','Rangkaian dijangka hampir sasaran (kurang '+pc(1-pr)+')']:['bad','Rangkaian dijangka tidak capai sasaran (kurang '+pc(1-pr)+')'];
+  return `<h2 class="sec">Denyut rangkaian</h2><div class="card pulse"><div class="row sp"><span class="pill ${verdict[0]}" style="font-size:13px">${verdict[1]}</span><span class="muted sm">Ramalan = hasil setakat hari ini dibahagi ${pc(pace)} bulan berlalu</span></div>
+  <div class="kpis ceo" style="margin-top:12px">${ck('Hasil bulan ini',rm0(thisM.rev),tgt?'ramalan akhir bulan '+rm0(proj)+' · sasaran '+rm0(tgt):'')}${ck('Margin kasar',pc(cur.gmp,1),rm0(cur.gm),prv&&delta(cur.gmp,prv.gmp))}${ck('Pelanggan ulang',pc(cur.repP),'ukuran kesetiaan',prv&&delta(cur.repP,prv.repP))}${ck('Utilisasi bay',pc(util),'ruang kerja terisi')}${ck('Pelaksanaan arahan',tc.pct==null?'-':pc(tc.pct),tc.tot?tc.done+' daripada '+tc.tot+' siap'+(tc.late?' · '+tc.late+' lewat':''):'Tiada arahan')}</div></div>`}
+function league(n){const ms6=monthsBack(6),pm=monthsBack(1)[0],fr=dayFrac();
+  const rows=S.branches.filter(b=>inS(b.id)).map(b=>{const k=kpi(aggM(monthsBack(n),i=>i===b.id)),mm=aggM([pm],i=>i===b.id)[0],t=S.targets[b.id],u=b.st==='aktif'?k.jobs/Math.max(1,b.bays*26*7*n):null,att=t?mm.rev/t:null,sp=aggM(ms6,i=>i===b.id).map(a=>a.rev),late=tkLateN(b.id);
+    const hr=healthRows().find(r=>r.br.id===b.id);return {b,k,u,att,sp,late,w:hr?hr.w:null}}).sort((a,c)=>c.k.rev-a.k.rev);
+  const C=['ok','warn','bad'],L=['Sihat','Perhatian','Kritikal'],tot=rows.reduce((a,r)=>a+r.k.rev,0)||1;
+  return `<h2 class="sec">Papan kedudukan cawangan <span class="muted" style="font:500 13px var(--bd)">(${n===1?'bulan ini':n+' bulan terakhir'})</span></h2><div class="card scroll net"><table class="lgt"><thead><tr><th>#</th><th>Cawangan</th><th class="num">Hasil</th><th class="num">Kongsi</th><th class="num">Margin</th><th class="num">Utilisasi</th><th class="num">Ulang</th><th class="num">Masa siap</th><th>Sasaran bulan ini</th><th>Trend 6 bln</th><th>Status</th><th></th></tr></thead><tbody>${rows.map((r,i)=>{const b=r.b,act=b.st==='aktif'&&r.k.jobs;
+   return `<tr><td>${i+1}</td><td><b>${esc(SHORT(b.id))}</b><div class="muted">${esc(b.city)}${b.st==='aktif'?' · Ketua '+esc(HOD[b.id]):''}</div></td><td class="num">${act?rm0(r.k.rev):'-'}</td><td class="num">${act?pc(r.k.rev/tot):'-'}</td><td class="num">${act?pc(r.k.gmp,1):'-'}</td><td class="num">${r.u==null?'-':pc(r.u)}</td><td class="num">${act?pc(r.k.repP):'-'}</td><td class="num">${act?Math.round(r.k.tat)+' min':'-'}</td><td>${r.att==null?'-':`<span class="pill ${r.att>=fr?'ok':r.att>=fr-.15?'warn':'bad'}">${pc(r.att)}</span>`}</td><td>${act?spark(r.sp,'#0d8a73'):'-'}</td><td>${b.st!=='aktif'?'<span class="pill info">Onboarding</span>':`<span class="pill ${C[r.w]}">${L[r.w]}</span>`}</td><td style="white-space:nowrap"><button class="btn sm ghost" data-act="goBranch" data-id="${b.id}">Buka</button>${b.st==='aktif'?` <button class="btn sm alt" data-act="tkTo" data-id="${b.id}">Arahan</button>`:''}</td></tr>`}).join('')}</tbody></table></div><p class="muted">Disusun ikut hasil. Status ialah lampu isyarat gabungan sasaran, utilisasi, tidak hadir, kerja tertunggu dan arahan lewat.</p>`}
+function pipeline(cur){const rems=S.reminders.filter(r=>inS((S.records.find(x=>x.id===r.rec)||{}).bid)),cnt=k=>rems.filter(r=>remStatus(r)===k).length,avg=cur.avg||0;
+  const qs=S.quotes.filter(q=>inS((by('bookings',q.bid)||{}).bid)),qv=q=>q.total,qa=qs.filter(q=>q.st==='approved'),qp=qs.filter(q=>q.st==='sent'),qd=qa.length+qs.filter(q=>q.st==='rejected').length;
+  const dx=S.records.filter(r=>r.dx&&inS(r.bid)).length;
+  return `<h2 class="sec">Masa depan hasil</h2><div class="grid cg"><div class="card"><h3 style="margin-top:0">Pelanggan akan kembali</h3>
+  <div class="mixrow"><span>Sudah ditempah</span><b>${cnt('booked')}</b></div><div class="mixrow"><span>Sudah tiba masanya</span><b>${cnt('due')}</b></div><div class="mixrow"><span>Tertunggak (risiko hilang)</span><b style="color:var(--red)">${cnt('overdue')}</b></div><div class="mixrow"><span>Akan datang</span><b>${cnt('upcoming')}</b></div>
+  <p class="muted">Anggaran hasil jika semua yang due dan tertunggak kembali: <b>${rm0((cnt('due')+cnt('overdue'))*avg)}</b> (bilangan × purata invois).</p></div>
+  <div class="card"><h3 style="margin-top:0">Kualiti jualan tambahan</h3>
+  <div class="mixrow"><span>Sebut harga diluluskan</span><b>${qd?pc(qa.length/qd):'-'}</b></div><div class="mixrow"><span>Nilai diluluskan</span><b>${rm0(qa.reduce((a,q)=>a+qv(q),0))}</b></div><div class="mixrow"><span>Nilai masih tergantung</span><b>${rm0(qp.reduce((a,q)=>a+qv(q),0))}</b></div><div class="mixrow"><span>Servis dengan laporan diagnostik foreman</span><b>${dx}</b></div>
+  <p class="muted">Kadar kelulusan tinggi bermakna pelanggan percaya pada diagnosis. Nilai tergantung ialah hasil yang belum dapat.</p></div></div>`}
+function riskExp(cur,lewat,x){const act=S.branches.filter(b=>b.st==='aktif'&&inS(b.id)),rev=act.map(b=>({b,r:kpi(aggM(monthsBack(3),i=>i===b.id)).rev})).sort((a,c)=>c.r-a.r),tot=rev.reduce((a,r)=>a+r.r,0)||1,top=rev[0],hr=healthRows(),red=hr.filter(r=>r.w===2),onb=S.branches.filter(b=>b.st!=='aktif'&&inS(b.id));
+  const dxn=S.bookings.filter(b=>activeB(b)&&inS(b.bid)&&b.insp&&b.insp.fm&&dxCount(b.insp).kritikal).length,tc=taskCompl();
+  const R=(l,v,g,d)=>`<div class="rk"><i class="dot ${['ok','warn','bad'][g]}"></i><div><b>${l}</b><div class="muted sm">${d}</div></div><b>${v}</b></div>`;
+  return `<h2 class="sec">Risiko dan ekspansi</h2><div class="grid cg"><div class="card"><h3 style="margin-top:0">Risiko</h3>
+  ${R('Bergantung pada satu cawangan',top?pc(top.r/tot):'-',top&&top.r/tot>.7?2:top&&top.r/tot>.5?1:0,top?esc(SHORT(top.b.id))+' menyumbang hasil terbesar. Lebih 70% ialah risiko.':'')}
+  ${R('Cawangan kritikal',red.length,red.length?2:0,red.length?red.map(r=>esc(SHORT(r.br.id))).join(', '):'Tiada')}
+  ${R('Penemuan keselamatan belum selesai',dxn,dxn?2:0,'Kenderaan dengan isu segera daripada foreman (risiko liabiliti)')}
+  ${R('Tidak hadir',pc(cur.nsP,1),cur.nsP>.08?2:cur.nsP>.05?1:0,'Slot bengkel kosong tanpa hasil')}
+  ${R('Arahan CEO lewat',tc.late,tc.late?2:0,'Cawangan tidak melaksana arahan tepat masa')}</div>
+  <div class="card"><h3 style="margin-top:0">Ekspansi</h3>
+  ${onb.length?onb.map(b=>R(esc(SHORT(b.id)),'Onboarding',1,esc(b.city+', '+b.state)+' · '+b.bays+' bay · ketua '+esc(HOD[b.id]||'belum dilantik'))).join(''):'<p class="muted">Tiada cawangan dalam onboarding.</p>'}
+  ${ui.branch==='ALL'?R('Permohonan rakan insurans dan roadtax',x.leads||0,0,'Sumber hasil tambahan'):''}${R('Calon menunggu saringan',x.apps||0,x.apps>3?1:0,'Kekurangan staf melambatkan pembukaan cawangan')}
+  <p class="muted">Pelan ekspansi sebenar (tapak, kos pelaburan, tarikh buka) belum dimasukkan dalam sistem.</p></div></div>`}
 
 /* ---------- arahan CEO & kesihatan cawangan ---------- */
 const HOD={KMN:'Hafiz (Demo)',SHA:'Nurul (Demo)',KTE:'Belum dilantik',JBU:'Belum dilantik'};
