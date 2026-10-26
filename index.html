@@ -487,7 +487,7 @@ const now=()=>new Date(Date.now()+S.skip*DAY);
 const by=(a,id)=>S[a].find(x=>x.id===id);
 const authGet=()=>{try{return sessionStorage.getItem('careos-auth')==='1'}catch(e){return false}};
 const authSet=v=>{try{v?sessionStorage.setItem('careos-auth','1'):sessionStorage.removeItem('careos-auth')}catch(e){}};
-const ui={logged:authGet(),role:'master',ct:'utama',bt:'ringkas',ht:'rangkaian',branch:'ALL',per:'3',f:{le:'master@carrepublic.demo',lp:'Demo#2026'},msg:null,slot:null,done:null,sel:null,fb:false,menu:false};
+const ui={logged:authGet(),role:'master',ct:'utama',bt:'ringkas',ht:'ringkas',branch:'ALL',per:'3',f:{le:'master@carrepublic.demo',lp:'Demo#2026'},msg:null,slot:null,done:null,sel:null,fb:false,menu:false};
 
 /* ---------- domain ---------- */
 function slotsFor(bid,svc,date){
@@ -597,10 +597,11 @@ const hm=t=>new Date(t).toLocaleTimeString('ms-MY',{hour:'2-digit',minute:'2-dig
 
 const NAV=[
  {id:'master',t:'Gambaran Master',ic:'star',subs:[]},
+ {id:'mgr',t:'Pengurus Rangkaian',ic:'chart',subs:[]},
  {id:'arahan',t:'Arahan CEO',ic:'brief',subs:[]},
  {id:'cust',t:'Pelanggan (app)',ic:'user',k:'ct',subs:[['utama','Utama','home'],['tempah','Tempah','cal'],['pasport','Pasport','book'],['rakan','Rakan','shield'],['saya','Saya','user']]},
  {id:'branch',t:'Cawangan (BranchOS)',ic:'wrench',k:'bt',subs:[['ringkas','Ringkasan','chart'],['papan','Papan kerja','board'],['jadual','Jadual','cal'],['due','Akan due','chat'],['pos','POS','till'],['arahan','Arahan','brief'],['staf','Staf','people']]},
- {id:'hq',t:'HQ',ic:'chart',k:'ht',subs:[['rangkaian','Rangkaian','chart'],['ringkas','Operasi','chart'],['rakan','Rakan','shield'],['wa','WhatsApp','chat'],['rekrut','Rekrutmen','people']]},
+ {id:'hq',t:'HQ',ic:'chart',k:'ht',subs:[['ringkas','Ringkasan','chart'],['rakan','Rakan','shield'],['wa','WhatsApp','chat'],['rekrut','Rekrutmen','people']]},
  {id:'kerja',t:'Kerjaya (calon)',ic:'brief',subs:[]}];
 
 function viewLogin(){return `<div class="lg"><section class="lg-l"><div class="logo"><i></i><b>CARREPUBLIC</b><small>CareOS</small></div>
@@ -622,7 +623,7 @@ function shell(){
   const side=`<aside class="side"><div class="logo"><i></i><b>CARREPUBLIC</b><small>CareOS</small></div><nav aria-label="Peranan">${NAV.map(x=>`<button class="nb" aria-current="${ui.role===x.id}" data-act="role" data-v="${x.id}">${I(x.ic)}${x.t}</button>${ui.role===x.id&&x.subs.length?`<div class="subs">${x.subs.map(([k,t])=>`<button class="sb" aria-current="${ui[x.k]===k}" data-act="${x.k}" data-v="${k}">${t}${bdg(k)}</button>`).join('')}</div>`:''}`).join('')}</nav><div class="sidef">${ctrls()}<div class="env">Persekitaran demo. Data contoh disimpan dalam pelayar ini.</div></div></aside>`;
   const mtop=`<header class="mtop"><div class="row1"><span class="logo2">CARREPUBLIC<small>CareOS</small></span><button class="menub" data-act="menu" aria-label="Menu" aria-expanded="${!!ui.menu}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">${ui.menu?'<path d="M6 6l12 12M18 6L6 18"/>':'<path d="M4 7h16M4 12h16M4 17h16"/>'}</svg></button></div><div class="chips">${NAV.map(x=>`<button class="chip-r" aria-pressed="${ui.role===x.id}" data-act="role" data-v="${x.id}">${x.t.replace(/ \(.*\)/,'')}</button>`).join('')}</div>${ui.menu?`<div class="pop">${ctrls()}</div>`:''}</header>`;
   const bnav=n.subs.length?`<nav class="bnav" aria-label="Menu">${n.subs.map(([k,t,ic])=>`<button aria-current="${ui[n.k]===k}" data-act="${n.k}" data-v="${k}">${I(ic)}${t}${bdg(k)}</button>`).join('')}</nav>`:'';
-  const body=ui.role==='master'?viewMaster():ui.role==='arahan'?viewArahan():ui.role==='cust'?viewCust():ui.role==='branch'?viewBranch():ui.role==='kerja'?viewKerja():viewHQ();
+  const body=ui.role==='master'?viewMaster():ui.role==='mgr'?viewNetwork():ui.role==='arahan'?viewArahan():ui.role==='cust'?viewCust():ui.role==='branch'?viewBranch():ui.role==='kerja'?viewKerja():viewHQ();
   return `<div class="shell">${side}${mtop}<main class="main" id="main">${body}</main>${bnav}</div><button class="fab" data-act="fbOpen">${I('chat')}<span>Komen</span></button>${ui.fb?fbModal():''}${msgBox()}`}
 
 function fbModal(){return `<div class="modal" data-act="fbClose"><div role="dialog" aria-label="Beri komen"><h2>Beri komen</h2><p class="muted">Tulis apa yang baik, mengelirukan atau kurang. Komen dihantar kepada pemilik demo bersama nama paparan yang anda sedang lihat.</p>
@@ -764,7 +765,7 @@ function bCard(b){const v=by('vehicles',b.vid),id=b.id;let h=`<div class="card">
   return h+'</div>'}
 
 /* ---------- HQ ---------- */
-function viewHQ(){const t=ui.ht;return t==='rangkaian'?viewNetwork():t==='wa'?hqWa():t==='rekrut'?hqRec():t==='rakan'?hqRakan():hqRingkas()}
+function viewHQ(){const t=ui.ht;return t==='wa'?hqWa():t==='rekrut'?hqRec():t==='rakan'?hqRakan():hqRingkas()}
 function hqRingkas(){const x=stats(),rs=x.rs,withCost=rs.filter(r=>r.cost!=null);
   const flows={},byV={};rs.slice().sort((a,b)=>a.ts-b.ts).forEach(r=>{const p=byV[r.vid];if(p&&p!==r.bid){const k=p+'→'+r.bid;flows[k]=(flows[k]||0)+1}byV[r.vid]=r.bid});
   const days=[];for(let i=13;i>=0;i--)days.push(ymd(addDays(now(),-i)));const dv=days.map(d=>rs.filter(r=>r.date===d).reduce((a,r)=>a+r.total,0)),mx=Math.max(1,...dv);
@@ -843,7 +844,7 @@ function viewNetwork(){
   if(cur.nsP>0.08)alerts.push([`Kadar tidak hadir tinggi (${pc(cur.nsP,1)}). Hantar peringatan tempahan.`,'hq:wa','Buka WhatsApp']);
   const sev=t=>/lewat|segera/.test(t)?'r':'a';alerts.sort((a,b)=>(sev(a[0])==='r'?0:1)-(sev(b[0])==='r'?0:1));
   const stp=(role,sub,t,d)=>`<li><div><b>${t}</b><span class="muted">${d}</span></div><button class="btn sm ghost" data-act="go" data-id="${role}:${sub}">Buka</button></li>`;
-  return `<div class="hero-m"><h1>Pengurusan Rangkaian</h1><p>Pantau semua cawangan: mana yang hampir penuh kapasiti jualan, mana yang kurang pelanggan masuk, dan siapa perlu arahan. Untuk pengurus rangkaian di HQ.</p><div class="strip" style="margin:12px 0 0"><span class="pill warn">Data demo</span><span class="pill info">${S.branches.filter(b=>b.st==='aktif').length} cawangan aktif · ${S.branches.length} dalam rangkaian</span></div></div>
+  return `<div class="hero-m"><h1>Pengurusan Rangkaian</h1><p>Pantau semua cawangan: mana yang hampir penuh kapasiti jualan, mana yang kurang pelanggan masuk, dan siapa perlu arahan. Paparan pengurus yang menyelia semua cawangan, berasingan daripada paparan CEO.</p><div class="strip" style="margin:12px 0 0"><span class="pill warn">Data demo</span><span class="pill info">${S.branches.filter(b=>b.st==='aktif').length} cawangan aktif · ${S.branches.length} dalam rangkaian</span></div></div>
   <div class="row sp" style="margin-bottom:6px">${scopeBar(true)}<div class="seg" role="group" aria-label="Tempoh">${per.map(([k,t])=>`<button aria-pressed="${String(n)===k}" data-act="per" data-v="${k}">${t}</button>`).join('')}</div></div>
   ${ceoPulse(cur,prv,thisM,tgt,pace,util)}
   ${league(n)}
@@ -1254,7 +1255,7 @@ function viewMaster(){const m=ceoModel(),A=m.A,tg=sum(m.act.map(b=>S.targets[b.i
   <div class="callout" style="margin-top:12px"><b>Belum ada dalam sistem (perlu data sebenar):</b><ul class="sm"><li>Permintaan setempat: pelanggan yang datang dari luar kawasan cawangan sedia ada, berdasarkan poskod mereka</li><li>Permintaan tempahan web yang ditolak kerana slot penuh</li><li>Bilangan kenderaan dan pesaing di kawasan calon</li><li>Sewa dan kos ubahsuai sebenar tapak</li></ul><p class="sm muted" style="margin-bottom:0">Bila cawangan sebenar mula beroperasi, poskod pelanggan dan tempahan web yang gagal boleh dikira terus daripada pangkalan data untuk menyenaraikan kawasan paling berpotensi.</p></div></div>
   <details class="card" style="margin-top:12px"><summary>Definisi dan sumber data</summary><ul class="sm"><li><b>Bulan lengkap</b>: 12 bulan sebelum bulan semasa. Bulan semasa hanya digunakan untuk ramalan.</li><li><b>Utilisasi</b>: servis selesai dibahagi kapasiti anggaran (bay × 26 hari × 7 servis sehari).</li><li><b>Selepas kos tetap</b>: untung kasar tolak anggaran kos tetap yang anda tetapkan.</li><li><b>Sumber</b>: <span class="pill warn">demo</span> data latar 15 bulan yang dijana untuk menunjukkan susun atur. Tiada angka di sini daripada operasi sebenar.</li></ul></details>
   ${demoTail()}
-  <p class="muted" style="margin-top:14px">Pemantauan cawangan hari ke hari: <button class="btn sm ghost" data-act="go" data-id="hq:rangkaian">Buka HQ, Rangkaian</button></p>`}
+  <p class="muted" style="margin-top:14px">Pemantauan semua cawangan (kapasiti dan pelanggan masuk): <button class="btn sm ghost" data-act="go" data-id="mgr:">Buka Pengurus Rangkaian</button></p>`}
 
 /* ---------- MOD STAF (data sebenar, Supabase) + tempahan awam ---------- */
 const SM=(()=>{
